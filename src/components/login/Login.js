@@ -24,11 +24,9 @@ export default class Login extends React.Component {
 
     render() {
         return (
-            <div className="login jumbotron center-block">
-                <h1>Login</h1>
+            <div className="login-screen">
                 <form role="form">
-                    <div className="form-group">
-                        <label htmlFor="username">Username</label>
+                    <div className="">
                         <input type="text"
                                value={this.linkState('user')}
                                onChange={this.linkState('user')}
@@ -36,8 +34,7 @@ export default class Login extends React.Component {
                                id="username"
                                placeholder="Username" />
                     </div>
-                    <div className="form-group">
-                        <label htmlFor="password">Password</label>
+                    <div className="">
                         <input type="password"
                                value={this.linkState('password')}
                                onChange={this.linkState('password')}
@@ -46,7 +43,7 @@ export default class Login extends React.Component {
                                ref="password"
                                placeholder="Password" />
                     </div>
-                    <button type="submit" className="btn btn-default" onClick={this._login.bind(this)}>Submit</button>
+                    <button type="submit" className="" onClick={this._login.bind(this)}>Submit</button>
                 </form>
             </div>
         );

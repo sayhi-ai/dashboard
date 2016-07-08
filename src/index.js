@@ -6,6 +6,9 @@ import {Router, browserHistory} from 'react-router'
 // import route
 import routes from "./route"
 
+// import stylesheet
+require('./index.scss');
+
 // Copy the index.html file
 require('file?name=[name].[ext]!./index.html');
 
