@@ -2,6 +2,8 @@ import React from 'react';
 import addons from 'react-addons'
 import ReactMixin from 'react-mixin';
 import Auth from '../../services/authService'
+import TextField from "material-ui/TextField"
+import RaisedButton from "material-ui/RaisedButton"
 
 export default class Login extends React.Component {
   
@@ -25,24 +27,28 @@ export default class Login extends React.Component {
     render() {
         return (
             <div className="login-screen">
-                <form role="form">
-                    <div className="">
-                        <input type="text"
-                               onChange={this.linkState('user')}
-                               className="form-control"
-                               id="username"
-                               placeholder="Username" />
+                <div className="login-outter">
+                    <div className="login-inner">
+                        <form className="login-form">
+                            <div className="">
+                                <TextField type="text"
+                                       onChange={this.linkState('user')}
+                                       className="form-control"
+                                       id="username"
+                                       placeholder="Username" />
+                            </div>
+                            <div className="">
+                                <TextField type="password"
+                                       onChange={this.linkState('password')}
+                                       className="form-control"
+                                       id="password"
+                                       ref="password"
+                                       placeholder="Password" />
+                            </div>
+                            <RaisedButton type="submit" className="" onClick={this._login.bind(this)}>Submit</RaisedButton>
+                        </form>
                     </div>
-                    <div className="">
-                        <input type="password"
-                               onChange={this.linkState('password')}
-                               className="form-control"
-                               id="password"
-                               ref="password"
-                               placeholder="Password" />
-                    </div>
-                    <button type="submit" className="" onClick={this._login.bind(this)}>Submit</button>
-                </form>
+                </div>
             </div>
         );
     }
