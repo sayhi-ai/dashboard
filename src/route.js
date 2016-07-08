@@ -2,10 +2,10 @@ import React from 'react'
 import {Route, IndexRoute} from "react-router"
 
 // import components
-import LoginComponent from "./components/login/LoginComponent"
+import Login from "./components/login/Login"
 
 export default (
     <Route path='/'>
-        <IndexRoute component={LoginComponent} />
+        <IndexRoute component={Login} />
     </Route>
 )
