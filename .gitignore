@@ -1,5 +1,6 @@
 # Project files and folders
 build
+dev
 node_modules
 
 # IDE files and folders

@@ -1,8 +1,9 @@
 var webpack = require('webpack');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 var path = require('path');
 
 module.exports = {
-    entry: "./src/js/index.js",
+    entry: "./src/index.js",
     module: {
         loaders: [
             {test: /\.scss|\.sass|\.css$/, loaders: ["style", "css", "sass"], exclude: /node_modules/},
@@ -12,15 +13,7 @@ module.exports = {
             {test: /\.svg$/, loader: "svg-inline"},
             {test: /load-image/, loader: 'imports?define=>false'},
             {test: /\.json$/, loader: "json-loader"},
-            {
-                test: /\.jsx?$/,
-                exclude: /(node_modules)|rankingWorker.js/,
-                loader: 'babel-loader',
-                query: {
-                    presets: ['react', 'es2015'],
-                    plugins: ['react-html-attrs', 'transform-class-properties', 'transform-decorators-legacy']
-                }
-            }
+            {test: /\.jsx?$/, exclude: /(node_modules)/, loader: 'babel-loader'}
         ]
     },
     output: {
@@ -30,6 +23,9 @@ module.exports = {
     plugins: [
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': '"development"'
-        })
+        }),
+        new CopyWebpackPlugin([
+            { from: 'static'}
+        ])
     ]
 };
