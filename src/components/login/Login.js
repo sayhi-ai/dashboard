@@ -28,7 +28,6 @@ export default class Login extends React.Component {
                 <form role="form">
                     <div className="">
                         <input type="text"
-                               value={this.linkState('user')}
                                onChange={this.linkState('user')}
                                className="form-control"
                                id="username"
@@ -36,7 +35,6 @@ export default class Login extends React.Component {
                     </div>
                     <div className="">
                         <input type="password"
-                               value={this.linkState('password')}
                                onChange={this.linkState('password')}
                                className="form-control"
                                id="password"
