@@ -4,6 +4,8 @@ import ReactMixin from 'react-mixin';
 import Auth from '../../services/authService'
 import TextField from "material-ui/TextField"
 import RaisedButton from "material-ui/RaisedButton"
+import Paper from "material-ui/Paper"
+import logoTitleImage from "../../resources/img/logowithtext.png"
 
 export default class Login extends React.Component {
   
@@ -29,24 +31,35 @@ export default class Login extends React.Component {
             <div className="login-screen">
                 <div className="login-outter">
                     <div className="login-inner">
-                        <form className="login-form">
-                            <div className="">
-                                <TextField type="text"
-                                       onChange={this.linkState('user')}
-                                       className="form-control"
-                                       id="username"
-                                       placeholder="Username" />
+                        <Paper className="login-div" zDepth={5}>
+                            <img className="login-logo" src={logoTitleImage}/>
+                            <div className="login-form-div">
+                                <form className="login-form">
+                                    <div className="">
+                                        <TextField type="text"
+                                               onChange={this.linkState('user')}
+                                               className="form-control"
+                                               id="username"
+                                               placeholder="Username" />
+                                    </div>
+                                    <div className="">
+                                        <TextField type="password"
+                                               onChange={this.linkState('password')}
+                                               className="form-control"
+                                               id="password"
+                                               ref="password"
+                                               placeholder="Password" />
+                                    </div>
+                                    <div className="login-button">
+                                        <RaisedButton type="submit"
+                                                      labelStyle={{color:"#FFFFFF"}}
+                                                      primary={true}
+                                                      onClick={this._login.bind(this)}
+                                                      label="Login"/>
+                                    </div>
+                                </form>
                             </div>
-                            <div className="">
-                                <TextField type="password"
-                                       onChange={this.linkState('password')}
-                                       className="form-control"
-                                       id="password"
-                                       ref="password"
-                                       placeholder="Password" />
-                            </div>
-                            <RaisedButton type="submit" className="" onClick={this._login.bind(this)}>Submit</RaisedButton>
-                        </form>
+                        </Paper>
                     </div>
                 </div>
             </div>

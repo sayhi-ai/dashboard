@@ -10,7 +10,7 @@ export default class MuiTheme extends React.Component {
             palette: {
                 primary1Color: "#19A5E4",
                 primary2Color: "#19A5E4",
-                primary3Color: "#19A5E4"
+                primary3Color: "#19A5E4",
             }
         })
 
