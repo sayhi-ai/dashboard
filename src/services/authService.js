@@ -4,14 +4,14 @@ import {LOGIN_URL, SIGNUP_URL} from '../constants/loginConstants';
 import LoginActions from '../actions/loginActions';
 
 export default class AuthService {
-    login(username, password) {
+    login(email, password) {
         return this.handleAuth(when(request({
             url: LOGIN_URL,
             method: 'POST',
             crossOrigin: true,
             type: 'json',
             data: {
-                username, password
+                email, password
             }
         })));
     }
