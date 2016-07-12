@@ -1,7 +1,7 @@
 import request from 'reqwest';
 import when from 'when';
 import LoginConstants from '../constants/loginConstants.js';
-import LoginActions from '../actions/loginActions';
+import {loginAction, logoutAction} from '../actions/loginActions';
 
 export var login = function (email, password) {
     console.log(LoginConstants.LOGIN_URL)
@@ -16,14 +16,15 @@ export var login = function (email, password) {
 }
 
 export var logout = function () {
-    LoginActions.logoutUser();
+    logoutAction();
 }
 
 export var handleAuth = function(loginPromise) {
     return loginPromise
         .then(function(response) {
-            var jwt = response.id_token;
-            LoginActions.loginUser(jwt);
+            var jwt = response.response;
+            console.log(jwt)
+            loginAction(jwt);
             return true;
         });
 }

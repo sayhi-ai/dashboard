@@ -2,6 +2,7 @@ import 'babel-polyfill'
 import React from "react"
 import ReactDOM from "react-dom"
 import {Router, browserHistory} from 'react-router'
+import {loginAction} from './actions/loginActions';
 
 // import route
 import routes from "./route"
@@ -11,6 +12,11 @@ require('./index.scss');
 
 // Copy the index.html file
 require('file?name=[name].[ext]!./index.html');
+
+let jwt = localStorage.getItem('sayhi-jwt');
+if (jwt) {
+    loginAction(jwt);
+}
 
 ReactDOM.render((
     <Router

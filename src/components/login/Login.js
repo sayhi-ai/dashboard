@@ -10,23 +10,23 @@ export default class Login extends React.Component {
     constructor() {
         super()
         this.state = {
-            user: '',
-            password: ''
+            user: 'vader@sayhi.ai',
+            password: 'DarthCockulusIs19InchesLong!'
         };
     }
     
     _setUsername(e) {
-        this.setState({
-            user: e.target.value,
-            password: this.state.password
-        })
+        // this.setState({
+        //     user: e.target.value,
+        //     password: this.state.password
+        // })
     }
 
     _setPassword(e) {
-        this.setState({
-            user: this.state.user,
-            password: e.target.value
-        })
+        // this.setState({
+        //     user: this.state.user,
+        //     password: e.target.value
+        // })
     }
 
     _login(e) {
