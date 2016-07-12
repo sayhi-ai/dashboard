@@ -1,0 +1,21 @@
+@import '../../app/theme';
+
+.dashboard-drawer {
+  text-align: center;
+}
+
+.dashboard-logo-div {
+  text-align: center;
+  width: 100%;
+}
+
+.dashboard-logo {
+  display: inline-block;
+  width: 50%;
+  margin-top: 5%;
+}
+
+.dashboard-drawer-search-field {
+  display: inline-block;
+  width: 80% !important;
+}

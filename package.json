@@ -67,6 +67,7 @@
     "es6-promise": "^3.2.1",
     "express": "^4.12.3",
     "flux": "^2.1.1",
+    "immutable": "^3.8.1",
     "material-ui": "^0.15.0",
     "object-assign": "^4.1.0",
     "react": "^15.2.0",

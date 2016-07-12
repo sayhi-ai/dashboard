@@ -8,13 +8,14 @@ var CHANGE_EVENT = 'change'
 var _searchTerms = {}
 
 function updateAll(updates) {
-    for (var id in _searchTerms) {
-        _searchTerms[id] = assign({}, _searchTerms[id], updates)
-    }
+    _searchTerms = updates
 }
 
 var SearchStore = assign({}, EventEmitter.prototype, {
-
+    getAll: function() {
+        return _searchTerms;
+    },
+    
     emitChange: function() {
         this.emit(CHANGE_EVENT)
     },
@@ -36,11 +37,27 @@ var SearchStore = assign({}, EventEmitter.prototype, {
 
 // Register callback to handle all updates
 AppDispatcher.register(function(action) {
-    var results;
+    let results;
 
     switch(action.actionType) {
+        case SearchConstants.SEARCH:
+            if (action.terms.length !== 0) {
+                results = [{
+                    type: "key",
+                    name: "this is a key"
+                }, {
+                    type: "key",
+                    name: "this is a persona"
+                }]
+            } else {
+                results = [{}]
+            }
+
+            SearchStore.emitChange()
+            break
+        
         case SearchConstants.UPDATE_SEARCH_RESULTS:
-            results = action.text.trim()
+            results = action.results
             if (results.length !== 0) {
                 updateAll(results)
                 SearchStore.emitChange()
