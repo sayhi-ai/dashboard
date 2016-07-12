@@ -6,10 +6,10 @@ export var searchTerms = function (terms) {
     if (terms[0] !== "") {
         results = [{
             type: "key",
-            name: "this is a key"
+            name: terms[0]
         }, {
-            type: "key",
-            name: "this is a persona"
+            type: "persona",
+            name: terms[0]
         }]
     } else {
         results = [{}]
