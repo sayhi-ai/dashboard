@@ -1,12 +1,12 @@
 import request from 'reqwest';
 import when from 'when';
-import {LOGIN_URL, SIGNUP_URL} from '../constants/loginConstants';
+import LoginConstants from '../constants/loginConstants.js';
 import LoginActions from '../actions/loginActions';
 
 export default class AuthService {
     login(email, password) {
         return this.handleAuth(when(request({
-            url: LOGIN_URL,
+            url: LoginConstants.LOGIN_URL,
             method: 'POST',
             crossOrigin: true,
             type: 'json',

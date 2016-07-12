@@ -1,5 +1,5 @@
 import AppDispatcher from '../dispatchers/appDispatcher';
-import {LOGIN_USER, LOGOUT_USER} from '../constants/loginConstants.js';
+import LoginConstants from '../constants/loginConstants.js';
 import RouterContainer from '../services/routerContainer'
 
 export default {
@@ -7,7 +7,7 @@ export default {
         var savedJwt = localStorage.getItem('sayhi-jwt');
 
         AppDispatcher.dispatch({
-            actionType: LOGIN_USER,
+            actionType: LoginConstants.LOGIN_USER,
             jwt: jwt
         });
 
@@ -22,7 +22,7 @@ export default {
         RouterContainer.get().transitionTo('/login');
         localStorage.removeItem('sayhi-jwt');
         AppDispatcher.dispatch({
-            actionType: LOGOUT_USER
+            actionType: LoginConstants.LOGOUT_USER
         });
     }
 }
