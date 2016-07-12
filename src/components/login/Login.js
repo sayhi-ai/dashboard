@@ -1,7 +1,5 @@
 import React from 'react';
-import addons from 'react-addons'
-import ReactMixin from 'react-mixin';
-import Auth from '../../services/authService'
+import {login} from '../../services/authService'
 import TextField from "material-ui/TextField"
 import RaisedButton from "material-ui/RaisedButton"
 import Paper from "material-ui/Paper"
@@ -16,12 +14,25 @@ export default class Login extends React.Component {
             password: ''
         };
     }
+    
+    _setUsername(e) {
+        this.setState({
+            user: e.target.value,
+            password: this.state.password
+        })
+    }
+
+    _setPassword(e) {
+        this.setState({
+            user: this.state.user,
+            password: e.target.value
+        })
+    }
 
     _login(e) {
         e.preventDefault();
-        Auth.login(this.state.user, this.state.password)
+        login(this.state.user, this.state.password)
             .catch(function(err) {
-                alert("There's an error logging in");
                 console.log("Error logging in", err);
             });
     }
@@ -37,18 +48,20 @@ export default class Login extends React.Component {
                                 <form className="login-form">
                                     <div className="">
                                         <TextField type="text"
-                                               onChange={this.linkState('user')}
-                                               className="form-control"
-                                               id="username"
-                                               placeholder="Username" />
+                                                   value={this.state.user}
+                                                   onChange={this._setUsername.bind(this)}
+                                                   className="form-control"
+                                                   id="username"
+                                                   placeholder="Username" />
                                     </div>
                                     <div className="">
                                         <TextField type="password"
-                                               onChange={this.linkState('password')}
-                                               className="form-control"
-                                               id="password"
-                                               ref="password"
-                                               placeholder="Password" />
+                                                   value={this.state.password}
+                                                   onChange={this._setPassword.bind(this)}
+                                                   className="form-control" 
+                                                   id="password" 
+                                                   ref="password" 
+                                                   placeholder="Password" />
                                     </div>
                                     <div className="login-button">
                                         <RaisedButton type="submit"
@@ -66,5 +79,3 @@ export default class Login extends React.Component {
         );
     }
 }
-
-ReactMixin(Login.prototype, addons.LinkedStateMixin);

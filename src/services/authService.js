@@ -3,29 +3,27 @@ import when from 'when';
 import LoginConstants from '../constants/loginConstants.js';
 import LoginActions from '../actions/loginActions';
 
-export default class AuthService {
-    login(email, password) {
-        return this.handleAuth(when(request({
-            url: LoginConstants.LOGIN_URL,
-            method: 'POST',
-            crossOrigin: true,
-            type: 'json',
-            data: {
-                email, password
-            }
-        })));
-    }
+export var login = function (email, password) {
+    console.log(LoginConstants.LOGIN_URL)
+    return handleAuth(when(request({
+        url: LoginConstants.LOGIN_URL,
+        method: 'POST',
+        type: 'application/json',
+        data: {
+            email, password
+        }
+    })));
+}
 
-    logout() {
-        LoginActions.logoutUser();
-    }
+export var logout = function () {
+    LoginActions.logoutUser();
+}
 
-    handleAuth(loginPromise) {
-        return loginPromise
-            .then(function(response) {
-                var jwt = response.id_token;
-                LoginActions.loginUser(jwt);
-                return true;
-            });
-    }
+export var handleAuth = function(loginPromise) {
+    return loginPromise
+        .then(function(response) {
+            var jwt = response.id_token;
+            LoginActions.loginUser(jwt);
+            return true;
+        });
 }
