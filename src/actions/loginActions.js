@@ -11,9 +11,10 @@ export var loginAction = function(jwt) {
     })
 
     if (savedJwt !== jwt) {
-        browserHistory.push('/dashboard')
         localStorage.setItem('sayhi-jwt', jwt)
     }
+
+    browserHistory.push('/dashboard')
 }
 
 export var logoutAction = function() {

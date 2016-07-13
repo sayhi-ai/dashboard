@@ -1,7 +1,8 @@
-import {LOGIN_USER, LOGOUT_USER} from '../constants/LoginConstants';
+import LoginConstants from '../constants/loginConstants';
 import BaseStore from './baseStore';
 import AppDispatcher from "../dispatchers/appDispatcher"
 import jwt_decode from 'jwt-decode';
+import assign from 'object-assign'
 
 var _user, _jwt
 var LoginStore = assign({}, BaseStore, {
@@ -20,12 +21,12 @@ var LoginStore = assign({}, BaseStore, {
 
 AppDispatcher.register(function(action) {
     switch(action.actionType) {
-        case LOGIN_USER:
+        case LoginConstants.LOGIN_USER:
             _jwt = action.jwt
             _user = jwt_decode(_jwt)
             LoginStore.emitChange()
             break;
-        case LOGOUT_USER:
+        case LoginConstants.LOGOUT_USER:
             _user = null
             LoginStore.emitChange()
             break
