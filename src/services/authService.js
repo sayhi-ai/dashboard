@@ -4,6 +4,8 @@ import LoginConstants from '../constants/loginConstants.js';
 import {loginAction, logoutAction} from '../actions/loginActions';
 
 export var login = function (email, password) {
+    localStorage.setItem('sayhi-user', email)
+    
     return handleAuth(when(request({
         url: LoginConstants.LOGIN_URL,
         method: 'POST',
@@ -15,6 +17,7 @@ export var login = function (email, password) {
 }
 
 export var logout = function () {
+    localStorage.removeItem('sayhi-user')
     logoutAction();
 }
 

@@ -1,3 +1,20 @@
-$font-stack: Helvetica, sans-serif;
+// Colors
 $primary-color: #19A5E4;
 $background-color: #F5F5F5;
+$body-text-color: #4A4A4A;
+
+// Fonts
+@font-face {
+  font-family: Hero-Font;
+  src: url("./resources/fonts/exo/Exo-Regular.otf");
+}
+
+@font-face {
+  font-family: Header-Font;
+  src: url("./resources/fonts/roboto/Roboto-Light.ttf");
+}
+
+@font-face {
+  font-family: Body-Font;
+  src: url("./resources/fonts/lato/Lato-Regular.ttf");
+}
