@@ -1,6 +1,7 @@
 import React from 'react'
 import {Route, IndexRedirect} from "react-router"
-
+import LoginStore from './stores/loginStore';
+import { browserHistory } from 'react-router'
 // import components
 import App from "./components/app/App"
 import Login from "./components/login/Login"

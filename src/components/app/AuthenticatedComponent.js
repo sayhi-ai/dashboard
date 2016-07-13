@@ -1,6 +1,6 @@
 import React from 'react';
 import LoginStore from '../../stores/loginStore';
-import NotLoggedIn from "./NotLoggedIn"
+import { browserHistory } from 'react-router'
 
 export default (ComposedComponent) => {
     return class AuthenticatedComponent extends React.Component {
@@ -31,19 +31,17 @@ export default (ComposedComponent) => {
         }
 
         render() {
-            if (this.state.userLoggedIn) {
-                return (
-                    <ComposedComponent
-                        {...this.props}
-                        user={this.state.user}
-                        jwt={this.state.jwt}
-                        userLoggedIn={this.state.userLoggedIn}/>
-                );
-            } else {
-                return (
-                    <NotLoggedIn/>
-                );
+            if (!this.state.userLoggedIn) {
+                browserHistory.push('/login')
             }
+
+            return (
+                <ComposedComponent
+                    {...this.props}
+                    user={this.state.user}
+                    jwt={this.state.jwt}
+                    userLoggedIn={this.state.userLoggedIn}/>
+            );
         }
     }
 };
