@@ -1,10 +1,13 @@
 @import '../app/theme';
 @import 'drawer/drawer';
 @import 'account/account';
+@import 'content/content';
+
 
 .dashboard-screen {
   display: block;
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
+  height: auto;
   background-color: $background-color;
 }

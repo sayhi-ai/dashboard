@@ -1,4 +1,5 @@
 import React from "react"
+import injectTapEventPlugin from 'react-tap-event-plugin';
 import MuiTheme from './MuiTheme';
 import LoginStore from '../../stores/loginStore';
 import AuthService from '../../services/authService'
@@ -7,6 +8,8 @@ export default class App extends React.Component {
     constructor() {
         super()
         this.state = this._getLoginState();
+
+        injectTapEventPlugin()
     }
 
     _getLoginState() {

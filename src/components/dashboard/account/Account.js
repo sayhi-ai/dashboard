@@ -48,7 +48,7 @@ export default class Account extends React.Component {
                 <IconButton style={iconStyle}
                             iconStyle={{fill: "rgb(117, 117, 117)"}}
                             onClick={this.handleToggleClick.bind(this)}>
-                    <MoreVertIcon />
+                    <MoreVertIcon/>
                 </IconButton>
                 <Popover
                     open={this.state.open}

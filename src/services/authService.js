@@ -24,7 +24,7 @@ export var logout = function () {
 export var handleAuth = function(loginPromise) {
     return loginPromise
         .then(function(response) {
-            var jwt = response.response
+            var jwt = response.response.substring(1, response.response.length - 1);
             loginAction(jwt)
             return true  
         })

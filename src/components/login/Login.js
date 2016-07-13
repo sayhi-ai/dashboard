@@ -19,13 +19,11 @@ export default class Login extends React.Component {
     _setUsername(e) {
         this.setState({
             user: e.target.value,
-            password: this.state.password
         })
     }
 
     _setPassword(e) {
         this.setState({
-            user: this.state.user,
             password: e.target.value
         })
     }
@@ -68,6 +66,10 @@ export default class Login extends React.Component {
                                                       primary={true}
                                                       onClick={this._login.bind(this)}
                                                       label="Login"/>
+                                    </div>
+                                    <div style={{position: "absolute", left: "-5000px"}} aria-hidden="true">
+                                        <input type="text" name="b_91105fa973023812cf53dce73_5ddf44500c" tabIndex="-1"
+                                               id="validate" ref="validated"/>
                                     </div>
                                 </form>
                             </div>
