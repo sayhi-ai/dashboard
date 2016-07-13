@@ -17,7 +17,6 @@ var SearchStore = assign({}, BaseStore, {
     }
 });
 
-// Register callback to handle all updates
 AppDispatcher.register(function(action) {
     let results;
 

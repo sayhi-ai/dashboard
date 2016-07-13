@@ -1,41 +1,37 @@
 import {LOGIN_USER, LOGOUT_USER} from '../constants/LoginConstants';
 import BaseStore from './baseStore';
+import AppDispatcher from "../dispatchers/appDispatcher"
 import jwt_decode from 'jwt-decode';
 
+var _user, _jwt
+var LoginStore = assign({}, BaseStore, {
+    getUser: function() {
+        return _user
+    },
 
-export default class LoginStore extends BaseStore {
+    getJwt: function() {
+        return _jwt
+    },
 
-    constructor() {
-        super(() => this._registerToActions.bind(this));
-        this._user = null;
-        this._jwt = null;
+    isLoggedIn: function() {
+        return !!_user
     }
+})
 
-    _registerToActions(action) {
-        switch(action.actionType) {
-            case LOGIN_USER:
-                this._jwt = action.jwt;
-                this._user = jwt_decode(this._jwt);
-                this.emitChange();
-                break;
-            case LOGOUT_USER:
-                this._user = null;
-                this.emitChange();
-                break;
-            default:
-                break;
-        }
+AppDispatcher.register(function(action) {
+    switch(action.actionType) {
+        case LOGIN_USER:
+            _jwt = action.jwt
+            _user = jwt_decode(_jwt)
+            LoginStore.emitChange()
+            break;
+        case LOGOUT_USER:
+            _user = null
+            LoginStore.emitChange()
+            break
+        default:
+            break
     }
+})
 
-    get user() {
-        return this._user;
-    }
-
-    get jwt() {
-        return this._jwt;
-    }
-
-    isLoggedIn() {
-        return !!this._user;
-    }
-}
+export default LoginStore
