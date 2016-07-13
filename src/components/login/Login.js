@@ -10,23 +10,23 @@ export default class Login extends React.Component {
     constructor() {
         super()
         this.state = {
-            user: 'vader@sayhi.ai',
-            password: 'DarthCockulusIs19InchesLong!'
+            user: '',
+            password: ''
         };
     }
     
     _setUsername(e) {
-        // this.setState({
-        //     user: e.target.value,
-        //     password: this.state.password
-        // })
+        this.setState({
+            user: e.target.value,
+            password: this.state.password
+        })
     }
 
     _setPassword(e) {
-        // this.setState({
-        //     user: this.state.user,
-        //     password: e.target.value
-        // })
+        this.setState({
+            user: this.state.user,
+            password: e.target.value
+        })
     }
 
     _login(e) {
@@ -52,7 +52,7 @@ export default class Login extends React.Component {
                                                    onChange={this._setUsername.bind(this)}
                                                    className="form-control"
                                                    id="username"
-                                                   placeholder="Username" />
+                                                   placeholder="Email" />
                                     </div>
                                     <div className="">
                                         <TextField type="password"
