@@ -1,50 +1,54 @@
+import AppDispatcher from '../dispatchers/appDispatcher'
 import BaseStore from './baseStore';
 import SearchConstants from '../constants/searchConstants.js';
+import assign from 'object-assign'
 
-export default class SearchStore extends BaseStore {
-    constructor() {
-        super(() => this._registerToActions.bind(this))
-        this._searchTerms = {}
-    }
+var CHANGE_EVENT = 'change'
+
+var _searchTerms = {}
+
+var SearchStore = assign({}, BaseStore, {
+    getAll: function() {
+        return _searchTerms;
+    },
     
-    getAll() {
-        return this._searchTerms
-    }
-
     updateAll(updates) {
-        this._searchTerms = updates
+        _searchTerms = updates
     }
+});
 
-    _registerToActions(action) {
-        let results;
-        console.log("got here")
-        switch(action.actionType) {
-            case SearchConstants.SEARCH:
-                if (action.terms.length !== 0) {
-                    results = [{
-                        type: "key",
-                        name: "this is a key"
-                    }, {
-                        type: "key",
-                        name: "this is a persona"
-                    }]
-                } else {
-                    results = [{}]
-                }
+// Register callback to handle all updates
+AppDispatcher.register(function(action) {
+    let results;
 
-                this.emitChange()
-                break
+    switch(action.actionType) {
+        case SearchConstants.SEARCH:
+            if (action.terms.length !== 0) {
+                results = [{
+                    type: "key",
+                    name: "this is a key"
+                }, {
+                    type: "key",
+                    name: "this is a persona"
+                }]
+            } else {
+                results = [{}]
+            }
 
-            case SearchConstants.UPDATE_SEARCH_RESULTS:
-                results = action.results
-                if (results.length !== 0) {
-                    this.updateAll(results)
-                    this.emitChange()
-                }
-                break
+            SearchStore.emitChange()
+            break
 
-            default:
-            // no op
-        }
+        case SearchConstants.UPDATE_SEARCH_RESULTS:
+            results = action.results
+            if (results.length !== 0) {
+                SearchStore.updateAll(results)
+                SearchStore.emitChange()
+            }
+            break
+
+        default:
+        // no op
     }
-}
+})
+
+export default SearchStore

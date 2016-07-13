@@ -20,11 +20,11 @@ export default class DashboardDrawer extends React.Component {
     }
 
     componentDidMount() {
-        SearchStore.addChangeListener(this._updateSearchResults)
+        SearchStore.addChangeListener(this._updateSearchResults.bind(this))
     }
 
     componentWillUnmount() {
-        SearchStore.removeChangeListener(this._updateSearchResults)
+        SearchStore.removeChangeListener(this._updateSearchResults.bind(this))
     }
 
     _fireSearchAction(e) {

@@ -1,27 +1,29 @@
-import AppDispatcher from '../dispatchers/appDispatcher';
-import EventEmitter from 'events';
+import assign from 'object-assign';
+import AppDispatcher from "../dispatchers/appDispatcher"
+var EventEmitter = require('events').EventEmitter;
 
-const CHANGE_EVENT = 'change'
+var CHANGE_EVENT = 'change'
 
-export default class BaseStore extends EventEmitter {
-    constructor(actionSubscribe) {
-        super()
+var BaseStore = assign({}, EventEmitter.prototype, {
+    register: function(actionSubscribe) {
         this._dispatchToken = AppDispatcher.register(actionSubscribe())
-    }
+    },
 
-    dispatchToken() {
+    dispatchToken: function() {
         return this._dispatchToken
-    }
+    },
 
-    emitChange() {
+    emitChange: function() {
         this.emit(CHANGE_EVENT)
-    }
+    },
 
-    addChangeListener(callback) {
+    addChangeListener: function(callback) {
         this.on(CHANGE_EVENT, callback)
-    }
+    },
 
-    removeChangeListener(callback) {
+    removeChangeListener: function(callback) {
         this.removeListener(CHANGE_EVENT, callback)
     }
-}
+})
+
+export default BaseStore
