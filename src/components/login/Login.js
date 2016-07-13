@@ -4,6 +4,7 @@ import TextField from "material-ui/TextField"
 import RaisedButton from "material-ui/RaisedButton"
 import Paper from "material-ui/Paper"
 import logoTitleImage from "../../resources/img/logowithtext.png"
+import when from 'when';
 
 export default class Login extends React.Component {
   
@@ -32,9 +33,6 @@ export default class Login extends React.Component {
     _login(e) {
         e.preventDefault();
         login(this.state.user, this.state.password)
-            .catch(function(err) {
-                console.log("Error logging in", err);
-            });
     }
 
     render() {
@@ -63,6 +61,7 @@ export default class Login extends React.Component {
                                                    ref="password" 
                                                    placeholder="Password" />
                                     </div>
+                                    <div className="login-error-field">{this.props.loginError}</div>
                                     <div className="login-button">
                                         <RaisedButton type="submit"
                                                       labelStyle={{color:"#FFFFFF"}}

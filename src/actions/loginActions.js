@@ -17,6 +17,13 @@ export var loginAction = function(jwt) {
     browserHistory.push('/dashboard')
 }
 
+export var errorLoginAction = function(error) {
+    AppDispatcher.dispatch({
+        actionType: LoginConstants.LOGIN_ERROR,
+        error: error
+    })
+}
+
 export var logoutAction = function() {
     browserHistory.push('/login')
     localStorage.removeItem('sayhi-jwt')

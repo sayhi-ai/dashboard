@@ -31,17 +31,18 @@ export default (ComposedComponent) => {
         }
 
         render() {
-            if (!this.state.userLoggedIn) {
-                browserHistory.push('/login')
+            if (this.state.userLoggedIn) {
+                return (
+                    <ComposedComponent
+                        {...this.props}
+                        user={this.state.user}
+                        jwt={this.state.jwt}
+                        userLoggedIn={this.state.userLoggedIn}/>
+                )
+            } else {
+                browserHistory.push('/login') // redirect if not logged in
+                return <div/>
             }
-
-            return (
-                <ComposedComponent
-                    {...this.props}
-                    user={this.state.user}
-                    jwt={this.state.jwt}
-                    userLoggedIn={this.state.userLoggedIn}/>
-            );
         }
     }
 };

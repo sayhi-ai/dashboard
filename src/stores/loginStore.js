@@ -30,6 +30,8 @@ AppDispatcher.register(function(action) {
             _user = null
             LoginStore.emitChange()
             break
+        case LoginConstants.LOGIN_ERROR:
+            LoginStore.emitChange()
         default:
             break
     }

@@ -40,6 +40,12 @@
 
   .login-form-div {
 
+    .login-error-field {
+      display: block;
+      width: 100%;
+      text-align: center;
+    }
+
     .login-button {
       color: white;
       margin-top: 10%;

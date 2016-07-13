@@ -21,8 +21,12 @@ export var logout = function () {
 export var handleAuth = function(loginPromise) {
     return loginPromise
         .then(function(response) {
-            var jwt = response.response;
-            loginAction(jwt);
-            return true;
-        });
+            var jwt = response.response
+            loginAction(jwt)
+            return true  
+        })
+        .catch(function(error) {
+            console.log(error)
+            return false
+        })
 }
