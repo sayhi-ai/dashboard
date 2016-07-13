@@ -8,6 +8,9 @@
   font-family: Header-Font, sans-serif;
   padding: 10%;
   color: $primary-color;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .account-menu-item {
