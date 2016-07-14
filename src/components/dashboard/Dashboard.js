@@ -7,7 +7,7 @@ import Content from "./content/Content"
 export default AuthenticatedComponent(class Dashboard extends React.Component {
     render() {
         return (
-            <div className="dashboard-screen">
+            <div className="dashboard-screen disable-select">
                 <Account user={this.props.user}/>
                 <DashboardDrawer/>
                 <Content/>
