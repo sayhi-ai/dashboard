@@ -7,19 +7,45 @@ import SearchConstants from '../../../constants/searchConstants';
 import Icon from "../../app/Icon"
 import key from "../../../resources/img/key.svg"
 import persona from "../../../resources/img/persona.svg"
+var Immutable = require('immutable');
 
 export default class ContentCard extends React.Component {
     
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
+
+        let responseComponents = this.props.responses.map(res =>
+            <TableRow><TableRowColumn>{res}</TableRowColumn></TableRow>
+        )
+
+        let immutableList = Immutable.List(responseComponents)
+
         this.state = {
-            addResponseText: ''
+            addResponseText: '',
+            responses: immutableList
         }
     }
 
     _setAddResponseText(e) {
         this.setState({
             addResponseText: e.target.value
+        })
+    }
+
+    _handleAddClick(e) {
+        e.preventDefault()
+        let responseToAdd = this.state.addResponseText
+
+        if (responseToAdd != "" && responseToAdd.length < 200) {
+            // add the response
+            this._addResponse(responseToAdd)
+        }
+    }
+    
+    _addResponse(response) {
+        this.setState({
+            addResponseText: '',
+            responses: this.state.responses.push(<TableRow><TableRowColumn>{response}</TableRowColumn></TableRow>)
         })
     }
     
@@ -42,7 +68,7 @@ export default class ContentCard extends React.Component {
 
         let avatar = key
         let subtitle = "Key"
-        if (this.props.type === SearchConstants.KEY) {
+        if (this.props.type === SearchConstants.PERSONA) {
             avatar = persona
             subtitle = "Persona"
         }
@@ -67,27 +93,15 @@ export default class ContentCard extends React.Component {
                                     </TableHeaderColumn>
                                 </TableRow>
                             </TableHeader>
-                            <TableBody displayRowCheckbox={false}
-                                       className="content-table-text">
-                                <TableRow>
-                                    <TableRowColumn>1</TableRowColumn>
-                                </TableRow>
-                                <TableRow>
-                                    <TableRowColumn>2</TableRowColumn>
-                                </TableRow>
-                                <TableRow>
-                                    <TableRowColumn>3</TableRowColumn>
-                                </TableRow>
-                                <TableRow>
-                                    <TableRowColumn>4</TableRowColumn>
-                                </TableRow>
+                            <TableBody displayRowCheckbox={false} className="content-table-text">
+                                {this.state.responses}
                             </TableBody>
                         </Table>
                     </CardText>
                     <CardActions style={cardActionStyle} expandable={true}>
                         <RaisedButton labelStyle={{color:"#FFFFFF", textTransform:"none"}}
                                       primary={true}
-                                      onClick={console.log("click")}
+                                      onClick={this._handleAddClick.bind(this)}
                                       label="Add"/>
                         <TextField type="text"
                                    style={{paddingLeft: "10px"}}
