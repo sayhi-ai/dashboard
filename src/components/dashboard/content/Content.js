@@ -5,7 +5,20 @@ import SearchConstants from '../../../constants/searchConstants';
 export default class Content extends React.Component {
     render() {
 
-        let responses = ["response 1", "response 2", "response 3", "response 4"]
+        let responses = [{
+            persona: "neutral",
+            response: "Dude"
+        }, {
+            persona: "Darth Vader",
+            response: "Luke, I am your father."
+        }, {
+            persona: "neutral",
+            response: "Cool."
+        }, {
+            persona: "Bro",
+            response: "I am awesome."
+        }]
+        
         return (
             <div className="content-div">
                 <ContentCard title="Darth Vader" type={SearchConstants.PERSONA} responses={responses}/>

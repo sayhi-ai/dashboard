@@ -15,13 +15,17 @@ export default class ContentCard extends React.Component {
         super(props)
 
         let responseComponents = this.props.responses.map(res =>
-            <TableRow><TableRowColumn>{res}</TableRowColumn></TableRow>
+            <TableRow>
+                <TableRowColumn style={{width: "150px"}}>{res.persona}</TableRowColumn>
+                <TableRowColumn>{res.response}</TableRowColumn>
+            </TableRow>
         )
 
         let immutableList = Immutable.List(responseComponents)
 
         this.state = {
             addResponseText: '',
+            addResponseType: '',
             responses: immutableList
         }
     }
@@ -32,20 +36,39 @@ export default class ContentCard extends React.Component {
         })
     }
 
+    _setAddResponseType(e) {
+        this.setState({
+            addResponseType: e.target.value
+        })
+    }
+
     _handleAddClick(e) {
         e.preventDefault()
-        let responseToAdd = this.state.addResponseText
+        let response = this.state.addResponseText
+        let responseType = this.state.addResponseType
 
-        if (responseToAdd != "" && responseToAdd.length < 200) {
+        if (response !== "" && response.length < 200 && responseType !== "" && responseType.length < 30) {
             // add the response
-            this._addResponse(responseToAdd)
+            this._addResponse(responseType, response)
+        }
+    }
+
+    _handleKeyPress(event) {
+        if(event.key == 'Enter'){
+            this._handleAddClick(event)
         }
     }
     
-    _addResponse(response) {
+    _addResponse(responseType, response) {
         this.setState({
             addResponseText: '',
-            responses: this.state.responses.push(<TableRow><TableRowColumn>{response}</TableRowColumn></TableRow>)
+            addResponseType: '',
+            responses: this.state.responses.push(
+                <TableRow>
+                    <TableRowColumn>{responseType}</TableRowColumn>
+                    <TableRowColumn>{response}</TableRowColumn>
+                </TableRow>
+            )
         })
     }
     
@@ -68,13 +91,15 @@ export default class ContentCard extends React.Component {
 
         let avatar = key
         let subtitle = "Key"
+        let tableType = "Persona"
         if (this.props.type === SearchConstants.PERSONA) {
             avatar = persona
             subtitle = "Persona"
+            tableType = "Key"
         }
         
         return (
-                <Card className="content-card">
+                <Card className="content-card" onKeyPress={this._handleKeyPress.bind(this)}>
                     <CardHeader
                         title={this.props.title}
                         style={{fontFamily: "Hero-Font"}}
@@ -88,8 +113,11 @@ export default class ContentCard extends React.Component {
                         <Table>
                             <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                                 <TableRow>
+                                    <TableHeaderColumn style={{width: "150px"}} className="content-table-title">
+                                        {tableType}
+                                    </TableHeaderColumn>
                                     <TableHeaderColumn className="content-table-title">
-                                        Responses
+                                        Response
                                     </TableHeaderColumn>
                                 </TableRow>
                             </TableHeader>
@@ -104,11 +132,17 @@ export default class ContentCard extends React.Component {
                                       onClick={this._handleAddClick.bind(this)}
                                       label="Add"/>
                         <TextField type="text"
+                                   style={{paddingLeft: "10px", width: "150px"}}
+                                   value={this.state.addResponseType}
+                                   onChange={this._setAddResponseType.bind(this)}
+                                   id="addResponseText"
+                                   placeholder={tableType} />
+                        <TextField type="text"
                                    style={{paddingLeft: "10px"}}
                                    value={this.state.addResponseText}
                                    onChange={this._setAddResponseText.bind(this)}
                                    id="addResponseText"
-                                   placeholder="Add a custom response" />
+                                   placeholder="Response" />
                     </CardActions>
                 </Card>
         );
