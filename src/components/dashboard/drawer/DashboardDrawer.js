@@ -3,6 +3,7 @@ import Drawer from 'material-ui/Drawer';
 import SearchStore from "../../../stores/searchStore"
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import Divider from 'material-ui/Divider';
 import {changePhrase, changePersona} from "../../../actions/searchAction"
 import SearchConstants from '../../../constants/searchConstants.js';
 import logoTitleImage from "../../../resources/img/logowithtext.png"
@@ -17,18 +18,39 @@ export default class DashboardDrawer extends React.Component {
         super(props)
 
         this.phrasesText = Immutable.List(["Hi", "Pokemon caught", "Pokemon info", "Bye"])
+        this.phrasesText = this.phrasesText.push("Add a phrase...")
         this.personaText = Immutable.List(["Neutral", "Darth Vader", "Bro", "Pikachu"])
-        
+        this.personaText = this.personaText.push("Add a persona...")
+
         let i = 0 // Start at 0 because we add first
         let phrases = Immutable.List(this.phrasesText.map(phrase => {
             i++
-            return <MenuItem value={i} primaryText={phrase} />
+            
+            if (i === this.phrasesText.size) {
+                return (
+                    <div>
+                        <Divider/>
+                        <MenuItem value={i} primaryText={phrase}/>
+                    </div>
+                )
+            } else {
+                return <MenuItem value={i} primaryText={phrase}/> 
+            }
         }))
 
         let j = 0 // Start at 0 because we add first
         let personas = Immutable.List(this.personaText.map(persona => {
             j++
-            return <MenuItem value={j} primaryText={persona} />
+            if (j === this.phrasesText.size) {
+                return (
+                    <div>
+                        <Divider/>
+                        <MenuItem value={j} primaryText={persona} />
+                    </div>
+                )
+            } else {
+                return <MenuItem value={j} primaryText={persona} />
+            }
         }))
         
         this.state = {
@@ -41,10 +63,11 @@ export default class DashboardDrawer extends React.Component {
     }
 
     _handlePhraseSelectFieldChange = (event, index, value) => {
+        console.log(this.phrasesText)
         if (value == this.phrasesText.size) {
             
         } else {
-            changePhrase(this.phrasesText[value - 1])
+            changePhrase(this.phrasesText.get(value - 1))
             this.setState({phraseValue: value});
         }
     }
@@ -53,7 +76,7 @@ export default class DashboardDrawer extends React.Component {
         if (value == this.personaText.size) {
 
         } else {
-            changePersona(this.personaText[value - 1])
+            changePersona(this.personaText.get(value - 1))
             this.setState({personaValue: value})
         }
     }
@@ -63,42 +86,6 @@ export default class DashboardDrawer extends React.Component {
         if (searchInput.length !== 0) {
             searchTerms(searchInput)
         }
-    }
-
-    _updateSearchResults() {
-        let styles = {
-            display: "block",
-            fill: "rgb(117, 117, 117)",
-            height: "24px",
-            width: "24px",
-            transition: "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-            position: "absolute",
-            top: "0px",
-            margin: "12px",
-            left: "4px",
-            WebkiUserSelect: "none"
-        }
-        
-        let results = SearchStore.getAll()
-        let resultComponents
-        if (results[0].type != undefined) {
-            resultComponents = results.map(res => {
-                    if (res.type === SearchConstants.KEY) {
-                        return <ListItem innerDivStyle={{textAlign: "left"}} primaryText={res.name}
-                                         leftIcon={<Icon styles={styles} svg={key}/>}/>
-                    } else {
-                        return <ListItem innerDivStyle={{textAlign: "left"}} primaryText={res.name}
-                                         leftIcon={<Icon styles={styles} svg={persona}/>}/>
-                    }
-                }
-            )
-        } else {
-            resultComponents = []
-        }
-
-        this.setState({
-            searchResults: resultComponents
-        })
     }
 
     render() {
