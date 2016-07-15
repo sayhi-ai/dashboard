@@ -3,11 +3,9 @@ import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
-import SearchConstants from '../../../constants/searchConstants';
 import Icon from "../../app/Icon"
-import key from "../../../resources/img/key.svg"
-import persona from "../../../resources/img/persona.svg"
 var Immutable = require('immutable');
+import SearchStore from "../../../stores/searchStore"
 
 export default class ContentCard extends React.Component {
     
@@ -16,7 +14,6 @@ export default class ContentCard extends React.Component {
 
         let responseComponents = this.props.responses.map(res =>
             <TableRow>
-                <TableRowColumn style={{width: "150px"}}>{res.persona}</TableRowColumn>
                 <TableRowColumn>{res.response}</TableRowColumn>
             </TableRow>
         )
@@ -24,10 +21,37 @@ export default class ContentCard extends React.Component {
         let immutableList = Immutable.List(responseComponents)
 
         this.state = {
+            phrase: "Hi",
+            persona: "Neutral",
             addResponseText: '',
-            addResponseType: '',
             responses: immutableList
         }
+    }
+
+    componentDidMount() {
+        SearchStore.addChangeListener(this._updatePhrase.bind(this))
+        SearchStore.addChangeListener(this._updatePersona.bind(this))
+    }
+
+    componentWillUnmount() {
+        SearchStore.addChangeListener(this._updatePhrase.bind(this))
+        SearchStore.removeChangeListener(this._updatePersona.bind(this))
+    }
+
+    _updatePhrase() {
+        let phrase = SearchStore.getPhrase()
+        
+        this.setState({
+            phrase: phrase
+        })
+    }
+
+    _updatePersona() {
+        let persona = SearchStore.getPersona()
+
+        this.setState({
+            persona: persona
+        })
     }
 
     _setAddResponseText(e) {
@@ -36,20 +60,13 @@ export default class ContentCard extends React.Component {
         })
     }
 
-    _setAddResponseType(e) {
-        this.setState({
-            addResponseType: e.target.value
-        })
-    }
-
     _handleAddClick(e) {
         e.preventDefault()
         let response = this.state.addResponseText
-        let responseType = this.state.addResponseType
 
-        if (response !== "" && response.length < 200 && responseType !== "" && responseType.length < 30) {
+        if (response !== "" && response.length < 200) {
             // add the response
-            this._addResponse(responseType, response)
+            this._addResponse(response)
         }
     }
 
@@ -59,13 +76,11 @@ export default class ContentCard extends React.Component {
         }
     }
     
-    _addResponse(responseType, response) {
+    _addResponse(response) {
         this.setState({
             addResponseText: '',
-            addResponseType: '',
             responses: this.state.responses.push(
                 <TableRow>
-                    <TableRowColumn>{responseType}</TableRowColumn>
                     <TableRowColumn>{response}</TableRowColumn>
                 </TableRow>
             )
@@ -88,36 +103,24 @@ export default class ContentCard extends React.Component {
         let cardActionStyle = {
             padding: "16px"
         }
-
-        let avatar = key
-        let subtitle = "Key"
-        let tableType = "Persona"
-        if (this.props.type === SearchConstants.PERSONA) {
-            avatar = persona
-            subtitle = "Persona"
-            tableType = "Key"
-        }
         
         return (
                 <Card className="content-card" onKeyPress={this._handleKeyPress.bind(this)}>
                     <CardHeader
-                        title={this.props.title}
+                        title={"\"" + this.state.phrase + "\""}
                         style={{fontFamily: "Hero-Font"}}
                         titleStyle={{paddingTop: "10px"}}
-                        subtitle={subtitle}
-                        avatar={<Icon styles={avatarStyle} svg={avatar}/>}
-                        actAsExpander={true}
-                        showExpandableButton={true}
+                        subtitle={this.state.persona}
+                        avatar={<Icon styles={avatarStyle} svg={this.props.avatar}/>}
+                        actAsExpander={false}
+                        showExpandableButton={false}
                     />
-                    <CardText expandable={true}>
+                    <CardText expandable={false}>
                         <Table>
                             <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                                 <TableRow>
-                                    <TableHeaderColumn style={{width: "150px"}} className="content-table-title">
-                                        {tableType}
-                                    </TableHeaderColumn>
                                     <TableHeaderColumn className="content-table-title">
-                                        Response
+                                        Responses
                                     </TableHeaderColumn>
                                 </TableRow>
                             </TableHeader>
@@ -126,17 +129,11 @@ export default class ContentCard extends React.Component {
                             </TableBody>
                         </Table>
                     </CardText>
-                    <CardActions style={cardActionStyle} expandable={true}>
+                    <CardActions style={cardActionStyle} expandable={false}>
                         <RaisedButton labelStyle={{color:"#FFFFFF", textTransform:"none"}}
                                       primary={true}
                                       onClick={this._handleAddClick.bind(this)}
                                       label="Add"/>
-                        <TextField type="text"
-                                   style={{paddingLeft: "10px", width: "150px"}}
-                                   value={this.state.addResponseType}
-                                   onChange={this._setAddResponseType.bind(this)}
-                                   id="addResponseText"
-                                   placeholder={tableType} />
                         <TextField type="text"
                                    style={{paddingLeft: "10px"}}
                                    value={this.state.addResponseText}

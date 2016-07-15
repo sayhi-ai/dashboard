@@ -1,7 +1,21 @@
 import AppDispatcher from '../dispatchers/appDispatcher';
 import SearchConstants from '../constants/searchConstants.js';
 
-export var searchTerms = function (terms) {
+export var changePhrase = function(phrase) {
+    AppDispatcher.dispatch({
+        actionType: SearchConstants.UPDATE_PHRASE,
+        phrase: phrase
+    })
+}
+
+export var changePersona = function(persona) {
+    AppDispatcher.dispatch({
+        actionType: SearchConstants.UPDATE_PERSONA,
+        persona: persona
+    })
+}
+
+export var searchTerms = function(terms) {
     let results
     if (terms[0] !== "") {
         results = [{
