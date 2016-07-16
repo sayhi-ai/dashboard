@@ -60,7 +60,7 @@ export default class ContentCard extends React.Component {
     _updatePhrase() {
         let phrase = SearchStore.getPhrase()
 
-        if (phrase !== "") {
+        if (phrase !== "" && phrase !== this.state.phrase) {
             this.setState({
                 phrase: phrase
             })
@@ -72,7 +72,7 @@ export default class ContentCard extends React.Component {
     _updatePersona() {
         let persona = SearchStore.getPersona()
 
-        if (persona !== "") {
+        if (persona !== "" && persona !== this.state.persona) {
             this.setState({
                 persona: persona
             })
