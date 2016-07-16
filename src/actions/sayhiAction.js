@@ -1,16 +1,16 @@
 import AppDispatcher from '../dispatchers/appDispatcher';
-import SearchConstants from '../constants/searchConstants.js';
+import SayHiConstants from '../constants/sayhiConstants.js';
 
-export var updateData = function(phrase) {
+export var distributeData = function(data) {
     AppDispatcher.dispatch({
-        actionType: SearchConstants.UPDATE_PHRASE,
-        phrase: phrase
+        actionType: SayHiConstants.DISTRIBUTE_DATA,
+        data: data
     })
 }
 
-export var addResponse = function(persona) {
+export var addResponse = function(responseData) {
     AppDispatcher.dispatch({
-        actionType: SearchConstants.UPDATE_PERSONA,
-        persona: persona
+        actionType: SayHiConstants.ADD_RESPONSE,
+        responseData: responseData
     })
 }

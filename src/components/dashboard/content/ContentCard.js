@@ -6,45 +6,66 @@ import TextField from 'material-ui/TextField'
 import Icon from "../../app/Icon"
 var Immutable = require('immutable');
 import SearchStore from "../../../stores/searchStore"
+import SayHiStore from "../../../stores/sayhiStore"
 
 export default class ContentCard extends React.Component {
     
     constructor(props) {
         super(props)
 
-        let responseComponents = this.props.responses.map(res =>
-            <TableRow>
-                <TableRowColumn>{res.text}</TableRowColumn>
-            </TableRow>
-        )
-
-        let immutableList = Immutable.List(responseComponents)
-
         this.state = {
             phrase: "Hi",
             persona: "Neutral",
             addResponseText: '',
-            responses: immutableList
+            data: [],
+            responses: []
         }
     }
 
     componentDidMount() {
         SearchStore.addChangeListener(this._updatePhrase.bind(this))
         SearchStore.addChangeListener(this._updatePersona.bind(this))
+        SayHiStore.addChangeListener(this._setData.bind(this))
     }
 
     componentWillUnmount() {
-        SearchStore.addChangeListener(this._updatePhrase.bind(this))
+        SearchStore.removeChangeListener(this._updatePhrase.bind(this))
         SearchStore.removeChangeListener(this._updatePersona.bind(this))
+        SayHiStore.removeChangeListener(this._setData.bind(this))
+    }
+    
+    _setData() {
+        let data = SayHiStore.getData()
+        
+        this.setState({
+            data: data
+        })
+
+        this._updateSearchResults(this.state.phrase, this.state.persona)
+    }
+
+    _updateSearchResults(phrase, persona) {
+        let responseComponents = this.state.data
+            .filter(res => {
+                console.log(phrase, persona)
+                return phrase === res.phrase && persona === res.persona
+            })
+            .map(res => <TableRow><TableRowColumn>{res.text}</TableRowColumn></TableRow>)
+        
+        this.setState({
+            responses: Immutable.List(responseComponents)
+        })
     }
 
     _updatePhrase() {
         let phrase = SearchStore.getPhrase()
-        
+
         if (phrase !== "") {
             this.setState({
                 phrase: phrase
             })
+            
+            this._updateSearchResults(phrase, this.state.persona)
         }
     }
 
@@ -55,6 +76,8 @@ export default class ContentCard extends React.Component {
             this.setState({
                 persona: persona
             })
+
+            this._updateSearchResults(this.state.phrase, persona)
         }
     }
 

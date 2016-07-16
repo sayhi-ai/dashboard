@@ -22,11 +22,11 @@ export default class DashboardDrawer extends React.Component {
     }
 
     componentDidMount() {
-        SearchStore.addChangeListener(this._setPhrasesAndPersonas.bind(this))
+        SearchStore.addChangeListener(this._initSearch.bind(this))
     }
 
     componentWillUnmount() {
-        SearchStore.addChangeListener(this._setPhrasesAndPersonas.bind(this))
+        SearchStore.removeChangeListener(this._initSearch.bind(this))
     }
     
     _initPhraseList(phraseList) {
@@ -68,8 +68,8 @@ export default class DashboardDrawer extends React.Component {
             }
         }))
     }
-    
-    _setPhrasesAndPersonas() {
+
+    _initSearch() {
         let phrases = SearchStore.getAllPhrases()
         let personas = SearchStore.getAllPersonas()
         
@@ -77,12 +77,16 @@ export default class DashboardDrawer extends React.Component {
             this.setState({
                 phrases: this._initPhraseList(phrases)
             })
+            
+            //changePhrase(phrases[0])
         }
         
         if (personas.length > 0) {
             this.setState({
                 personas: this._initPersonaList(personas)
             })
+
+            //changePersona(personas[0])
         }
     }
 

@@ -11,7 +11,7 @@ export default class Content extends React.Component {
     render() {
         return (
             <div className="content-div">
-                <ContentCard avatar={persona} responses={this.props.responses}/>
+                <ContentCard avatar={persona}/>
             </div>
         );
     }

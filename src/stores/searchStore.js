@@ -58,7 +58,7 @@ AppDispatcher.register(function(action) {
             }
             break
 
-        case SearchConstants.SET_PHRASES_AND_PERSONAS:
+        case SearchConstants.INIT_SEARCH:
             if (action.phrases.length > 0) {
                 SearchStore.setAllPhrases(action.phrases)
                 SearchStore.setAllPersonas(action.personas)

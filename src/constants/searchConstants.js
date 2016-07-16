@@ -3,5 +3,5 @@ export default {
     PERSONA: "persona",
     UPDATE_PHRASE: "update-phrase",
     UPDATE_PERSONA: "update-persona",
-    SET_PHRASES_AND_PERSONAS: "set-phrases-and-personas"
+    INIT_SEARCH: "init-search"
 }

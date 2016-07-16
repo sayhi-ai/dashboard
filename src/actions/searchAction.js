@@ -1,9 +1,9 @@
 import AppDispatcher from '../dispatchers/appDispatcher';
 import SearchConstants from '../constants/searchConstants.js';
 
-export var setPhrasesAndPersonas = function(phrases, personas) {
+export var initSearch = function(phrases, personas) {
     AppDispatcher.dispatch({
-        actionType: SearchConstants.SET_PHRASES_AND_PERSONAS,
+        actionType: SearchConstants.INIT_SEARCH,
         phrases: phrases,
         personas: personas
     })
