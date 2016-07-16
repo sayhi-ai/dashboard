@@ -4,9 +4,12 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 import Icon from "../../app/Icon"
-var Immutable = require('immutable');
 import SearchStore from "../../../stores/searchStore"
 import SayHiStore from "../../../stores/sayhiStore"
+import Snackbar from "material-ui/Snackbar"
+var Immutable = require('immutable');
+var sayhi = require('sayhi-ai');
+
 
 export default class ContentCard extends React.Component {
     
@@ -14,6 +17,9 @@ export default class ContentCard extends React.Component {
         super(props)
 
         this.state = {
+            open: false,
+            snackBarColor: '',
+            snackBarText : '',
             phrase: "Hi",
             persona: "Neutral",
             addResponseText: '',
@@ -92,8 +98,17 @@ export default class ContentCard extends React.Component {
         let response = this.state.addResponseText
 
         if (response !== "" && response.length < 200) {
-            // add the response
-            this._addResponse(response)
+            sayhi.addResponse({
+                phrase: this.state.phrase, 
+                persona: this.state.persona, 
+                text: response
+            }, this._addResponse.bind(this, response))
+        } else {
+            this.setState({
+                open: true,
+                snackBarColor: "#F44336",
+                snackBarText : "Sorry, something went wrong (Responses can be no longer than 200 characters)."
+            })
         }
     }
 
@@ -103,7 +118,7 @@ export default class ContentCard extends React.Component {
         }
     }
     
-    _addResponse(response) {
+    _addResponse(response, data) {
         this.setState({
             addResponseText: '',
             responses: this.state.responses.push(
@@ -113,6 +128,12 @@ export default class ContentCard extends React.Component {
             )
         })
     }
+
+    _handleRequestClose = () => {
+        this.setState({
+            open: false
+        });
+    };
     
     render() {
         let avatarStyle = {
@@ -132,6 +153,7 @@ export default class ContentCard extends React.Component {
         }
         
         return (
+            <div>
                 <Card className="content-card" onKeyPress={this._handleKeyPress.bind(this)}>
                     <CardHeader
                         title={"\"" + this.state.phrase + "\""}
@@ -176,6 +198,11 @@ export default class ContentCard extends React.Component {
                                    placeholder="Response" />
                     </CardActions>
                 </Card>
+                <Snackbar message={this.state.snackBarText}
+                          bodyStyle={{backgroundColor: this.state.snackBarColor, fontFamily: "Header-Font"}}
+                          autoHideDuration={5000} open={this.state.open}
+                          handleClose={this._handleRequestClose.bind(this)}/>
+            </div>
         );
     }
 }
