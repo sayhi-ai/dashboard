@@ -1,7 +1,10 @@
 import React from 'react';
 import Drawer from 'material-ui/Drawer';
 import SelectField from 'material-ui/SelectField';
+import Dialog from 'material-ui/Dialog';
+import RaisedButton from 'material-ui/RaisedButton';
 import MenuItem from 'material-ui/MenuItem';
+import TextField from 'material-ui/TextField'
 import Divider from 'material-ui/Divider';
 import {changePhrase, changePersona} from "../../../actions/searchAction"
 import logoTitleImage from "../../../resources/img/logowithtext.png"
@@ -14,6 +17,13 @@ export default class DashboardDrawer extends React.Component {
         super(props)
         
         this.state = {
+            dialogOpen: false,
+            addPhrase: '',
+            addPhraseErrorCode: '',
+            addPersona: '',
+            addPersonaErrorCode: '',
+            addResponse: '',
+            addResponseErrorCode: '',
             phraseValue: 1,
             personaValue: 1,
             phrases: [],
@@ -92,7 +102,7 @@ export default class DashboardDrawer extends React.Component {
 
     _handlePhraseSelectFieldChange = (event, index, value) => {
         if (!value) {
-            
+            this._handleDialogOpen() // This occurs when the user has clicked on add a phrase
         } else {
             changePhrase(this.phrasesText.get(value - 1))
             this.setState({phraseValue: value});
@@ -101,41 +111,121 @@ export default class DashboardDrawer extends React.Component {
     
     _handlePersonaSelectFieldChange = (event, index, value) => {
         if (!value) {
-
+            this._handleDialogOpen() // This occurs when the user has clicked on add a persona
         } else {
             changePersona(this.personaText.get(value - 1))
             this.setState({personaValue: value})
         }
     }
 
+    _handleDialogOpen() {
+        this.setState({dialogOpen: true})
+    }
+
+    _handleDialogClose() {
+        this.setState({dialogOpen: false})
+    }
+
+    _handlePhraseTextFieldChange(e) {
+        this.setState({
+            addPhrase: e.target.value
+        })
+    }
+
+    _handlePersonaTextFieldChange(e) {
+        this.setState({
+            addPersona: e.target.value
+        })
+    }
+
+    _handleResponseTextFieldChange(e) {
+        this.setState({
+            addResponse: e.target.value
+        })
+    }
+    
+    _handleAddResponseTuple(e) {
+        console.log("this")
+    }
+
+    _handleKeyPress(event) {
+        if(event.key == 'Enter'){
+            this._handleAddResponseTuple(event)
+        }
+    }
+
     render() {
+        const actions = [
+            <RaisedButton
+                label="Add"
+                primary={true}
+                onTouchTap={this._handleAddResponseTuple.bind(this)}
+            />
+        ];
+        
         return (
-            <Drawer open={true} className="dashboard-drawer">
-                <img className="dashboard-logo" src={logoTitleImage}/>
-                <h3 className="dashboard-drawer-search-title">Search for a response</h3>
-                <div style={{textAlign:"left", marginLeft:"30px"}}>
-                    <SelectField value={this.state.phraseValue}
-                                 onChange={this._handlePhraseSelectFieldChange.bind(this)}
-                                 className="dashboard-drawer-select-field"
-                                 floatingLabelText="Choose a phrase"
-                                 floatingLabelFixed={true}
-                                 floatingLabelStyle={{color: '#19A5E4'}}
-                                 style={{width: "200px"}}>
-                        {this.state.phrases}
-                    </SelectField>
-                </div>
-                <div style={{textAlign:"left", marginLeft:"30px"}}>
-                    <SelectField value={this.state.personaValue}
-                                 onChange={this._handlePersonaSelectFieldChange.bind(this)}
-                                 className="dashboard-drawer-select-field"
-                                 floatingLabelText="Choose a persona"
-                                 floatingLabelFixed={true}
-                                 floatingLabelStyle={{color: '#19A5E4'}}
-                                 style={{width: "200px"}}>
-                        {this.state.personas}
-                    </SelectField>
-                </div>
-            </Drawer>
+            <div>
+                <Drawer open={true} className="dashboard-drawer">
+                    <img className="dashboard-logo" src={logoTitleImage}/>
+                    <h3 className="dashboard-drawer-search-title">Search for a response</h3>
+                    <div style={{textAlign:"left", marginLeft:"30px"}}>
+                        <SelectField value={this.state.phraseValue}
+                                     onChange={this._handlePhraseSelectFieldChange.bind(this)}
+                                     className="dashboard-drawer-select-field"
+                                     floatingLabelText="Choose a phrase"
+                                     floatingLabelFixed={true}
+                                     floatingLabelStyle={{color: '#19A5E4'}}
+                                     style={{width: "200px"}}>
+                            {this.state.phrases}
+                        </SelectField>
+                    </div>
+                    <div style={{textAlign:"left", marginLeft:"30px"}}>
+                        <SelectField value={this.state.personaValue}
+                                     onChange={this._handlePersonaSelectFieldChange.bind(this)}
+                                     className="dashboard-drawer-select-field"
+                                     floatingLabelText="Choose a persona"
+                                     floatingLabelFixed={true}
+                                     floatingLabelStyle={{color: '#19A5E4'}}
+                                     style={{width: "200px"}}>
+                            {this.state.personas}
+                        </SelectField>
+                    </div>
+                </Drawer>
+                <Dialog
+                    title="Add a phrase, persona & response"
+                    actions={actions}
+                    modal={false}
+                    open={this.state.dialogOpen}
+                    onRequestClose={this._handleDialogClose.bind(this)}
+                >
+                    <TextField type="text"
+                               value={this.state.addPhrase}
+                               inputStyle={{textAlign: "center"}}
+                               style={{marginLeft: "10%"}}
+                               errorText={this.state.addPhraseErrorCode}
+                               onChange={this._handlePhraseTextFieldChange.bind(this)}
+                               id="addPhraseTextField"
+                               onKeyPress={this._handleKeyPress.bind(this)}
+                               placeholder="Phrase" />
+                    <TextField type="text"
+                               value={this.state.addPersona}
+                               inputStyle={{textAlign: "center"}}
+                               errorText={this.state.addPersonaErrorCode}
+                               onChange={this._handlePersonaTextFieldChange.bind(this)}
+                               id="addPersonaTextField"
+                               onKeyPress={this._handleKeyPress.bind(this)}
+                               placeholder="Persona" />
+                    <TextField type="text"
+                               value={this.state.addResponse}
+                               inputStyle={{textAlign: "center"}}
+                               style={{width:"512px", marginLeft: "10%"}}
+                               errorText={this.state.addResponseErrorCode}
+                               onChange={this._handleResponseTextFieldChange.bind(this)}
+                               id="addResponseTextField"
+                               onKeyPress={this._handleKeyPress.bind(this)}
+                               placeholder="Response" />
+                </Dialog>
+            </div>
         )
     }
 }

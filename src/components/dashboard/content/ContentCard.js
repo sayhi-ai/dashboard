@@ -129,12 +129,12 @@ export default class ContentCard extends React.Component {
         })
     }
 
-    _handleRequestClose = () => {
+    _handleSnackBarClose() {
         this.setState({
             open: false
-        });
-    };
-    
+        })
+    }
+
     render() {
         let avatarStyle = {
             display: "inline-block",
@@ -201,7 +201,7 @@ export default class ContentCard extends React.Component {
                 <Snackbar message={this.state.snackBarText}
                           bodyStyle={{backgroundColor: this.state.snackBarColor, fontFamily: "Header-Font"}}
                           autoHideDuration={5000} open={this.state.open}
-                          handleClose={this._handleRequestClose.bind(this)}/>
+                          handleClose={this._handleSnackBarClose.bind(this)}/>
             </div>
         );
     }
