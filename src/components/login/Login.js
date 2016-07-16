@@ -61,7 +61,7 @@ export default class Login extends React.Component {
             <div className="login-screen">
                 <div className="login-outter">
                     <div className="login-inner">
-                        <Paper className="login-div" zDepth={5} onKeyPress={this._handleKeyPress.bind(this)}>
+                        <Paper className="login-div" zDepth={5}>
                             <img className="login-logo" src={logoTitleImage}/>
                             <div className="login-form-div">
                                 <form className="login-form">
@@ -71,6 +71,7 @@ export default class Login extends React.Component {
                                                    onChange={this._setUsername.bind(this)}
                                                    className="form-control"
                                                    id="username"
+                                                   onKeyPress={this._handleKeyPress.bind(this)}
                                                    placeholder="Email" />
                                     </div>
                                     <div className="">
@@ -79,7 +80,8 @@ export default class Login extends React.Component {
                                                    onChange={this._setPassword.bind(this)}
                                                    className="form-control" 
                                                    id="password" 
-                                                   ref="password" 
+                                                   ref="password"
+                                                   onKeyPress={this._handleKeyPress.bind(this)}
                                                    placeholder="Password" />
                                     </div>
                                     <div className="login-error-field">{this.props.loginError}</div>
