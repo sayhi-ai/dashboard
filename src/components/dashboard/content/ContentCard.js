@@ -6,7 +6,6 @@ import TextField from 'material-ui/TextField'
 import Icon from "../../app/Icon"
 import SearchStore from "../../../stores/searchStore"
 import SayHiStore from "../../../stores/sayhiStore"
-import Snackbar from "material-ui/Snackbar"
 var Immutable = require('immutable');
 var sayhi = require('sayhi-ai');
 
@@ -23,6 +22,7 @@ export default class ContentCard extends React.Component {
             phrase: "Hi",
             persona: "Neutral",
             addResponseText: '',
+            addResponseError: '',
             data: [],
             responses: []
         }
@@ -95,6 +95,9 @@ export default class ContentCard extends React.Component {
         let response = this.state.addResponseText
 
         if (response !== "" && response.length < 200) {
+            this.setState({
+                addResponseError: ''
+            })
             sayhi.addResponse({
                 phrase: this.state.phrase, 
                 persona: this.state.persona, 
@@ -102,9 +105,7 @@ export default class ContentCard extends React.Component {
             }, this._addResponse.bind(this, response))
         } else {
             this.setState({
-                open: true,
-                snackBarColor: "#F44336",
-                snackBarText : "Sorry, something went wrong (Responses can be no longer than 200 characters)."
+                addResponseError: "Sorry, something went wrong (Responses can be no longer than 200 characters)."
             })
         }
     }
@@ -191,14 +192,11 @@ export default class ContentCard extends React.Component {
                                    style={{paddingLeft: "10px"}}
                                    value={this.state.addResponseText}
                                    onChange={this._setAddResponseText.bind(this)}
+                                   errorText={this.state.addResponseError}
                                    id="addResponseText"
                                    placeholder="Response" />
                     </CardActions>
                 </Card>
-                <Snackbar message={this.state.snackBarText}
-                          bodyStyle={{backgroundColor: this.state.snackBarColor, fontFamily: "Header-Font"}}
-                          autoHideDuration={5000} open={this.state.open}
-                          handleClose={this._handleSnackBarClose.bind(this)}/>
             </div>
         );
     }
