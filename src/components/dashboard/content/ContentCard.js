@@ -41,17 +41,21 @@ export default class ContentCard extends React.Component {
     _updatePhrase() {
         let phrase = SearchStore.getPhrase()
         
-        this.setState({
-            phrase: phrase
-        })
+        if (phrase !== "") {
+            this.setState({
+                phrase: phrase
+            })
+        }
     }
 
     _updatePersona() {
         let persona = SearchStore.getPersona()
 
-        this.setState({
-            persona: persona
-        })
+        if (persona !== "") {
+            this.setState({
+                persona: persona
+            })
+        }
     }
 
     _setAddResponseText(e) {
