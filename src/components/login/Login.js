@@ -3,14 +3,18 @@ import {login} from '../../services/authService'
 import TextField from "material-ui/TextField"
 import RaisedButton from "material-ui/RaisedButton"
 import Paper from "material-ui/Paper"
-import logoTitleImage from "../../resources/img/logowithtext.png"
 import when from 'when';
+import logoTitleImage from "../../resources/img/logowithtext.png"
+import Snackbar from "material-ui/Snackbar"
 
 export default class Login extends React.Component {
   
     constructor() {
         super()
         this.state = {
+            open: false,
+            snackBarColor: '',
+            snackBarText : '',
             user: '',
             password: ''
         };
@@ -18,7 +22,7 @@ export default class Login extends React.Component {
     
     _setUsername(e) {
         this.setState({
-            user: e.target.value,
+            user: e.target.value
         })
     }
 
@@ -31,6 +35,25 @@ export default class Login extends React.Component {
     _login(e) {
         e.preventDefault();
         login(this.state.user, this.state.password)
+        setTimeout(() => {
+            this.setState({
+                open: true,
+                snackBarColor: "#F44336",
+                snackBarText : "Wrong username or password."
+            })
+        }, 5000)
+    }
+
+    _handleSnackBarClose() {
+        this.setState({
+            open: false
+        })
+    }
+
+    _handleKeyPress(event) {
+        if(event.key == 'Enter'){
+            this._login(event)
+        }
     }
 
     render() {
@@ -38,7 +61,7 @@ export default class Login extends React.Component {
             <div className="login-screen">
                 <div className="login-outter">
                     <div className="login-inner">
-                        <Paper className="login-div" zDepth={5}>
+                        <Paper className="login-div" zDepth={5} onKeyPress={this._handleKeyPress.bind(this)}>
                             <img className="login-logo" src={logoTitleImage}/>
                             <div className="login-form-div">
                                 <form className="login-form">
@@ -76,6 +99,11 @@ export default class Login extends React.Component {
                         </Paper>
                     </div>
                 </div>
+                <Snackbar message={this.state.snackBarText}
+                          bodyStyle={{backgroundColor: this.state.snackBarColor, fontFamily: "Header-Font",
+                          textAlign: "center"}}
+                          autoHideDuration={8000} open={this.state.open}
+                          handleClose={this._handleSnackBarClose.bind(this)}/>
             </div>
         );
     }
