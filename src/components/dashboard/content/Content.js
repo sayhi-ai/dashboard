@@ -1,6 +1,8 @@
 import React from 'react';
 import ContentCard from "./ContentCard"
 import persona from "../../../resources/img/persona.svg"
+import reqwest from "reqwest"
+import when from "when"
 var sayhi = require('sayhi-ai');
 
 export default class Content extends React.Component {
@@ -11,7 +13,12 @@ export default class Content extends React.Component {
     }
     
     _sayHiCallback(data) {
-        console.log("data")
+        console.log(data)
+        sayhi.addResponse({phrase: "hi", persona: "vader", text: "hoaeu"}, this._test)
+    }
+
+    _test() {
+
     }
 
     render() {
