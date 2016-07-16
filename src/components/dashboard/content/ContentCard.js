@@ -14,7 +14,7 @@ export default class ContentCard extends React.Component {
 
         let responseComponents = this.props.responses.map(res =>
             <TableRow>
-                <TableRowColumn>{res.response}</TableRowColumn>
+                <TableRowColumn>{res.text}</TableRowColumn>
             </TableRow>
         )
 

@@ -5,6 +5,7 @@ import MenuItem from 'material-ui/MenuItem';
 import Divider from 'material-ui/Divider';
 import {changePhrase, changePersona} from "../../../actions/searchAction"
 import logoTitleImage from "../../../resources/img/logowithtext.png"
+import SearchStore from "../../../stores/searchStore"
 var Immutable = require('immutable');
 
 export default class DashboardDrawer extends React.Component {
@@ -15,19 +16,26 @@ export default class DashboardDrawer extends React.Component {
         this.state = {
             phraseValue: 1,
             personaValue: 1,
-            phrases: this._initPhrasetList(["Hi", "Pokemon caught", "Pokemon info", "Bye"]),
-            personas: this._initPersonaList(["Neutral", "Bro", "Pikachu"])
+            phrases: [],
+            personas: []
         }
     }
+
+    componentDidMount() {
+        SearchStore.addChangeListener(this._setPhrasesAndPersonas.bind(this))
+    }
+
+    componentWillUnmount() {
+        SearchStore.addChangeListener(this._setPhrasesAndPersonas.bind(this))
+    }
     
-    _initPhrasetList(phraseList) {
+    _initPhraseList(phraseList) {
         this.phrasesText = Immutable.List(phraseList)
         this.phrasesText = this.phrasesText.push("Add a phrase...")
-
+        
         let i = 0 // Start at 0 because we add first
         return Immutable.List(this.phrasesText.map(phrase => {
             i++
-
             if (i === this.phrasesText.size) {
                 return (
                     <span>
@@ -59,6 +67,23 @@ export default class DashboardDrawer extends React.Component {
                 return <MenuItem value={j} primaryText={persona} />
             }
         }))
+    }
+    
+    _setPhrasesAndPersonas() {
+        let phrases = SearchStore.getAllPhrases()
+        let personas = SearchStore.getAllPersonas()
+        
+        if (phrases.length > 0) {
+            this.setState({
+                phrases: this._initPhraseList(phrases)
+            })
+        }
+        
+        if (personas.length > 0) {
+            this.setState({
+                personas: this._initPersonaList(personas)
+            })
+        }
     }
 
     _handlePhraseSelectFieldChange = (event, index, value) => {
