@@ -17,6 +17,18 @@
   font-size: 1.3em !important;
 }
 
+.content-card-code-example {
+  text-align: center;
+  font-weight: normal;
+  margin-top: -3%;
+  margin-bottom: 2%;
+  font-family: Code-Font, monospace;
+}
+
 .content-table-text {
   font-family: Body-Font, sans-serif;
+}
+
+.blue-syntax {
+  color: $primary-color;
 }

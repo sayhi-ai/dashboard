@@ -1,9 +1,19 @@
 import React from 'react';
 import ContentCard from "./ContentCard"
-import SearchConstants from '../../../constants/searchConstants';
 import persona from "../../../resources/img/persona.svg"
+var sayhi = require('sayhi-ai');
 
 export default class Content extends React.Component {
+
+    constructor(props) {
+        super(props)
+        sayhi.initWithToken(this.props.jwt, this._sayHiCallback)
+    }
+    
+    _sayHiCallback(data) {
+        console.log("data")
+    }
+
     render() {
 
         let responses = [{

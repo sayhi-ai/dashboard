@@ -120,7 +120,14 @@ export default class ContentCard extends React.Component {
                         showExpandableButton={false}
                     />
                     <CardText expandable={false}>
-                        <Table>
+                        <h3 className="content-card-code-example">
+                            <span>sayhi.say(</span>
+                            <span className="blue-syntax">{"\"" + this.state.phrase + "\""}</span>
+                            <span>{", "}</span>
+                            <span className="blue-syntax">{"\"" + this.state.persona + "\""}</span>
+                            <span>{");"}</span>
+                        </h3>
+                        <Table className="disable-select">
                             <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                                 <TableRow>
                                     <TableHeaderColumn className="content-table-title">
