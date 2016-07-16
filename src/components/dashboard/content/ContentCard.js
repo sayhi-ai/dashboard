@@ -52,10 +52,7 @@ export default class ContentCard extends React.Component {
 
     _updateSearchResults(phrase, persona) {
         let responseComponents = this.state.data
-            .filter(res => {
-                console.log(phrase, persona)
-                return phrase === res.phrase && persona === res.persona
-            })
+            .filter(res => phrase === res.phrase && persona === res.persona)
             .map(res => <TableRow><TableRowColumn>{res.text}</TableRowColumn></TableRow>)
         
         this.setState({

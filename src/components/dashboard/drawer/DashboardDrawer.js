@@ -7,9 +7,11 @@ import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField'
 import Divider from 'material-ui/Divider';
 import {changePhrase, changePersona} from "../../../actions/searchAction"
+import {distributeData} from "../../../actions/sayhiAction"
 import logoTitleImage from "../../../resources/img/logowithtext.png"
 import SearchStore from "../../../stores/searchStore"
 var Immutable = require('immutable');
+var sayhi = require('sayhi-ai');
 
 export default class DashboardDrawer extends React.Component {
     
@@ -104,6 +106,7 @@ export default class DashboardDrawer extends React.Component {
         if (!value) {
             this._handleDialogOpen() // This occurs when the user has clicked on add a phrase
         } else {
+            console.log(this.phrasesText, value - 1)
             changePhrase(this.phrasesText.get(value - 1))
             this.setState({phraseValue: value});
         }
@@ -113,6 +116,7 @@ export default class DashboardDrawer extends React.Component {
         if (!value) {
             this._handleDialogOpen() // This occurs when the user has clicked on add a persona
         } else {
+            console.log(this.phrasesText, value - 1)
             changePersona(this.personaText.get(value - 1))
             this.setState({personaValue: value})
         }
@@ -145,7 +149,60 @@ export default class DashboardDrawer extends React.Component {
     }
     
     _handleAddResponseTuple(e) {
-        console.log("this")
+        let phrase = this.state.addPhrase
+        let persona = this.state.addPersona
+        let response = this.state.addResponse
+        
+        let error = false
+        let phraseErrorMessage = ""
+        let personaErrorMessage = ""
+        let responseErrorMessage = ""
+        
+        if (phrase === "" || phrase.length > 30) {
+            error = true
+            phraseErrorMessage = "A phrase is between 0 and 30 characters long."
+        }
+
+        if (persona === "" || persona.length > 30) {
+            error = true
+            personaErrorMessage = "A persona is between 0 and 30 characters long."
+        }
+
+        if (phrase === "" || response.length > 30) {
+            error = true
+            responseErrorMessage = "A response is between 0 and 200 characters long."
+        }
+        
+        if (error) {
+            this.setState({
+                addPhraseErrorCode: phraseErrorMessage,
+                addPersonaErrorCode: personaErrorMessage,
+                addResponseErrorCode: responseErrorMessage
+            })
+        } else {
+            sayhi.addResponse({
+                phrase: phrase,
+                persona: persona,
+                text: response
+            }, this._addResponse.bind(this, phrase, persona))
+            
+            this.setState({
+                addPhraseErrorCode: '',
+                addPersonaErrorCode: '',
+                addResponseErrorCode: '',
+                dialogOpen: false
+            })
+        }
+    }
+    
+    _addResponse(phrase, persona, data) {
+        distributeData(data.responses)
+        this.phrasesText = this.phrasesText.push(phrase)
+        this.personaText = this.personaText.push(persona)
+        this.setState({
+            phrases: this._initPhraseList(this.phrasesText),
+            personas: this._initPersonaList(this.personaText)
+        })
     }
 
     _handleKeyPress(event) {
