@@ -1,19 +1,13 @@
-import request from 'reqwest';
+// import request from 'reqwest';
 import when from 'when';
 import LoginConstants from '../constants/loginConstants.js';
 import {loginAction, logoutAction} from '../actions/loginActions';
 
 export var login = function (email, password) {
-    localStorage.setItem('sayhi-user', email)
+    localStorage.setItem('sayhi-user', 'hello')
+    loginAction("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ")
     
-    return handleAuth(when(request({
-        url: LoginConstants.LOGIN_URL,
-        method: 'POST',
-        type: 'application/json',
-        data: {
-            email, password
-        }
-    })));
+    return true
 }
 
 export var logout = function () {

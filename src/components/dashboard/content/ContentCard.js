@@ -53,7 +53,7 @@ export default class ContentCard extends React.Component {
     _updateSearchResults(phrase, persona) {
         let responseComponents = this.state.data
             .filter(res => phrase === res.phrase && persona === res.persona)
-            .map(res => <TableRow><TableRowColumn>{res.text}</TableRowColumn></TableRow>)
+            .map(res => res.text)
         
         this.setState({
             responses: Immutable.List(responseComponents)
@@ -119,11 +119,7 @@ export default class ContentCard extends React.Component {
     _addResponse(response, data) {
         this.setState({
             addResponseText: '',
-            responses: this.state.responses.push(
-                <TableRow>
-                    <TableRowColumn>{response}</TableRowColumn>
-                </TableRow>
-            )
+            responses: this.state.responses.push(response)
         })
     }
 
@@ -151,52 +147,43 @@ export default class ContentCard extends React.Component {
         }
         
         return (
-            <div>
-                <Card className="content-card" onKeyPress={this._handleKeyPress.bind(this)}>
-                    <CardHeader
-                        title={"\"" + this.state.phrase + "\""}
-                        style={{fontFamily: "Hero-Font"}}
-                        titleStyle={{paddingTop: "10px"}}
-                        subtitle={this.state.persona}
-                        avatar={<Icon styles={avatarStyle} svg={this.props.avatar}/>}
-                        actAsExpander={false}
-                        showExpandableButton={false}
-                    />
-                    <CardText expandable={false}>
-                        <h3 className="content-card-code-example">
-                            <span>sayhi.say(</span>
-                            <span className="blue-syntax">{"\"" + this.state.phrase + "\""}</span>
-                            <span>{", "}</span>
-                            <span className="blue-syntax">{"\"" + this.state.persona + "\""}</span>
-                            <span>{");"}</span>
-                        </h3>
-                        <Table className="disable-select">
-                            <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-                                <TableRow>
-                                    <TableHeaderColumn className="content-table-title">
-                                        Responses
-                                    </TableHeaderColumn>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody displayRowCheckbox={false} className="content-table-text">
-                                {this.state.responses}
-                            </TableBody>
-                        </Table>
-                    </CardText>
-                    <CardActions style={cardActionStyle} expandable={false}>
-                        <RaisedButton labelStyle={{color:"#FFFFFF", textTransform:"none"}}
-                                      primary={true}
-                                      onClick={this._handleAddClick.bind(this)}
-                                      label="Add"/>
-                        <TextField type="text"
-                                   style={{paddingLeft: "10px"}}
-                                   value={this.state.addResponseText}
-                                   onChange={this._setAddResponseText.bind(this)}
-                                   errorText={this.state.addResponseError}
-                                   id="addResponseText"
-                                   placeholder="Response" />
-                    </CardActions>
-                </Card>
+            <div className='flex justify-center'>
+                <div className='w-100' style={{maxWidth: 750}}>
+                    <div className='ma3 pa3 br2' style={{backgroundColor: '#555'}}>
+                        <div className='w-100 tc courier f3'>
+                            <span className='white'>ai.say(</span>
+                            <span style={{color: 'rgb(100, 215, 228)'}}>{'"' + this.state.phrase + '"'}</span>
+                            <span className='white'>{");"}</span>
+                        </div>
+                    </div>
+                    <div className='ma3 pa3 br2 bg-white'>
+                        {this.state.responses.map(response => 
+                            <div className='flex justify-start items-center'>
+                                <div
+                                    className='br4 white pointer dim pv2 ph3 ma1 f5'
+                                    style={{
+                                        backgroundColor: '#19A5E4'
+                                    }}
+                                >
+                                    {response}
+                                </div>
+                            </div>
+                        )}
+                        <div className='flex justify-end items-center mt2 h-100'>
+                            <input
+                                className='br-pill ba b--black pv2 ph3 ma1 outline-0 f5'
+                                type='text'
+                                placeholder='Add new response'
+                                onChange={this._setAddResponseText.bind(this)}
+                                onKeyDown={this._handleKeyPress.bind(this)}
+                                value={this.state.addResponseText}/>
+                            <div className='flex items-end h-100 ma1 pt2' style={{transition: 'padding 0.2s ease'}}>
+                                <div className='br-pill ba b--black pa2'/>
+                                <div className='br-pill ba b--black ml1 pa1'/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }

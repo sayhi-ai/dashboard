@@ -86,6 +86,7 @@
     "request-json": "^0.5.6",
     "reqwest": "^2.0.5",
     "sayhi-ai": "^1.0.3",
+    "tachyons": "^4.5.3",
     "tls": "0.0.1",
     "when": "^3.7.7"
   },
