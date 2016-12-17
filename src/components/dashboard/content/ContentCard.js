@@ -3,6 +3,7 @@ import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
+import Response from '../response/Response'
 import Icon from "../../app/Icon"
 import SearchStore from "../../../stores/searchStore"
 import SayHiStore from "../../../stores/sayhiStore"
@@ -157,18 +158,11 @@ export default class ContentCard extends React.Component {
                         </div>
                     </div>
                     <div className='ma3 pa3 br2 bg-white'>
-                        {this.state.responses.map(response => 
-                            <div className='flex justify-start items-center'>
-                                <div
-                                    className='br4 white pointer dim pv2 ph3 ma1 f5'
-                                    style={{
-                                        backgroundColor: '#19A5E4'
-                                    }}
-                                >
-                                    {response}
-                                </div>
-                            </div>
+                        <div>
+                        {this.state.responses.map((response, index) => 
+                            <Response key={index} response={response}/>
                         )}
+                        </div>
                         <div className='flex items-center mt2 h-100 w-100 justify-stretch'>
                             <input
                                 className='br-pill ba b--black pv2 ph3 ma1 outline-0 f5 flex-auto'

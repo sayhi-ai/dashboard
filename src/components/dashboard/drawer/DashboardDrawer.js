@@ -3,10 +3,9 @@ import Drawer from 'material-ui/Drawer';
 import SelectField from 'material-ui/SelectField';
 import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
-import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField'
 import Divider from 'material-ui/Divider';
-import {initSearch, changePhrase, changePersona} from "../../../actions/searchAction"
+import {initSearch, changePhrase} from "../../../actions/searchAction"
 import {distributeData} from "../../../actions/sayhiAction"
 import logoTitleImage from "../../../resources/img/logowithtext.png"
 import SearchStore from "../../../stores/searchStore"
@@ -22,14 +21,10 @@ export default class DashboardDrawer extends React.Component {
             dialogOpen: false,
             addPhrase: '',
             addPhraseErrorCode: '',
-            addPersona: '',
-            addPersonaErrorCode: '',
             addResponse: '',
             addResponseErrorCode: '',
-            phraseValue: 1,
-            personaValue: 1,
+            phraseValue: 0,
             phrases: [],
-            personas: []
         }
     }
 
@@ -43,48 +38,23 @@ export default class DashboardDrawer extends React.Component {
     
     _initPhraseList(phraseList) {
         this.phrasesText = Immutable.List(phraseList)
-        this.phrasesText = this.phrasesText.push("Add a phrase...")
-        
-        let i = 0 // Start at 0 because we add first
-        return Immutable.List(this.phrasesText.map(phrase => {
-            i++
-            if (i === this.phrasesText.size) {
-                console.log(i, phrase)
-                return (
-                    <span>
-                        <Divider/>
-                        <MenuItem value={i} primaryText={phrase}/>
-                    </span>
-                )
-            } else {
-                return <MenuItem value={i} primaryText={phrase}/>
-            }
-        }))
-    }
-    
-    _initPersonaList(personaList) {
-        this.personaText = Immutable.List(personaList)
-        this.personaText = this.personaText.push("Add a persona...")
 
-        let j = 0 // Start at 0 because we add first
-        return Immutable.List(this.personaText.map(persona => {
-            j++
-            if (j === this.personaText.size) {
-                return (
-                    <span>
-                        <Divider/>
-                        <MenuItem value={j} primaryText={persona} />
-                    </span>
-                )
-            } else {
-                return <MenuItem value={j} primaryText={persona} />
-            }
+        return Immutable.List(this.phrasesText.map((phrase, index) => {
+            return ( 
+                <div
+                    className='pointer pv2 f5 dim'
+                    style={{paddingLeft: 20, background: '#fafafa', }}
+                    key={index}
+                    onClick={(e) => this._handlePhraseSelectFieldChange(e, index)}
+                >
+                    "{phrase}"
+                </div>
+            )
         }))
     }
 
     _initSearch() {
         let phrases = SearchStore.getAllPhrases()
-        let personas = SearchStore.getAllPersonas()
         
         if (phrases.length > 0) {
             this.setState({
@@ -93,34 +63,13 @@ export default class DashboardDrawer extends React.Component {
             
             //changePhrase(phrases[0])
         }
-        
-        if (personas.length > 0) {
-            this.setState({
-                personas: this._initPersonaList(personas)
-            })
-
-            //changePersona(personas[0])
-        }
     }
 
-    _handlePhraseSelectFieldChange = (event, index, value) => {
-        if (!value) {
-            this._handleDialogOpen() // This occurs when the user has clicked on add a phrase
-        } else {
-            changePhrase(this.phrasesText.get(value - 1))
-            this.setState({phraseValue: value});
-        }
+    _handlePhraseSelectFieldChange = (event, index) => {
+        changePhrase(this.phrasesText.get(index))
+        this.setState({phraseValue: index});
     }
     
-    _handlePersonaSelectFieldChange = (event, index, value) => {
-        if (!value) {
-            this._handleDialogOpen() // This occurs when the user has clicked on add a persona
-        } else {
-            changePersona(this.personaText.get(value - 1))
-            this.setState({personaValue: value})
-        }
-    }
-
     _handleDialogOpen() {
         this.setState({dialogOpen: true})
     }
@@ -135,12 +84,6 @@ export default class DashboardDrawer extends React.Component {
         })
     }
 
-    _handlePersonaTextFieldChange(e) {
-        this.setState({
-            addPersona: e.target.value
-        })
-    }
-
     _handleResponseTextFieldChange(e) {
         this.setState({
             addResponse: e.target.value
@@ -149,22 +92,15 @@ export default class DashboardDrawer extends React.Component {
     
     _handleAddResponseTuple(e) {
         let phrase = this.state.addPhrase
-        let persona = this.state.addPersona
         let response = this.state.addResponse
         
         let error = false
         let phraseErrorMessage = ""
-        let personaErrorMessage = ""
         let responseErrorMessage = ""
         
         if (phrase === "" || phrase.length > 30) {
             error = true
             phraseErrorMessage = "A phrase is between 0 and 30 characters long."
-        }
-
-        if (persona === "" || persona.length > 30) {
-            error = true
-            personaErrorMessage = "A persona is between 0 and 30 characters long."
         }
 
         if (phrase === "" || response.length > 30) {
@@ -175,19 +111,16 @@ export default class DashboardDrawer extends React.Component {
         if (error) {
             this.setState({
                 addPhraseErrorCode: phraseErrorMessage,
-                addPersonaErrorCode: personaErrorMessage,
                 addResponseErrorCode: responseErrorMessage
             })
         } else {
             sayhi.addResponse({
                 phrase: phrase,
-                persona: persona,
                 text: response
             }, this._addResponse.bind(this))
             
             this.setState({
                 addPhraseErrorCode: '',
-                addPersonaErrorCode: '',
                 addResponseErrorCode: '',
                 dialogOpen: false
             })
@@ -195,7 +128,7 @@ export default class DashboardDrawer extends React.Component {
     }
     
     _addResponse(data) {
-        initSearch(data.phrases.map(phrase => phrase.name), data.personas.map(persona => persona.name))
+        initSearch(data.phrases.map(phrase => phrase.name))
         distributeData(data.responses)
     }
 
@@ -216,34 +149,32 @@ export default class DashboardDrawer extends React.Component {
         
         return (
             <div>
-                <Drawer open={true} className="dashboard-drawer">
-                    <img className="dashboard-logo" src={logoTitleImage}/>
-                    <h3 className="dashboard-drawer-search-title">Search for a response</h3>
-                    <div style={{textAlign:"left", marginLeft:"30px"}}>
-                        <SelectField value={this.state.phraseValue}
-                                     onChange={this._handlePhraseSelectFieldChange.bind(this)}
-                                     className="dashboard-drawer-select-field"
-                                     floatingLabelText="Choose a phrase"
-                                     floatingLabelFixed={true}
-                                     floatingLabelStyle={{color: '#19A5E4'}}
-                                     style={{width: "200px"}}>
-                            {this.state.phrases}
-                        </SelectField>
+                <div className='' style={{width: 270}}>
+                    <div style={{textAlign:"left"}}>
+                        <div className='ttu mt4 mb2 f6 flex justify-between items-center'>
+                            <div style={{paddingLeft: 20}}>
+                                Phrases
+                            </div>
+                            <div
+                                className='flex items-center pointer dim' style={{fontSize: '.7rem'}}
+                                onClick={this._handleDialogOpen.bind(this)}
+                            >
+                                <div
+                                    style={{width: 16, height: 16, paddingBottom: 2}}
+                                    className='br-100 ba flex items-center justify-center'
+                                >
+                                    +
+                                </div>
+                                <div className='ml1'>
+                                    Add
+                                </div>
+                            </div>
+                        </div>
+                        {this.state.phrases}
                     </div>
-                    <div style={{textAlign:"left", marginLeft:"30px"}}>
-                        <SelectField value={this.state.personaValue}
-                                     onChange={this._handlePersonaSelectFieldChange.bind(this)}
-                                     className="dashboard-drawer-select-field"
-                                     floatingLabelText="Choose a persona"
-                                     floatingLabelFixed={true}
-                                     floatingLabelStyle={{color: '#19A5E4'}}
-                                     style={{width: "200px"}}>
-                            {this.state.personas}
-                        </SelectField>
-                    </div>
-                </Drawer>
+                </div>
                 <Dialog
-                    title="Add a phrase, persona & response"
+                    title="Add a phrase & response"
                     actions={actions}
                     modal={false}
                     open={this.state.dialogOpen}
@@ -258,14 +189,6 @@ export default class DashboardDrawer extends React.Component {
                                id="addPhraseTextField"
                                onKeyPress={this._handleKeyPress.bind(this)}
                                placeholder="Phrase" />
-                    <TextField type="text"
-                               value={this.state.addPersona}
-                               inputStyle={{textAlign: "center"}}
-                               errorText={this.state.addPersonaErrorCode}
-                               onChange={this._handlePersonaTextFieldChange.bind(this)}
-                               id="addPersonaTextField"
-                               onKeyPress={this._handleKeyPress.bind(this)}
-                               placeholder="Persona" />
                     <TextField type="text"
                                value={this.state.addResponse}
                                inputStyle={{textAlign: "center"}}
