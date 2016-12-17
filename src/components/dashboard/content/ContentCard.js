@@ -92,7 +92,6 @@ export default class ContentCard extends React.Component {
     }
 
     _handleAddClick(e) {
-        e.preventDefault()
         let response = this.state.addResponseText
 
         if (response !== "" && response.length < 200) {
@@ -170,17 +169,22 @@ export default class ContentCard extends React.Component {
                                 </div>
                             </div>
                         )}
-                        <div className='flex justify-end items-center mt2 h-100'>
+                        <div className='flex items-center mt2 h-100 w-100 justify-stretch'>
                             <input
-                                className='br-pill ba b--black pv2 ph3 ma1 outline-0 f5'
+                                className='br-pill ba b--black pv2 ph3 ma1 outline-0 f5 flex-auto'
                                 type='text'
                                 placeholder='Add new response'
                                 onChange={this._setAddResponseText.bind(this)}
                                 onKeyDown={this._handleKeyPress.bind(this)}
                                 value={this.state.addResponseText}/>
-                            <div className='flex items-end h-100 ma1 pt2' style={{transition: 'padding 0.2s ease'}}>
-                                <div className='br-pill ba b--black pa2'/>
-                                <div className='br-pill ba b--black ml1 pa1'/>
+                            <div className='flex ba br-100 justify-center items-center pointer dim ml2'
+                                style={{
+                                    width: 36,
+                                    height: 36
+                                }}
+                                onClick={this._handleAddClick.bind(this)}
+                            >
+                                +
                             </div>
                         </div>
                     </div>
