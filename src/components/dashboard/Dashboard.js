@@ -1,6 +1,7 @@
 import React from 'react';
 import AuthenticatedComponent from '../app/AuthenticatedComponent';
 import Account from "./account/Account"
+import HeaderBar from "./headerBar/HeaderBar"
 import DashboardDrawer from "./drawer/DashboardDrawer"
 import Content from "./content/Content"
 import {initSearch} from "../../actions/searchAction"
@@ -23,7 +24,7 @@ export default AuthenticatedComponent(class Dashboard extends React.Component {
     render() {
         return (
             <div className="dashboard-screen">
-                <Account/>
+                <HeaderBar/>
                 <div className='flex w-100'>
                     <Content/>
                 </div>
