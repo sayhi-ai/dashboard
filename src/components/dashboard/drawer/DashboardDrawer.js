@@ -42,8 +42,8 @@ export default class DashboardDrawer extends React.Component {
         return Immutable.List(this.phrasesText.map((phrase, index) => {
             return ( 
                 <div
-                    className='pointer pv2 f5 dim'
-                    style={{paddingLeft: 20, background: '#fafafa', }}
+                    className='pointer pv2 ph3 f5 dim'
+                    style={{background: '#fafafa'}}
                     key={index}
                     onClick={(e) => this._handlePhraseSelectFieldChange(e, index)}
                 >
@@ -148,11 +148,11 @@ export default class DashboardDrawer extends React.Component {
         ];
         
         return (
-            <div>
+            <div style={{background: '#f0f0f0'}}>
                 <div className='' style={{width: 270}}>
                     <div style={{textAlign:"left"}}>
-                        <div className='ttu mt4 mb2 f6 flex justify-between items-center'>
-                            <div style={{paddingLeft: 20}}>
+                        <div className='ttu mt4 mb2 f6 flex justify-between items-center ph3'>
+                            <div>
                                 Phrases
                             </div>
                             <div
@@ -183,7 +183,7 @@ export default class DashboardDrawer extends React.Component {
                     <TextField type="text"
                                value={this.state.addPhrase}
                                inputStyle={{textAlign: "center"}}
-                               style={{marginLeft: "10%"}}
+                               style={{width: "100%"}}
                                errorText={this.state.addPhraseErrorCode}
                                onChange={this._handlePhraseTextFieldChange.bind(this)}
                                id="addPhraseTextField"
@@ -192,7 +192,7 @@ export default class DashboardDrawer extends React.Component {
                     <TextField type="text"
                                value={this.state.addResponse}
                                inputStyle={{textAlign: "center"}}
-                               style={{width:"512px", marginLeft: "10%"}}
+                               style={{width: "100%"}}
                                errorText={this.state.addResponseErrorCode}
                                onChange={this._handleResponseTextFieldChange.bind(this)}
                                id="addResponseTextField"
