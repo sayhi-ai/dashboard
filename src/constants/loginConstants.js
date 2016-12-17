@@ -1,4 +1,4 @@
-var BASE_URL = 'https://sayhi-ai.azurewebsites.net/';
+var BASE_URL = 'http://localhost:8080/';
 export default {
     BASE_URL: BASE_URL,
     LOGIN_URL: BASE_URL + 'login',

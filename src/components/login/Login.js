@@ -1,14 +1,15 @@
 import React from 'react';
 import {login} from '../../services/authService'
+import {loginAction} from '../../actions/loginActions'
 import TextField from "material-ui/TextField"
 import RaisedButton from "material-ui/RaisedButton"
 import Paper from "material-ui/Paper"
-import when from 'when';
+import LoginStore from "../../stores/loginStore"
 import logoTitleImage from "../../resources/img/logowithtext.png"
 import Snackbar from "material-ui/Snackbar"
 
 export default class Login extends React.Component {
-  
+
     constructor() {
         super()
         this.state = {
@@ -19,29 +20,43 @@ export default class Login extends React.Component {
             password: ''
         };
     }
+
+    componentDidMount() {
+        LoginStore.addChangeListener(this._handleLoginChange.bind(this))
+    }
+
+    componentWillUnmount() {
+        LoginStore.removeChangeListener(this._handleLoginChange.bind(this))
+    }
+
+    _handleLoginChange() {
+        let error = LoginStore.getLoginError()
+        if (error != null) {
+            this.setState({
+                open: true,
+                snackBarColor: "#F44336",
+                snackBarText : "Wrong username or password."
+            })
+        }
+    }
     
     _setUsername(e) {
         this.setState({
-            user: e.target.value
+            user: e.target.value,
+            open: false
         })
     }
 
     _setPassword(e) {
         this.setState({
-            password: e.target.value
+            password: e.target.value,
+            open: false
         })
     }
 
     _login(e) {
         e.preventDefault();
         login(this.state.user, this.state.password)
-        setTimeout(() => {
-            this.setState({
-                open: true,
-                snackBarColor: "#F44336",
-                snackBarText : "Wrong username or password."
-            })
-        }, 5000)
     }
 
     _handleSnackBarClose() {
