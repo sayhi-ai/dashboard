@@ -64,6 +64,7 @@
     "node": ">=5.0.0"
   },
   "dependencies": {
+    "classnames": "^2.2.5",
     "es6-promise": "^3.2.1",
     "eventemitter3": "^1.2.0",
     "events": "^1.1.1",
@@ -74,6 +75,7 @@
     "jwt-decode": "^2.0.1",
     "material-ui": "^0.15.0",
     "net": "^1.0.2",
+    "npm-run-all": "^3.1.2",
     "object-assign": "^4.1.0",
     "react": "^15.2.1",
     "react-addons": "^0.9.1-deprecated",
@@ -130,6 +132,7 @@
     "build:dev:watch": "webpack --progress --config tools/webpack.config.dev.js --watch",
     "server:dev": "node tools/start.js dev",
     "server:prod": "node tools/start.js build",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "start": "npm-run-all --parallel build:dev:watch server:dev"
   }
 }

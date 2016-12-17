@@ -6,6 +6,7 @@ import TextField from 'material-ui/TextField'
 import Icon from "../../app/Icon"
 import SearchStore from "../../../stores/searchStore"
 import SayHiStore from "../../../stores/sayhiStore"
+import classnames from 'classnames'
 var Immutable = require('immutable');
 var sayhi = require('sayhi-ai');
 

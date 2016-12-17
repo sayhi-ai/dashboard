@@ -45,11 +45,9 @@ export default class Account extends React.Component {
 
         return (
             <div className="account-toggle">
-                <IconButton style={iconStyle}
-                            iconStyle={{fill: "rgb(117, 117, 117)"}}
-                            onClick={this.handleToggleClick.bind(this)}>
-                    <MoreVertIcon/>
-                </IconButton>
+                <div onClick={this.handleToggleClick.bind(this)}>
+                    Account
+                </div>
                 <Popover
                     open={this.state.open}
                     anchorEl={this.state.anchorEl}

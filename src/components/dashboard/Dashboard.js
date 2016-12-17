@@ -24,8 +24,9 @@ export default AuthenticatedComponent(class Dashboard extends React.Component {
         return (
             <div className="dashboard-screen">
                 <Account/>
-                <DashboardDrawer/>
-                <Content/>
+                <div className='flex w-100'>
+                    <Content/>
+                </div>
             </div>
         );
     }

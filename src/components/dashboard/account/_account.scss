@@ -1,21 +1,5 @@
 @import '../../app/theme';
 
 .account-toggle {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-}
-
-.account-toggle-name {
-  font-family: Header-Font, sans-serif;
-  padding: 10%;
-  color: $primary-color;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.account-menu-item {
-  font-family: Body-Font, sans-serif !important;
-  color: $body-text-color !important;
+  height: 50px;
 }
