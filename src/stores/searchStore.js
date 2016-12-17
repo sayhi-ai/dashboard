@@ -51,13 +51,6 @@ AppDispatcher.register(function(action) {
             }
             break
 
-        case SearchConstants.UPDATE_PERSONA:
-            if (action.persona !== "") {
-                SearchStore.setPersona(action.persona)
-                SearchStore.emitChange()
-            }
-            break
-
         case SearchConstants.INIT_SEARCH:
             if (action.phrases.length > 0) {
                 SearchStore.setAllPhrases(action.phrases)

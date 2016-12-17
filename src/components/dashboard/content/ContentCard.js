@@ -1,16 +1,9 @@
 import React from 'react'
-import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card'
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
-import RaisedButton from 'material-ui/RaisedButton'
-import TextField from 'material-ui/TextField'
 import Response from '../response/Response'
-import Icon from "../../app/Icon"
+import {fetchResponses, addResponse} from '../../../services/sayhiService'
 import SearchStore from "../../../stores/searchStore"
 import SayHiStore from "../../../stores/sayhiStore"
-import classnames from 'classnames'
 var Immutable = require('immutable');
-var sayhi = require('sayhi-ai');
-
 
 export default class ContentCard extends React.Component {
     
@@ -22,43 +15,28 @@ export default class ContentCard extends React.Component {
             snackBarColor: '',
             snackBarText : '',
             phrase: "Hi",
-            persona: "Neutral",
             addResponseText: '',
             addResponseError: '',
-            data: [],
             responses: []
         }
     }
 
     componentDidMount() {
         SearchStore.addChangeListener(this._updatePhrase.bind(this))
-        SearchStore.addChangeListener(this._updatePersona.bind(this))
-        SayHiStore.addChangeListener(this._setData.bind(this))
+        SayHiStore.addChangeListener(this._setResponses.bind(this))
     }
 
     componentWillUnmount() {
         SearchStore.removeChangeListener(this._updatePhrase.bind(this))
-        SearchStore.removeChangeListener(this._updatePersona.bind(this))
-        SayHiStore.removeChangeListener(this._setData.bind(this))
+        SayHiStore.removeChangeListener(this._setResponses.bind(this))
     }
     
-    _setData() {
-        let data = SayHiStore.getData()
-        
-        this.setState({
-            data: data
-        })
+    _setResponses() {
+        let responses = SayHiStore.getResponses()
+        console.log("get here")
 
-        this._updateSearchResults(this.state.phrase, this.state.persona)
-    }
-
-    _updateSearchResults(phrase, persona) {
-        let responseComponents = this.state.data
-            .filter(res => phrase === res.phrase && persona === res.persona)
-            .map(res => res.text)
-        
         this.setState({
-            responses: Immutable.List(responseComponents)
+            responses: Immutable.List(responses)
         })
     }
 
@@ -66,23 +44,10 @@ export default class ContentCard extends React.Component {
         let phrase = SearchStore.getPhrase()
 
         if (phrase !== "" && phrase !== this.state.phrase) {
+            fetchResponses(phrase)
             this.setState({
                 phrase: phrase
             })
-            
-            this._updateSearchResults(phrase, this.state.persona)
-        }
-    }
-
-    _updatePersona() {
-        let persona = SearchStore.getPersona()
-
-        if (persona !== "" && persona !== this.state.persona) {
-            this.setState({
-                persona: persona
-            })
-
-            this._updateSearchResults(this.state.phrase, persona)
         }
     }
 
@@ -99,11 +64,10 @@ export default class ContentCard extends React.Component {
             this.setState({
                 addResponseError: ''
             })
-            sayhi.addResponse({
-                phrase: this.state.phrase, 
-                persona: this.state.persona, 
-                text: response
-            }, this._addResponse.bind(this, response))
+            addResponse(this.state.phrase, response)
+            this.setState({
+                responses: this.state.responses.push(response)
+            })
         } else {
             this.setState({
                 addResponseError: "Sorry, something went wrong (Responses can be no longer than 200 characters)."
@@ -116,13 +80,6 @@ export default class ContentCard extends React.Component {
             this._handleAddClick(event)
         }
     }
-    
-    _addResponse(response, data) {
-        this.setState({
-            addResponseText: '',
-            responses: this.state.responses.push(response)
-        })
-    }
 
     _handleSnackBarClose() {
         this.setState({
@@ -131,22 +88,6 @@ export default class ContentCard extends React.Component {
     }
 
     render() {
-        let avatarStyle = {
-            display: "inline-block",
-            fill: "rgb(117, 117, 117)",
-            height: "24px",
-            width: "24px",
-            transition: "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-            top: "0px",
-            margin: "12px",
-            left: "4px",
-            WebkiUserSelect: "none"
-        }
-        
-        let cardActionStyle = {
-            padding: "16px"
-        }
-        
         return (
             <div className='flex justify-center'>
                 <div className='w-100' style={{maxWidth: 750}}>

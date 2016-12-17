@@ -1,22 +1,19 @@
 import React from 'react';
-import Drawer from 'material-ui/Drawer';
-import SelectField from 'material-ui/SelectField';
 import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField'
-import Divider from 'material-ui/Divider';
 import {initSearch, changePhrase} from "../../../actions/searchAction"
-import {distributeData} from "../../../actions/sayhiAction"
-import logoTitleImage from "../../../resources/img/logowithtext.png"
-import SearchStore from "../../../stores/searchStore"
+import {addResponse, fetchPhrases} from "../../../services/sayhiService"
+import SayHiStore from "../../../stores/sayhiStore"
 var Immutable = require('immutable');
-var sayhi = require('sayhi-ai');
 
 export default class DashboardDrawer extends React.Component {
     
     constructor(props) {
         super(props)
-        
+
+        fetchPhrases()
+
         this.state = {
             dialogOpen: false,
             addPhrase: '',
@@ -29,17 +26,23 @@ export default class DashboardDrawer extends React.Component {
     }
 
     componentDidMount() {
-        SearchStore.addChangeListener(this._initSearch.bind(this))
+        SayHiStore.addChangeListener(this._initPhraseList.bind(this))
     }
 
     componentWillUnmount() {
-        SearchStore.removeChangeListener(this._initSearch.bind(this))
+        SayHiStore.removeChangeListener(this._initPhraseList.bind(this))
     }
     
-    _initPhraseList(phraseList) {
+    _initPhraseList() {
+        let phraseList = SayHiStore.getPhrases()
+        if (phraseList.length === 0) {
+            return;
+        }
+
         this.phrasesText = Immutable.List(phraseList)
 
-        return Immutable.List(this.phrasesText.map((phrase, index) => {
+        let phraseDivs =  Immutable.List(this.phrasesText
+            .map((phrase, index) => {
             return ( 
                 <div
                     className='pointer pv2 ph3 f5 dim'
@@ -51,18 +54,10 @@ export default class DashboardDrawer extends React.Component {
                 </div>
             )
         }))
-    }
 
-    _initSearch() {
-        let phrases = SearchStore.getAllPhrases()
-        
-        if (phrases.length > 0) {
-            this.setState({
-                phrases: this._initPhraseList(phrases)
-            })
-            
-            //changePhrase(phrases[0])
-        }
+        this.setState({
+            phrases: phraseDivs
+        })
     }
 
     _handlePhraseSelectFieldChange = (event, index) => {
@@ -114,10 +109,7 @@ export default class DashboardDrawer extends React.Component {
                 addResponseErrorCode: responseErrorMessage
             })
         } else {
-            sayhi.addResponse({
-                phrase: phrase,
-                text: response
-            }, this._addResponse.bind(this))
+            addResponse(phrase, response)
             
             this.setState({
                 addPhraseErrorCode: '',

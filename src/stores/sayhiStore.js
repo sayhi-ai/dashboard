@@ -3,34 +3,52 @@ import BaseStore from './baseStore';
 import SayHiConstants from '../constants/sayhiConstants.js';
 import assign from 'object-assign'
 
-var _data = [{}]
+var _phrases = []
+var _responses = []
+var _error = null
 
 var SayHiStore = assign({}, BaseStore, {
-    setData(data) {
-        _data = data
+    getPhrases() {
+        return _phrases
     },
-
-    getData() {
-        return _data
+    getResponses() {
+        return _responses
+    },
+    getError() {
+        return _error
     }
 });
 
 AppDispatcher.register(function(action) {
     switch(action.actionType) {
-        case SayHiConstants.DISTRIBUTE_DATA:
-            if (action.data) {
-                SayHiStore.setData(action.data)
+        case SayHiConstants.GET_PHRASES:
+            if (action.phrases) {
+                _phrases = new Set(action.phrases)
+                _error = null
                 SayHiStore.emitChange()
             }
             break
-
-        case SayHiConstants.ADD_RESPONSE:
-            if (action.responseData) {
-                //SayHiStore.setPersona(action.responseData)
-                //SayHiStore.emitChange()
+        case SayHiConstants.GET_RESPONSES:
+            if (action.responses) {
+                _responses = new Set(action.responses)
+                _error = null
+                SayHiStore.emitChange()
             }
             break
-
+        case SayHiConstants.ADD_RESPONSE:
+            if (action.response) {
+                console.log("get here32 ")
+                _responses.push(action.response)
+                _error = null
+                SayHiStore.emitChange()
+            }
+            break
+        case SayHiConstants.ERROR:
+            if (action.error) {
+                _error = action.error
+                SayHiStore.emitChange()
+            }
+            break
         default:
         // no op
     }

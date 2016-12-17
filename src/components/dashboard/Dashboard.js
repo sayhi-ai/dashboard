@@ -4,9 +4,6 @@ import Account from "./account/Account"
 import HeaderBar from "./headerBar/HeaderBar"
 import DashboardDrawer from "./drawer/DashboardDrawer"
 import Content from "./content/Content"
-import {initSearch} from "../../actions/searchAction"
-import {distributeData} from "../../actions/sayhiAction"
-var sayhi = require('sayhi-ai');
 
 export default AuthenticatedComponent(class Dashboard extends React.Component {
     constructor(props) {

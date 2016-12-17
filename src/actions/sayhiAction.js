@@ -1,16 +1,30 @@
 import AppDispatcher from '../dispatchers/appDispatcher';
 import SayHiConstants from '../constants/sayhiConstants.js';
 
-export var distributeData = function(data) {
+export var getPhrasesAction = function(phrases) {
     AppDispatcher.dispatch({
-        actionType: SayHiConstants.DISTRIBUTE_DATA,
-        data: data
+        actionType: SayHiConstants.GET_PHRASES,
+        phrases: phrases
     })
 }
 
-export var addResponse = function(responseData) {
+export var getResponsesAction = function(responses) {
+    AppDispatcher.dispatch({
+        actionType: SayHiConstants.GET_RESPONSES,
+        responses: responses
+    })
+}
+
+export var addResponseAction = function(response) {
     AppDispatcher.dispatch({
         actionType: SayHiConstants.ADD_RESPONSE,
-        responseData: responseData
+        response: response
+    })
+}
+
+export var handleErrorAction = function (error) {
+    AppDispatcher.dispatch({
+        actionType: SayHiConstants.ERROR,
+        error: error
     })
 }
