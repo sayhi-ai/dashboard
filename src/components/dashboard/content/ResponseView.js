@@ -1,11 +1,10 @@
 import React from 'react'
 import Response from '../response/Response'
-import {fetchResponses, addResponse} from '../../../services/sayhiService'
-import SearchStore from "../../../stores/searchStore"
-import SayHiStore from "../../../stores/sayhiStore"
-var Immutable = require('immutable');
+import {fetchResponses, addResponse} from '../../../services/sayhi/responseService'
+import StateStore from "../../../stores/stateStore"
+import ResponseStore from "../../../stores/sayhi/responseStore"
 
-export default class ContentCard extends React.Component {
+export default class ResponseView extends React.Component {
     
     constructor(props) {
         super(props)
@@ -22,31 +21,30 @@ export default class ContentCard extends React.Component {
     }
 
     componentDidMount() {
-        SearchStore.addChangeListener(this._updatePhrase.bind(this))
-        SayHiStore.addChangeListener(this._setResponses.bind(this))
+        StateStore.addChangeListener(this._updatePhrase.bind(this))
+        ResponseStore.addChangeListener(this._setResponses.bind(this))
     }
 
     componentWillUnmount() {
-        SearchStore.removeChangeListener(this._updatePhrase.bind(this))
-        SayHiStore.removeChangeListener(this._setResponses.bind(this))
+        StateStore.removeChangeListener(this._updatePhrase.bind(this))
+        ResponseStore.removeChangeListener(this._setResponses.bind(this))
     }
     
     _setResponses() {
-        let responses = SayHiStore.getResponses()
-        console.log("get here")
+        let responses = ResponseStore.getResponses()
 
         this.setState({
-            responses: Immutable.List(responses)
+            responses: responses
         })
     }
 
     _updatePhrase() {
-        let phrase = SearchStore.getPhrase()
+        let phrase = StateStore.getCurrentPhrase()
 
-        if (phrase !== "" && phrase !== this.state.phrase) {
-            fetchResponses(phrase)
+        if (phrase.phrase !== "" && phrase.phrase !== this.state.phrase) {
+            fetchResponses(StateStore.getCurrentBotId(), phrase.id)
             this.setState({
-                phrase: phrase
+                phrase: phrase.phrase
             })
         }
     }
@@ -64,7 +62,7 @@ export default class ContentCard extends React.Component {
             this.setState({
                 addResponseError: ''
             })
-            addResponse(this.state.phrase, response)
+            addResponse(StateStore.getCurrentPhrase().id, response)
             this.setState({
                 responses: this.state.responses.push(response)
             })

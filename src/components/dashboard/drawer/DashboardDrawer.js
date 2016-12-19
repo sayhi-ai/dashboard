@@ -2,58 +2,56 @@ import React from 'react';
 import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField'
-import {initSearch, changePhrase} from "../../../actions/searchAction"
-import {addResponse, fetchPhrases} from "../../../services/sayhiService"
-import SayHiStore from "../../../stores/sayhiStore"
-var Immutable = require('immutable');
+import {changePhrase} from "../../../actions/stateAction"
+import {addPhrase, fetchPhrases} from "../../../services/sayhi/phraseService"
+import PhraseStore from "../../../stores/sayhi/phraseStore"
+import StateStore from "../../../stores/stateStore"
 
 export default class DashboardDrawer extends React.Component {
     
     constructor(props) {
         super(props)
 
-        fetchPhrases()
+        fetchPhrases(StateStore.getCurrentBotId())
 
         this.state = {
             dialogOpen: false,
             addPhrase: '',
             addPhraseErrorCode: '',
-            addResponse: '',
-            addResponseErrorCode: '',
             phraseValue: 0,
             phrases: [],
         }
     }
 
     componentDidMount() {
-        SayHiStore.addChangeListener(this._initPhraseList.bind(this))
+        PhraseStore.addChangeListener(this._loadPhraseList.bind(this))
     }
 
     componentWillUnmount() {
-        SayHiStore.removeChangeListener(this._initPhraseList.bind(this))
+        PhraseStore.removeChangeListener(this._loadPhraseList.bind(this))
     }
     
-    _initPhraseList() {
-        let phraseList = SayHiStore.getPhrases()
-        if (phraseList.length === 0) {
+    _loadPhraseList() {
+        this.phrasesObj = PhraseStore.getPhrases()
+        const phrases = this.phrasesObj.map(phrase => phrase.phrase)
+
+        if (phrases.length === 0) {
             return;
         }
 
-        this.phrasesText = Immutable.List(phraseList)
-
-        let phraseDivs =  Immutable.List(this.phrasesText
+        let phraseDivs =  phrases
             .map((phrase, index) => {
-            return ( 
-                <div
-                    className='pointer pv2 ph3 f5 dim'
-                    style={{background: '#fafafa'}}
-                    key={index}
-                    onClick={(e) => this._handlePhraseSelectFieldChange(e, index)}
-                >
-                    "{phrase}"
-                </div>
-            )
-        }))
+                return (
+                    <div
+                        className='pointer pv2 ph3 f5 dim'
+                        style={{background: '#fafafa'}}
+                        key={index}
+                        onClick={(e) => this._handlePhraseSelectFieldChange(e, index)}
+                    >
+                        "{phrase}"
+                    </div>
+                )
+            })
 
         this.setState({
             phrases: phraseDivs
@@ -61,7 +59,7 @@ export default class DashboardDrawer extends React.Component {
     }
 
     _handlePhraseSelectFieldChange = (event, index) => {
-        changePhrase(this.phrasesText.get(index))
+        changePhrase(this.phrasesObj.get(index))
         this.setState({phraseValue: index});
     }
     
@@ -78,55 +76,34 @@ export default class DashboardDrawer extends React.Component {
             addPhrase: e.target.value
         })
     }
-
-    _handleResponseTextFieldChange(e) {
-        this.setState({
-            addResponse: e.target.value
-        })
-    }
     
-    _handleAddResponseTuple(e) {
+    _handleAddPhrase(e) {
         let phrase = this.state.addPhrase
-        let response = this.state.addResponse
-        
+
         let error = false
         let phraseErrorMessage = ""
-        let responseErrorMessage = ""
-        
+
         if (phrase === "" || phrase.length > 30) {
             error = true
             phraseErrorMessage = "A phrase is between 0 and 30 characters long."
-        }
-
-        if (phrase === "" || response.length > 30) {
-            error = true
-            responseErrorMessage = "A response is between 0 and 200 characters long."
         }
         
         if (error) {
             this.setState({
                 addPhraseErrorCode: phraseErrorMessage,
-                addResponseErrorCode: responseErrorMessage
             })
         } else {
-            addResponse(phrase, response)
-            
+            addPhrase(StateStore.getCurrentBotId(), phrase)
             this.setState({
                 addPhraseErrorCode: '',
-                addResponseErrorCode: '',
                 dialogOpen: false
             })
         }
     }
-    
-    _addResponse(data) {
-        initSearch(data.phrases.map(phrase => phrase.name))
-        distributeData(data.responses)
-    }
 
     _handleKeyPress(event) {
         if(event.key == 'Enter'){
-            this._handleAddResponseTuple(event)
+            this._handleAddPhrase(event)
         }
     }
 
@@ -135,7 +112,7 @@ export default class DashboardDrawer extends React.Component {
             <RaisedButton
                 label="Add"
                 primary={true}
-                onTouchTap={this._handleAddResponseTuple.bind(this)}
+                onTouchTap={this._handleAddPhrase.bind(this)}
             />
         ];
         
@@ -166,7 +143,7 @@ export default class DashboardDrawer extends React.Component {
                     </div>
                 </div>
                 <Dialog
-                    title="Add a phrase & response"
+                    title="Add a phrase"
                     actions={actions}
                     modal={false}
                     open={this.state.dialogOpen}
@@ -181,15 +158,6 @@ export default class DashboardDrawer extends React.Component {
                                id="addPhraseTextField"
                                onKeyPress={this._handleKeyPress.bind(this)}
                                placeholder="Phrase" />
-                    <TextField type="text"
-                               value={this.state.addResponse}
-                               inputStyle={{textAlign: "center"}}
-                               style={{width: "100%"}}
-                               errorText={this.state.addResponseErrorCode}
-                               onChange={this._handleResponseTextFieldChange.bind(this)}
-                               id="addResponseTextField"
-                               onKeyPress={this._handleKeyPress.bind(this)}
-                               placeholder="Response" />
                 </Dialog>
             </div>
         )
