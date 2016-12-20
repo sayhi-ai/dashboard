@@ -30,7 +30,7 @@ export default class Login extends React.Component {
 
     _handleLoginChange() {
         let error = LoginStore.getLoginError()
-        if (error != null) {
+        if (error !== null) {
             this.setState({
                 open: true,
                 snackBarColor: "#F44336",

@@ -1,7 +1,7 @@
 import fetch from "isomorphic-fetch";
 import PhraseConstants from '../../constants/sayhi/phraseConstants.js';
 import * as actions from '../../actions/sayhi/phraseAction';
-import {handleError} from '../../actions/stateAction';
+import {handleError} from '../../actions/errorAction';
 
 export const addPhrase = function (botId, phrase) {
     let token = localStorage.getItem('sayhi-jwt')
@@ -25,7 +25,7 @@ export const addPhrase = function (botId, phrase) {
             });
         } else {
             response.json().then(json => {
-                handleError(json.error)
+                handleError(json.detail)
             });
         }
     });

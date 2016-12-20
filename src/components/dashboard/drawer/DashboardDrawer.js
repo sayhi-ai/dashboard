@@ -6,6 +6,7 @@ import {changePhrase} from "../../../actions/stateAction"
 import {addPhrase, fetchPhrases} from "../../../services/sayhi/phraseService"
 import PhraseStore from "../../../stores/sayhi/phraseStore"
 import StateStore from "../../../stores/stateStore"
+import ENV_VARS from '../../../../tools/ENV_VARS'
 
 export default class DashboardDrawer extends React.Component {
     
@@ -83,9 +84,16 @@ export default class DashboardDrawer extends React.Component {
         let error = false
         let phraseErrorMessage = ""
 
+        let phrases = PhraseStore.getPhrases().filter(p => p.phrase === phrase)
+        if (phrases.size !== 0) {
+            error = true
+            phraseErrorMessage = "Phrase already exists."
+        }
+
         if (phrase === "" || phrase.length > 30) {
             error = true
-            phraseErrorMessage = "A phrase is between 0 and 30 characters long."
+            phraseErrorMessage = "A phrase is between 0 and " +
+                ENV_VARS.CONSTANTS.MAX_PHRASE_TOKEN_LENGTH + " characters long."
         }
         
         if (error) {
@@ -96,7 +104,8 @@ export default class DashboardDrawer extends React.Component {
             addPhrase(StateStore.getCurrentBotId(), phrase)
             this.setState({
                 addPhraseErrorCode: '',
-                dialogOpen: false
+                dialogOpen: false,
+                addPhrase: ''
             })
         }
     }

@@ -7,10 +7,3 @@ export var changePhrase = function(phrase) {
         phrase: phrase
     })
 }
-
-export var handleError = function (error) {
-    AppDispatcher.dispatch({
-        actionType: StateConstants.ERROR,
-        error: error
-    })
-}

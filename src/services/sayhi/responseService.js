@@ -1,7 +1,7 @@
 import fetch from "isomorphic-fetch";
 import ResponseConstants from '../../constants/sayhi/responseConstants.js';
 import * as actions from '../../actions/sayhi/responseAction';
-import {handleError} from '../../actions/stateAction';
+import {handleError} from '../../actions/errorAction';
 
 export const addResponse = function (phraseId, response) {
     let token = localStorage.getItem('sayhi-jwt')
@@ -16,17 +16,18 @@ export const addResponse = function (phraseId, response) {
             "phraseId": phraseId,
             "response": response
         })
-    }).then(response => {
-        if (response.status === 200) {
-            response.json().then(json => {
+    }).then(serverResponse => {
+        if (serverResponse.status === 200) {
+            serverResponse.json().then(json => {
                 if (json.added) {
                     actions.addResponse(response)
                 } else {
                     actions.addResponse(null)
+                    handleError("Response already exists.")
                 }
             });
         } else {
-            response.json().then(json => {
+            serverResponse.json().then(json => {
                 actions.addResponse(null)
                 handleError(json.error)
             });

@@ -1,8 +1,10 @@
 import React from 'react'
-import Response from '../response/Response'
-import {fetchResponses, addResponse} from '../../../services/sayhi/responseService'
-import StateStore from "../../../stores/stateStore"
-import ResponseStore from "../../../stores/sayhi/responseStore"
+import Response from './Response'
+import {fetchResponses, addResponse} from '../../../../services/sayhi/responseService'
+import {handleError} from '../../../../actions/errorAction';
+import StateStore from "../../../../stores/stateStore"
+import ResponseStore from "../../../../stores/sayhi/responseStore"
+import ENV_VAR from '../../../../../tools/ENV_VARS'
 
 export default class ResponseView extends React.Component {
     
@@ -15,7 +17,6 @@ export default class ResponseView extends React.Component {
             snackBarText : '',
             phrase: "Hi",
             addResponseText: '',
-            addResponseError: '',
             responses: []
         }
     }
@@ -58,19 +59,27 @@ export default class ResponseView extends React.Component {
     _handleAddClick(e) {
         let response = this.state.addResponseText
 
-        if (response !== "" && response.length < 200) {
-            this.setState({
-                addResponseError: ''
-            })
-            addResponse(StateStore.getCurrentPhrase().id, response)
-            this.setState({
-                responses: this.state.responses.push(response)
-            })
-        } else {
-            this.setState({
-                addResponseError: "Sorry, something went wrong (Responses can be no longer than 200 characters)."
-            })
+        // Check for duplicates on client first before sending request to server
+        let responses = ResponseStore.getResponses().filter(r => r === response)
+        if (responses.size !== 0) {
+            return handleError("Response already exists.");
         }
+
+        if (response === "") {
+            return handleError("Responses cannot be empty.")
+        }
+
+        if (response.length > ENV_VAR.CONSTANTS.MAX_RESPONSE_LENGTH) {
+            return handleError("Responses can be no longer than " +
+                ENV_VAR.CONSTANTS.MAX_RESPONSE_LENGTH + " characters.")
+        }
+
+        addResponse(StateStore.getCurrentPhrase().id, response)
+
+        this.setState({
+            responses: this.state.responses.push(response),
+            addResponseText: ''
+        })
     }
 
     _handleKeyPress(event) {

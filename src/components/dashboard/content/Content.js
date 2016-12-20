@@ -1,5 +1,5 @@
 import React from 'react';
-import ResponseView from "./ResponseView"
+import ResponseView from "./response/ResponseContainer"
 import persona from "../../../resources/img/persona.svg"
 
 export default class Content extends React.Component {
