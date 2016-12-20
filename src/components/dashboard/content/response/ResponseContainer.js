@@ -15,7 +15,7 @@ export default class ResponseView extends React.Component {
             open: false,
             snackBarColor: '',
             snackBarText : '',
-            phrase: "Hi",
+            phrase: "",
             addResponseText: '',
             responses: []
         }

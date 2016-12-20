@@ -54,8 +54,13 @@ export default class DashboardDrawer extends React.Component {
                 )
             })
 
+        // TODO: fix this hack
+        if (this.phrasesObj.size > 0) {
+            setTimeout(() => changePhrase(this.phrasesObj.get(0)), 0);
+        }
         this.setState({
-            phrases: phraseDivs
+            phrases: phraseDivs,
+            phraseValue: 0
         })
     }
 
