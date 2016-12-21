@@ -3,6 +3,31 @@ import PhraseConstants from '../../constants/sayhi/phraseConstants.js';
 import * as actions from '../../actions/sayhi/phraseAction';
 import {handleError} from '../../actions/errorAction';
 
+export const fetchPhrases = function (botId) {
+    let token = localStorage.getItem('sayhi-jwt')
+    return fetch(PhraseConstants.GET_PHRASES_URL, {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({
+            "botId": botId,
+        })
+    }).then(response => {
+        if (response.status === 200) {
+            response.json().then(json => {
+                actions.getPhrases(json.phrases)
+            });
+        } else {
+            response.json().then(json => {
+                handleError(json.error)
+            });
+        }
+    });
+}
+
 export const addPhrase = function (botId, phrase) {
     let token = localStorage.getItem('sayhi-jwt')
     return fetch(PhraseConstants.ADD_PHRASES_URL, {
@@ -31,9 +56,9 @@ export const addPhrase = function (botId, phrase) {
     });
 }
 
-export const fetchPhrases = function (botId) {
+export const removePhrase = function (phraseId) {
     let token = localStorage.getItem('sayhi-jwt')
-    return fetch(PhraseConstants.GET_PHRASES_URL, {
+    return fetch(PhraseConstants.REMOVE_PHRASES_URL, {
         method: "POST",
         headers: {
             'Accept': 'application/json',
@@ -41,15 +66,20 @@ export const fetchPhrases = function (botId) {
             'Authorization': 'Bearer ' + token
         },
         body: JSON.stringify({
-            "botId": botId,
+            "phraseId": phraseId
         })
-    }).then(response => {
-        if (response.status === 200) {
-            response.json().then(json => {
-                actions.getPhrases(json.phrases)
+    }).then(serverResponse => {
+        if (serverResponse.status === 200) {
+            serverResponse.json().then(json => {
+                if (json.removed) {
+                    actions.removePhrase(phraseId)
+                } else {
+                    handleError("Error removing phrase.")
+                }
             });
         } else {
-            response.json().then(json => {
+            serverResponse.json().then(json => {
+                actions.addResponse(null)
                 handleError(json.error)
             });
         }

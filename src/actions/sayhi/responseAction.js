@@ -14,3 +14,10 @@ export var addResponse = function(response) {
         response: response
     })
 }
+
+export var removeResponse = function(id) {
+    AppDispatcher.dispatch({
+        actionType: ResponseConstants.REMOVE_RESPONSE,
+        id: id
+    })
+}

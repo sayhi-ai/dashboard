@@ -19,7 +19,7 @@ AppDispatcher.register(function(action) {
     switch(action.actionType) {
         case PhraseConstants.GET_PHRASES:
             if (action.phrases) {
-                _phrases = Immutable.List(action.phrases).toSet().toList()
+                _phrases = Immutable.List(action.phrases)
                 PhraseStore.emitChange()
             }
             break

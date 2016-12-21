@@ -14,3 +14,10 @@ export var addPhrase = function(phrase) {
         phrase: phrase
     })
 }
+
+export var removePhrase = function(phraseId) {
+    AppDispatcher.dispatch({
+        actionType: PhraseConstants.REMOVE_PHRASE,
+        phraseId: phraseId
+    })
+}

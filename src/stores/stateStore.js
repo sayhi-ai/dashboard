@@ -4,7 +4,7 @@ import StateConstants from '../constants/stateConstants.js';
 import assign from 'object-assign'
 
 var _phrase = {}
-var _botId = "ciwurr2ut8j790124g0pgnex6"
+var _botId = "ciwy8agg650tc0161tcbo75ol"
 var _error = null
 
 var StateStore = assign({}, BaseStore, {

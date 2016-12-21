@@ -14,6 +14,7 @@ export default class DashboardDrawer extends React.Component {
         super(props)
 
         fetchPhrases(StateStore.getCurrentBotId())
+        this.firstLoad = true
 
         this.state = {
             dialogOpen: false,
@@ -55,7 +56,8 @@ export default class DashboardDrawer extends React.Component {
             })
 
         // TODO: fix this hack
-        if (this.phrasesObj.size > 0) {
+        if (this.phrasesObj.size > 0 && this.firstLoad) {
+            this.firstLoad = false
             setTimeout(() => changePhrase(this.phrasesObj.get(0)), 0);
         }
         this.setState({
