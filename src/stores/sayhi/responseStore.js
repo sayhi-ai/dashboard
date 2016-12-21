@@ -4,7 +4,7 @@ import ResponseConstants from '../../constants/sayhi/responseConstants';
 import assign from 'object-assign'
 var Immutable = require('immutable');
 
-var _responses = []
+var _responses = Immutable.List();
 
 var ResponseStore = assign({}, BaseStore, {
     getResponses() {
@@ -15,7 +15,7 @@ var ResponseStore = assign({}, BaseStore, {
 AppDispatcher.register(function(action) {
     switch(action.actionType) {
         case ResponseConstants.GET_RESPONSES:
-            if (action.responses) {
+            if (action.responses.length > 0) {
                 _responses = Immutable.List(action.responses)
                 ResponseStore.emitChange()
             }
@@ -39,8 +39,6 @@ AppDispatcher.register(function(action) {
                     _responses = _responses.delete(index)
                     ResponseStore.emitChange()
                 }
-            } else {
-                ResponseStore.emitChange()
             }
             break
         default:

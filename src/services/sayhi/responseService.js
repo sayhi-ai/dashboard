@@ -18,7 +18,7 @@ export const fetchResponses = function (phraseId) {
     }).then(response => {
         if (response.status === 200) {
             response.json().then(json => {
-                actions.getResponses(json.responses)
+                actions.setResponses(json.responses)
             });
         } else {
             response.json().then(json => {

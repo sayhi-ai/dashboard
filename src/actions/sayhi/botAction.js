@@ -1,24 +1,23 @@
 import AppDispatcher from '../../dispatchers/appDispatcher';
 import BotConstants from '../../constants/sayhi/botConstants.js';
 
-export var getBots = function() {
+export var setBots = function(bots) {
     AppDispatcher.dispatch({
         actionType: BotConstants.GET_BOTS,
+        bots: bots
     })
 }
 
-export const addBot = function(name, type, description) {
+export const addBot = function(bot) {
     AppDispatcher.dispatch({
         actionType: BotConstants.ADD_BOT,
-        name: name,
-        type: type,
-        description: description
+        bot: bot
     })
 }
 
-export var removePhrase = function(botId) {
+export var removeBot = function(botId) {
     AppDispatcher.dispatch({
         actionType: BotConstants.REMOVE_BOT,
-        botId: botId
+        id: botId
     })
 }

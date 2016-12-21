@@ -1,31 +1,44 @@
 import AppDispatcher from '../../dispatchers/appDispatcher'
 import BaseStore from './../baseStore';
-import SayHiConstants from '../../constants/sayhi/';
+import BotContstants from '../../constants/sayhi/botConstants';
 import assign from 'object-assign'
 var Immutable = require('immutable');
 
-var _phrases = []
-var _responses = []
-var _error = null
+var _bots = Immutable.List();
 
-var SayHiStore = assign({}, BaseStore, {
-    getPhrases() {
-        return _phrases
-    },
-    getResponses() {
-        return _responses
-    },
-    getError() {
-        return _error
+var BotStore = assign({}, BaseStore, {
+    getBots() {
+        return _bots
     }
 });
 
 AppDispatcher.register(function(action) {
     switch(action.actionType) {
-        case SayHiConstants.GET_PHRASES:
-            if (action.phrases) {
-                _phrases = Immutable.List(action.phrases).toSet().toList()
-                SayHiStore.emitChange()
+        case BotContstants.GET_BOTS:
+            if (action.bots.length > 0) {
+                _bots = Immutable.List(action.bots)
+                BotStore.emitChange()
+            }
+            break
+        case BotContstants.ADD_BOT:
+            if (action.bot !== null) {
+                _bots = _bots.push(action.bot)
+                BotStore.emitChange()
+            }
+            break
+        case BotContstants.REMOVE_BOT:
+            if (action.id !== null) {
+                let index = null
+                for (let i = 0; i < _bots.size; i++) {
+                    if (_bots.get(i).id === action.id) {
+                        index = i
+                    }
+                }
+
+                if (index !== null) {
+                    _bots = _bots.delete(index)
+                    BotStore.emitChange()
+                }
             }
             break
         default:

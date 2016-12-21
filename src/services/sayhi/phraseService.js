@@ -18,7 +18,7 @@ export const fetchPhrases = function (botId) {
     }).then(response => {
         if (response.status === 200) {
             response.json().then(json => {
-                actions.getPhrases(json.phrases)
+                actions.setPhrases(json.phrases)
             });
         } else {
             response.json().then(json => {
@@ -79,7 +79,6 @@ export const removePhrase = function (phraseId) {
             });
         } else {
             serverResponse.json().then(json => {
-                actions.addResponse(null)
                 handleError(json.error)
             });
         }

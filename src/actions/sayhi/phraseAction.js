@@ -1,7 +1,7 @@
 import AppDispatcher from '../../dispatchers/appDispatcher';
 import PhraseConstants from '../../constants/sayhi/phraseConstants.js';
 
-export var getPhrases = function(phrases) {
+export var setPhrases = function(phrases) {
     AppDispatcher.dispatch({
         actionType: PhraseConstants.GET_PHRASES,
         phrases: phrases
@@ -18,6 +18,6 @@ export var addPhrase = function(phrase) {
 export var removePhrase = function(phraseId) {
     AppDispatcher.dispatch({
         actionType: PhraseConstants.REMOVE_PHRASE,
-        phraseId: phraseId
+        id: phraseId
     })
 }
