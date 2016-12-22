@@ -1,6 +1,6 @@
 import React from 'react';
 import LoginStore from '../../stores/loginStore';
-import { browserHistory } from 'react-router'
+import browserHistory from '../../history'
 
 export default (ComposedComponent) => {
     return class AuthenticatedComponent extends React.Component {

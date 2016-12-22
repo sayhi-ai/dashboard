@@ -1,6 +1,6 @@
 import AppDispatcher from '../dispatchers/appDispatcher'
 import LoginConstants from '../constants/loginConstants.js'
-import { browserHistory } from 'react-router'
+import browserHistory from '../history'
 
 export var loginAction = function(jwt) {
     var savedJwt = localStorage.getItem('sayhi-jwt')

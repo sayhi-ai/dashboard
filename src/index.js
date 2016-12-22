@@ -1,9 +1,10 @@
 import 'babel-polyfill'
 import React from "react"
 import ReactDOM from "react-dom"
-import {Router, browserHistory} from 'react-router'
+import {Router} from 'react-router'
 import {loginAction} from './actions/loginActions'
 import 'tachyons'
+import browserHistory from './history'
 
 // import route
 import routes from "./route"

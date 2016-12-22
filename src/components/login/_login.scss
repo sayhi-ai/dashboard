@@ -40,15 +40,34 @@
 
   .login-form-div {
 
-    .login-error-field {
+    .forgot-password-div {
       display: block;
-      width: 100%;
-      text-align: center;
+      color: $primary-color;
+      font-size: 0.8em;
+      margin-top: 3%;
+    }
+
+    .forgot-password-text {
+      width: 50%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .button-div {
+      display: block;
+      margin-top: 10%;
     }
 
     .login-button {
+      display: inline-block;
       color: white;
-      margin-top: 10%;
+      margin-right: 2%;
+    }
+
+    .create-account-button {
+      display: inline-block;
+      color: $primary-color;
+      margin-left: 2%;
     }
   }
 }
