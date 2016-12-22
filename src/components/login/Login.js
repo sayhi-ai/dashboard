@@ -56,10 +56,36 @@ export default class Login extends React.Component {
 
     _login(e) {
         e.preventDefault();
-        login(this.state.user, this.state.password)
+
+        let error = null
+        if (this.state.user === '') {
+            error = "Email missing."
+        }
+
+        if (this.state.user.length > 100) {
+            error = "Email is too long."
+        }
+
+        if (this.state.password === '') {
+            error = "Password missing."
+        }
+
+        if (this.state.password.length > 100) {
+            error = "Password is too long."
+        }
+
+        if (error === null) {
+            login(this.state.user, this.state.password)
+        } else {
+            this.setState({
+                open: true,
+                snackBarColor: "#F44336",
+                snackBarText : error
+            })
+        }
     }
 
-    _createAccount(e) {
+    _createAccountClick(e) {
         e.preventDefault()
         browserHistory.push('/account/create');
     }
@@ -122,7 +148,7 @@ export default class Login extends React.Component {
                                             <RaisedButton type="submit"
                                                           labelStyle={{color:"#19A5E4"}}
                                                           primary={false}
-                                                          onClick={this._createAccount.bind(this)}
+                                                          onClick={this._createAccountClick.bind(this)}
                                                           label="Create Account"/>
                                         </div>
                                     </div>

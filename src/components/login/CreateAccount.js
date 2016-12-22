@@ -2,10 +2,11 @@ import React from 'react';
 import TextField from "material-ui/TextField"
 import RaisedButton from "material-ui/RaisedButton"
 import Paper from "material-ui/Paper"
-import LoginStore from "../../stores/loginStore"
+import AccountStore from "../../stores/accountStore"
 import logoTitleImage from "../../resources/img/logowithtext.png"
 import Snackbar from "material-ui/Snackbar"
 import browserHistory from '../../history'
+import {createAccount} from '../../services/accountService'
 
 export default class Login extends React.Component {
 
@@ -24,20 +25,29 @@ export default class Login extends React.Component {
     }
 
     componentDidMount() {
-        LoginStore.addChangeListener(this._handleLoginChange.bind(this))
+        AccountStore.addChangeListener(this._handleServerResponse.bind(this))
     }
 
     componentWillUnmount() {
-        LoginStore.removeChangeListener(this._handleLoginChange.bind(this))
+        AccountStore.removeChangeListener(this._handleServerResponse.bind(this))
     }
 
-    _handleLoginChange() {
-        let error = LoginStore.getLoginError()
-        if (error !== null) {
+    _handleServerResponse() {
+        let accountCreated = AccountStore.getAccountCreated()
+        let error = AccountStore.getError()
+
+        if (accountCreated) {
+            this.setState({
+                open: true,
+                snackBarColor: "#27ae60",
+                snackBarText : "Account created successfully. Please check " +
+                  "your e-mail to activate your account."
+            })
+        } else if (error !== null) {
             this.setState({
                 open: true,
                 snackBarColor: "#F44336",
-                snackBarText : "Wrong username or password."
+                snackBarText : error
             })
         }
     }
@@ -77,13 +87,71 @@ export default class Login extends React.Component {
         })
     }
 
-    _login(e) {
+    _loginClick(e) {
         e.preventDefault()
         browserHistory.push('/login');
     }
 
-    _createAccount(e) {
+    _validateEmail(email) {
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email);
+    }
 
+    _createAccount(e) {
+        e.preventDefault();
+
+        let error = null
+
+        if (this.state.firstName === '') {
+            error = "First name missing."
+        }
+
+        if (this.state.firstName.length > 30) {
+            error = "First name is too long."
+        }
+
+        if (this.state.lastName === '') {
+            error = "Last name missing."
+        }
+
+        if (this.state.lastName.length > 30) {
+            error = "Last name is too long."
+        }
+
+        if (this.state.email === '') {
+            error = "Email missing."
+        }
+
+        if (this.state.email.length > 100) {
+            error = "Email is too long."
+        }
+
+        if (!this._validateEmail(this.state.email)) {
+            error = "Email is not valid."
+        }
+
+        if (this.state.password1 === '' || this.state.password2 === '') {
+            error = "Password missing."
+        }
+
+        if (this.state.password1.length > 30 || this.state.password1.length < 6) {
+            error = "Password has to be between 6 and 30 characters."
+        }
+
+        if (this.state.password1 !== this.state.password2) {
+            error = "Passwords do not match."
+        }
+
+        if (error === null) {
+            createAccount(this.state.firstName, this.state.lastName,
+                this.state.email, this.state.password1)
+        } else {
+            this.setState({
+                open: true,
+                snackBarColor: "#F44336",
+                snackBarText : error
+            })
+        }
     }
 
     _handleSnackBarClose() {
@@ -94,7 +162,7 @@ export default class Login extends React.Component {
 
     _handleKeyPress(event) {
         if(event.key == 'Enter'){
-            this._login(event)
+            this._createAccount(event)
         }
     }
 
@@ -167,7 +235,7 @@ export default class Login extends React.Component {
                                             <RaisedButton type="submit"
                                                           labelStyle={{color:"#19A5E4"}}
                                                           primary={false}
-                                                          onClick={this._login.bind(this)}
+                                                          onClick={this._loginClick.bind(this)}
                                                           label="Login"/>
                                         </div>
                                         <div className="create-account-button">

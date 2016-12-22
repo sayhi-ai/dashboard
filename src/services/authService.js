@@ -1,8 +1,8 @@
 import fetch from "isomorphic-fetch";
 import LoginConstants from "../constants/loginConstants"
-import {loginAction, errorLoginAction, logoutAction} from '../actions/loginActions';
+import * as loginActions from '../actions/loginActions';
 
-export var login = function (email, password) {
+export const login = function (email, password) {
     localStorage.setItem('sayhi-user', email)
     return handleAuth(fetch(LoginConstants.LOGIN_URL, {
         method: "POST",
@@ -17,20 +17,20 @@ export var login = function (email, password) {
     }));
 }
 
-export var logout = function () {
+export const logout = function () {
     localStorage.removeItem('sayhi-user')
-    logoutAction();
+    loginActions.logout();
 }
 
-export var handleAuth = function (promise) {
+export const handleAuth = function (promise) {
     promise.then(response => {
         if (response.status === 200) {
             response.json().then(json => {
-                loginAction(json.token)
+                loginActions.login(json.token)
             });
         } else {
             response.json().then(json => {
-                errorLoginAction(json.error)
+                loginActions.errorLogin(json.error)
             });
         }
     });

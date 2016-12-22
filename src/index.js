@@ -2,7 +2,7 @@ import 'babel-polyfill'
 import React from "react"
 import ReactDOM from "react-dom"
 import {Router} from 'react-router'
-import {loginAction} from './actions/loginActions'
+import {login} from './actions/loginActions'
 import 'tachyons'
 import browserHistory from './history'
 
@@ -17,7 +17,7 @@ require('file?name=[name].[ext]!./index.html')
 
 let jwt = localStorage.getItem('sayhi-jwt')
 if (jwt) {
-    loginAction(jwt)
+    login(jwt)
 }
 
 ReactDOM.render((
