@@ -78,9 +78,9 @@
     "net": "^1.0.2",
     "npm-run-all": "^3.1.2",
     "object-assign": "^4.1.0",
-    "react": "^15.2.1",
+    "react": "15.3.1",
+    "react-dom": "15.3.1",
     "react-addons": "^0.9.1-deprecated",
-    "react-dom": "^15.0.1",
     "react-favicon": "0.0.4",
     "react-flux": "^1.0.1",
     "react-mixin": "^3.0.5",
@@ -131,6 +131,7 @@
     "server:dev": "node tools/start.js dev",
     "server:prod": "node tools/start.js build",
     "lint": "eslint .",
-    "start": "npm-run-all --parallel build:dev:watch server:dev"
+    "dev": "npm-run-all --parallel build:dev:watch server:dev",
+    "start": "npm-run-all build server:prod"
   }
 }
