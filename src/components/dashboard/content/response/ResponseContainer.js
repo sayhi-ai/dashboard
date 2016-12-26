@@ -112,6 +112,7 @@ export default class ResponseView extends React.Component {
                         <div className='flex items-center mt2 h-100 w-100 justify-stretch'>
                             <input
                                 className='br-pill ba b--black pv2 ph3 ma1 outline-0 f5 flex-auto'
+                                style={{flex: '1'}}
                                 type='text'
                                 placeholder='Add new response'
                                 onChange={this._setAddResponseText.bind(this)}
