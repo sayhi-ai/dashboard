@@ -9,7 +9,7 @@ import ENV_VAR from '../../../../../tools/ENV_VARS'
 export default class ResponseView extends React.Component {
     
     constructor(props) {
-        super(props)
+        super(props);
 
         this.state = {
             open: false,
