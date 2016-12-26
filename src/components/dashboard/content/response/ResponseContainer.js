@@ -1,6 +1,6 @@
 import React from 'react'
 import Response from './Response'
-import {fetchResponses, addResponse} from '../../../../services/sayhi/responseService'
+import {fetchResponses, addResponse, removeResponse} from '../../../../services/sayhi/responseService'
 import {handleError} from '../../../../actions/errorAction';
 import StateStore from "../../../../stores/stateStore"
 import ResponseStore from "../../../../stores/sayhi/responseStore"
@@ -32,7 +32,7 @@ export default class ResponseView extends React.Component {
     }
     
     _setResponses() {
-        let responses = ResponseStore.getResponses().map(response => response.response)
+        const responses = ResponseStore.getResponses()
 
         this.setState({
             responses: responses
@@ -40,7 +40,7 @@ export default class ResponseView extends React.Component {
     }
 
     _updatePhrase() {
-        let phrase = StateStore.getCurrentPhrase()
+        const phrase = StateStore.getCurrentPhrase()
 
         if (phrase.phrase !== "" && phrase.phrase !== this.state.phrase) {
             fetchResponses(phrase.id)
@@ -106,7 +106,7 @@ export default class ResponseView extends React.Component {
                     <div className='ma3 pa3 br2 bg-white'>
                         <div>
                         {this.state.responses.map((response, index) => 
-                            <Response key={index} response={response}/>
+                            <Response key={index} response={response.response} onDelete={() => removeResponse(StateStore.getCurrentPhrase().id, response.id)}/>
                         )}
                         </div>
                         <div className='flex items-center mt2 h-100 w-100 justify-stretch'>

@@ -3,10 +3,11 @@ import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField'
 import {changePhrase} from "../../../actions/stateAction"
-import {addPhrase, fetchPhrases} from "../../../services/sayhi/phraseService"
+import {addPhrase, removePhrase, fetchPhrases} from "../../../services/sayhi/phraseService"
 import PhraseStore from "../../../stores/sayhi/phraseStore"
 import StateStore from "../../../stores/stateStore"
 import ENV_VARS from '../../../../tools/ENV_VARS'
+import Immutable from 'immutable'
 
 export default class DashboardDrawer extends React.Component {
     
@@ -21,7 +22,7 @@ export default class DashboardDrawer extends React.Component {
             addPhrase: '',
             addPhraseErrorCode: '',
             phraseValue: 0,
-            phrases: [],
+            phrases: new Immutable.List(),
         }
     }
 
@@ -34,40 +35,23 @@ export default class DashboardDrawer extends React.Component {
     }
     
     _loadPhraseList() {
-        this.phrasesObj = PhraseStore.getPhrases()
-        const phrases = this.phrasesObj.map(phrase => phrase.phrase)
-
-        if (phrases.length === 0) {
+        if (PhraseStore.getPhrases().size === 0) {
             return;
         }
 
-        let phraseDivs =  phrases
-            .map((phrase, index) => {
-                return (
-                    <div
-                        className='pointer pv2 ph3 f5 dim'
-                        style={{background: '#fafafa'}}
-                        key={index}
-                        onClick={(e) => this._handlePhraseSelectFieldChange(e, index)}
-                    >
-                        "{phrase}"
-                    </div>
-                )
-            })
-
         // TODO: fix this hack
-        if (this.phrasesObj.size > 0 && this.firstLoad) {
+        if (PhraseStore.getPhrases().size > 0 && this.firstLoad) {
             this.firstLoad = false
-            setTimeout(() => changePhrase(this.phrasesObj.get(0)), 0);
+            setTimeout(() => changePhrase(PhraseStore.getPhrases().get(0)), 0);
         }
+
         this.setState({
-            phrases: phraseDivs,
-            phraseValue: 0
+            phrases: PhraseStore.getPhrases(),
         })
     }
 
     _handlePhraseSelectFieldChange = (event, index) => {
-        changePhrase(this.phrasesObj.get(index))
+        changePhrase(this.state.phrases.get(index))
         this.setState({phraseValue: index});
     }
     
@@ -118,7 +102,7 @@ export default class DashboardDrawer extends React.Component {
     }
 
     _handleKeyPress(event) {
-        if(event.key == 'Enter'){
+        if(event.key == 'Enter') {
             this._handleAddPhrase(event)
         }
     }
@@ -155,7 +139,23 @@ export default class DashboardDrawer extends React.Component {
                                 </div>
                             </div>
                         </div>
-                        {this.state.phrases}
+                        {this.state.phrases.map((phrase, index) => 
+                        <div
+                            className='pointer pv2 ph3 f5 flex justify-between items-center hide-child'
+                            style={{background: this.state.phraseValue !== index ? '#fafafa' : '#e0e0e0'}}
+                            key={index}
+                            onClick={(e) => this._handlePhraseSelectFieldChange(e, index)}
+                        >
+                            <div>
+                                "{phrase.phrase}"
+                            </div>
+                            {this.state.phrases.size > 1 &&
+                            <div className='ttu mr2 red child' style={{fontSize: '.7em'}} onClick={() => removePhrase(phrase.id)}>
+                                delete
+                            </div>
+                            }
+                        </div>
+                        )}
                     </div>
                 </div>
                 <Dialog

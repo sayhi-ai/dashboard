@@ -15,7 +15,7 @@ var ResponseStore = assign({}, BaseStore, {
 AppDispatcher.register(function(action) {
     switch(action.actionType) {
         case ResponseConstants.GET_RESPONSES:
-            if (action.responses.length > 0) {
+            if (action.responses.length >= 0) {
                 _responses = Immutable.List(action.responses)
                 ResponseStore.emitChange()
             }

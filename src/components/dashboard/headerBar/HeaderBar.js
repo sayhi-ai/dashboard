@@ -12,12 +12,12 @@ export default class HeaderBar extends React.Component {
         return (
             <div className='flex vw-100 items-center white ph3 justify-between' style={{height: 55, background: '#19A5E4'}}>
                 <div className='flex items-center'>
-                    <div className='f4'>
+                    <div className='f4' style={{fontFamily: 'Hero-Font'}}>
                         Sayhi.ai
                     </div>
                 </div>
-                <div className='flex'>
-                    <Icon svg={require('../../../resources/img/key.svg')}/>
+                <div className='flex pointer'>
+                    <Icon svg={require('../../../resources/img/key.svg')} style={{width: '18px', fill: 'white'}}/>
                 </div>
             </div>
         );
