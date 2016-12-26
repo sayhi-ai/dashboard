@@ -1,3 +1,3 @@
 export default {
-    ERROR: 'ERROR'
+  ERROR: 'ERROR'
 }

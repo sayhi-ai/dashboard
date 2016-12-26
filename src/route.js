@@ -8,12 +8,12 @@ import CreateAccount from "./components/login/CreateAccount"
 import Dashboard from "./components/dashboard/Dashboard"
 
 export default (
-    <Route path='/' component={App}>
-        <IndexRedirect to="login"/>
-        <Route name="login" path="login" component={Login}/>
-        <Route name="account" path="account">
-            <Route name="create" path="create" component={CreateAccount}/>
-        </Route>
-        <Route name="dashboard" path="dashboard" component={Dashboard}/>
+  <Route path='/' component={App}>
+    <IndexRedirect to="login"/>
+    <Route name="login" path="login" component={Login}/>
+    <Route name="account" path="account">
+      <Route name="create" path="create" component={CreateAccount}/>
     </Route>
+    <Route name="dashboard" path="dashboard" component={Dashboard}/>
+  </Route>
 )
