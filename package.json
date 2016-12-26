@@ -123,7 +123,6 @@
   },
   "scripts": {
     "clean": "rm build",
-    "prebuild": "npm-run-all lint test",
     "build": "webpack --progress --config tools/webpack.config.prod.js",
     "build:dev": "webpack --progress --config tools/webpack.config.dev.js",
     "build:dev:watch": "webpack --progress --config tools/webpack.config.dev.js --watch",
