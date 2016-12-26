@@ -10,162 +10,164 @@ import browserHistory from '../../history'
 
 export default class Login extends React.Component {
 
-    constructor() {
-        super()
-        this.state = {
-            open: false,
-            snackBarColor: '',
-            snackBarText : '',
-            user: '',
-            password: ''
-        };
+  constructor() {
+    super()
+    this.state = {
+      open: false,
+      snackBarColor: '',
+      snackBarText: '',
+      user: '',
+      password: ''
+    };
+  }
+
+  componentDidMount() {
+    LoginStore.addChangeListener(this._handleLoginChange.bind(this))
+  }
+
+  componentWillUnmount() {
+    LoginStore.removeChangeListener(this._handleLoginChange.bind(this))
+  }
+
+  _handleLoginChange() {
+    let error = LoginStore.getLoginError()
+    if (error !== null) {
+      this.setState({
+        open: true,
+        snackBarColor: "#F44336",
+        snackBarText: "Wrong username or password."
+      })
+    }
+  }
+
+  _setUsername(e) {
+    this.setState({
+      user: e.target.value,
+      open: false
+    })
+  }
+
+  _setPassword(e) {
+    this.setState({
+      password: e.target.value,
+      open: false
+    })
+  }
+
+  _login(e) {
+    e.preventDefault();
+
+    let error = null
+    if (this.state.user === '') {
+      error = "Email missing."
     }
 
-    componentDidMount() {
-        LoginStore.addChangeListener(this._handleLoginChange.bind(this))
+    if (this.state.user.length > 100) {
+      error = "Email is too long."
     }
 
-    componentWillUnmount() {
-        LoginStore.removeChangeListener(this._handleLoginChange.bind(this))
+    if (this.state.password === '') {
+      error = "Password missing."
     }
 
-    _handleLoginChange() {
-        let error = LoginStore.getLoginError()
-        if (error !== null) {
-            this.setState({
-                open: true,
-                snackBarColor: "#F44336",
-                snackBarText : "Wrong username or password."
-            })
-        }
-    }
-    
-    _setUsername(e) {
-        this.setState({
-            user: e.target.value,
-            open: false
-        })
+    if (this.state.password.length > 100) {
+      error = "Password is too long."
     }
 
-    _setPassword(e) {
-        this.setState({
-            password: e.target.value,
-            open: false
-        })
+    if (error === null) {
+      login(this.state.user, this.state.password)
+    } else {
+      this.setState({
+        open: true,
+        snackBarColor: "#F44336",
+        snackBarText: error
+      })
     }
+  }
 
-    _login(e) {
-        e.preventDefault();
+  _createAccountClick(e) {
+    e.preventDefault()
+    browserHistory.push('/account/create');
+  }
 
-        let error = null
-        if (this.state.user === '') {
-            error = "Email missing."
-        }
+  _handleSnackBarClose() {
+    this.setState({
+      open: false
+    })
+  }
 
-        if (this.state.user.length > 100) {
-            error = "Email is too long."
-        }
-
-        if (this.state.password === '') {
-            error = "Password missing."
-        }
-
-        if (this.state.password.length > 100) {
-            error = "Password is too long."
-        }
-
-        if (error === null) {
-            login(this.state.user, this.state.password)
-        } else {
-            this.setState({
-                open: true,
-                snackBarColor: "#F44336",
-                snackBarText : error
-            })
-        }
+  _handleKeyPress(event) {
+    if (event.key == 'Enter') {
+      this._login(event)
     }
+  }
 
-    _createAccountClick(e) {
-        e.preventDefault()
-        browserHistory.push('/account/create');
-    }
-
-    _handleSnackBarClose() {
-        this.setState({
-            open: false
-        })
-    }
-
-    _handleKeyPress(event) {
-        if(event.key == 'Enter'){
-            this._login(event)
-        }
-    }
-
-    render() {
-        return (
-            <div className="login-screen">
-                <div className="login-outter">
-                    <div className="login-inner">
-                        <Paper className="login-div" zDepth={5}>
-                            <img className="login-logo" src={logoTitleImage}/>
-                            <div className="login-form-div">
-                                <form className="login-form">
-                                    <div className="">
-                                        <TextField type="text"
-                                                   value={this.state.user}
-                                                   onChange={this._setUsername.bind(this)}
-                                                   className="form-control"
-                                                   id="username"
-                                                   onKeyPress={this._handleKeyPress.bind(this)}
-                                                   placeholder="Email" />
-                                    </div>
-                                    <div className="">
-                                        <TextField type="password"
-                                                   value={this.state.password}
-                                                   onChange={this._setPassword.bind(this)}
-                                                   className="form-control" 
-                                                   id="password" 
-                                                   ref="password"
-                                                   onKeyPress={this._handleKeyPress.bind(this)}
-                                                   placeholder="Password" />
-                                    </div>
-                                    <div className="forgot-password-div"
-                                         onClick={() => console.log("sdf")}>
-                                        <div className="forgot-password-text dim pointer">
-                                            Forgot password?
-                                        </div>
-                                    </div>
-                                    <div className="button-div">
-                                        <div className="login-button">
-                                            <RaisedButton type="submit"
-                                                          labelStyle={{color:"#FFFFFF"}}
-                                                          primary={true}
-                                                          onClick={this._login.bind(this)}
-                                                          label="Login"/>
-                                        </div>
-                                        <div className="create-account-button">
-                                            <RaisedButton type="submit"
-                                                          labelStyle={{color:"#19A5E4"}}
-                                                          primary={false}
-                                                          onClick={this._createAccountClick.bind(this)}
-                                                          label="Create Account"/>
-                                        </div>
-                                    </div>
-                                    <div style={{position: "absolute", left: "-5000px"}} aria-hidden="true">
-                                        <input type="text" name="b_91105fa973023812cf53dce73_5ddf44500c" tabIndex="-1"
-                                               id="validate" ref="validated"/>
-                                    </div>
-                                </form>
-                            </div>
-                        </Paper>
+  render() {
+    return (
+      <div className="login-screen">
+        <div className="login-outter">
+          <div className="login-inner">
+            <Paper className="login-div" zDepth={5}>
+              <img className="login-logo" src={logoTitleImage}/>
+              <div className="login-form-div">
+                <form className="login-form">
+                  <div className="">
+                    <TextField type="text"
+                               value={this.state.user}
+                               onChange={this._setUsername.bind(this)}
+                               className="form-control"
+                               id="username"
+                               onKeyPress={this._handleKeyPress.bind(this)}
+                               placeholder="Email"/>
+                  </div>
+                  <div className="">
+                    <TextField type="password"
+                               value={this.state.password}
+                               onChange={this._setPassword.bind(this)}
+                               className="form-control"
+                               id="password"
+                               ref="password"
+                               onKeyPress={this._handleKeyPress.bind(this)}
+                               placeholder="Password"/>
+                  </div>
+                  <div className="forgot-password-div"
+                       onClick={() => console.log("sdf")}>
+                    <div className="forgot-password-text dim pointer">
+                      Forgot password?
                     </div>
-                </div>
-                <Snackbar message={this.state.snackBarText}
-                          bodyStyle={{backgroundColor: this.state.snackBarColor, fontFamily: "Header-Font",
-                          textAlign: "center"}}
-                          autoHideDuration={8000} open={this.state.open}/>
-            </div>
-        );
-    }
+                  </div>
+                  <div className="button-div">
+                    <div className="login-button">
+                      <RaisedButton type="submit"
+                                    labelStyle={{color: "#FFFFFF"}}
+                                    primary={true}
+                                    onClick={this._login.bind(this)}
+                                    label="Login"/>
+                    </div>
+                    <div className="create-account-button">
+                      <RaisedButton type="submit"
+                                    labelStyle={{color: "#19A5E4"}}
+                                    primary={false}
+                                    onClick={this._createAccountClick.bind(this)}
+                                    label="Create Account"/>
+                    </div>
+                  </div>
+                  <div style={{position: "absolute", left: "-5000px"}} aria-hidden="true">
+                    <input type="text" name="b_91105fa973023812cf53dce73_5ddf44500c" tabIndex="-1"
+                           id="validate" ref="validated"/>
+                  </div>
+                </form>
+              </div>
+            </Paper>
+          </div>
+        </div>
+        <Snackbar message={this.state.snackBarText}
+                  bodyStyle={{
+                    backgroundColor: this.state.snackBarColor, fontFamily: "Header-Font",
+                    textAlign: "center"
+                  }}
+                  autoHideDuration={8000} open={this.state.open}/>
+      </div>
+    );
+  }
 }

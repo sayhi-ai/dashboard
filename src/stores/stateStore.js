@@ -8,38 +8,38 @@ var _botId = "ciwy8agg650tc0161tcbo75ol"
 var _error = null
 
 var StateStore = assign({}, BaseStore, {
-    getError() {
-        return _error
-    },
+  getError() {
+    return _error
+  },
 
-    getCurrentPhrase() {
-        return _phrase
-    },
-    
-    getCurrentBotId() {
-        return _botId
-    }
+  getCurrentPhrase() {
+    return _phrase
+  },
+
+  getCurrentBotId() {
+    return _botId
+  }
 });
 
-AppDispatcher.register(function(action) {
-    switch(action.actionType) {
-        case StateConstants.UPDATE_PHRASE:
-            if (action.phrase !== "") {
-                _phrase = action.phrase
-                StateStore.emitChange()
-            }
-            break
-        case StateConstants.ERROR:
-            if (action.phrase !== "") {
-                _error = action.error
-                console.log(_error)
-                StateStore.emitChange()
-            }
-            break
+AppDispatcher.register(function (action) {
+  switch (action.actionType) {
+    case StateConstants.UPDATE_PHRASE:
+      if (action.phrase !== "") {
+        _phrase = action.phrase
+        StateStore.emitChange()
+      }
+      break
+    case StateConstants.ERROR:
+      if (action.phrase !== "") {
+        _error = action.error
+        console.log(_error)
+        StateStore.emitChange()
+      }
+      break
 
-        default:
-        // no op
-    }
+    default:
+    // no op
+  }
 })
 
 export default StateStore

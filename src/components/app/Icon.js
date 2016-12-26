@@ -1,9 +1,9 @@
 import React from 'react';
 
 export default class Icon extends React.Component {
-    render() {
-        return (
-            <i style={this.props.style} dangerouslySetInnerHTML={{__html: this.props.svg}}/>
-        )
-    }
+  render() {
+    return (
+      <i style={this.props.style} dangerouslySetInnerHTML={{__html: this.props.svg}}/>
+    )
+  }
 }

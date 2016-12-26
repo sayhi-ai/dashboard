@@ -17,13 +17,13 @@ require('file?name=[name].[ext]!./index.html')
 
 const jwt = localStorage.getItem('sayhi-jwt')
 if (jwt) {
-    login(jwt)
+  login(jwt)
 }
 
 ReactDOM.render((
-    <Router
-        forceFetch
-        routes={routes}
-        history={browserHistory}
-    />
+  <Router
+    forceFetch
+    routes={routes}
+    history={browserHistory}
+  />
 ), document.getElementById('root'))

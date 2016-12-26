@@ -6,24 +6,24 @@ import assign from 'object-assign'
 var _error = null
 
 var StateStore = assign({}, BaseStore, {
-    getError() {
-        return _error
-    }
+  getError() {
+    return _error
+  }
 });
 
-AppDispatcher.register(function(action) {
-    switch(action.actionType) {
-        case ErrorConstants.ERROR:
-            if (action.error !== null || action.error !== "") {
-                _error = action.error
-                console.log(_error)
-                StateStore.emitChange()
-            }
-            break
+AppDispatcher.register(function (action) {
+  switch (action.actionType) {
+    case ErrorConstants.ERROR:
+      if (action.error !== null || action.error !== "") {
+        _error = action.error
+        console.log(_error)
+        StateStore.emitChange()
+      }
+      break
 
-        default:
-        // no op
-    }
+    default:
+    // no op
+  }
 })
 
 export default StateStore
