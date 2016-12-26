@@ -176,7 +176,7 @@ export default class Login extends React.Component {
                             <div className="login-form-div">
                                 <form className="login-form">
                                     <div className="db">
-                                        <div className="dib w4">
+                                        <div className="dib w4 mr1">
                                             <TextField type="text"
                                                        value={this.state.user}
                                                        onChange={this._setFirstName.bind(this)}
@@ -185,7 +185,7 @@ export default class Login extends React.Component {
                                                        onKeyPress={this._handleKeyPress.bind(this)}
                                                        placeholder="First Name" />
                                         </div>
-                                        <div className="dib w4">
+                                        <div className="dib w4 ml1">
                                             <TextField type="text"
                                                        value={this.state.user}
                                                        onChange={this._setLastName.bind(this)}
