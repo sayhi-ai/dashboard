@@ -22,18 +22,17 @@ export default class ResponseView extends React.Component {
     }
 
     componentDidMount() {
-        StateStore.addChangeListener(this._updatePhrase.bind(this))
+        StateStore.addChangeListener(this._updatePhrase.bind(this));
         ResponseStore.addChangeListener(this._setResponses.bind(this))
     }
 
     componentWillUnmount() {
-        StateStore.removeChangeListener(this._updatePhrase.bind(this))
+        StateStore.removeChangeListener(this._updatePhrase.bind(this));
         ResponseStore.removeChangeListener(this._setResponses.bind(this))
     }
     
     _setResponses() {
-        const responses = ResponseStore.getResponses().map(response => response.response);
-        const responses = ResponseStore.getResponses()
+        const responses = ResponseStore.getResponses();
 
         this.setState({
             responses: responses
@@ -42,7 +41,6 @@ export default class ResponseView extends React.Component {
 
     _updatePhrase() {
         const phrase = StateStore.getCurrentPhrase();
-        const phrase = StateStore.getCurrentPhrase()
 
         if (phrase.phrase !== "" && phrase.phrase !== this.state.phrase) {
             fetchResponses(phrase.id);
