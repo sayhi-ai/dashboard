@@ -1,6 +1,7 @@
 import React from 'react';
 import AppBar from 'material-ui/AppBar';
 import Icon from '../../app/Icon'
+import {logout} from '../../../actions/loginActions'
 
 export default class HeaderBar extends React.Component {
 
@@ -16,7 +17,7 @@ export default class HeaderBar extends React.Component {
                         Sayhi.ai
                     </div>
                 </div>
-                <div className='flex pointer'>
+                <div className='flex pointer' onClick={logout}>
                     <Icon svg={require('../../../resources/img/key.svg')} style={{width: '18px', fill: 'white'}}/>
                 </div>
             </div>

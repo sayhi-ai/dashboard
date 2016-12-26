@@ -12,7 +12,7 @@ var PhraseStore = assign({}, BaseStore, {
     }
 });
 
-AppDispatcher.register(function(action) {
+AppDispatcher.register((action) => {
     switch(action.actionType) {
         case PhraseConstants.GET_PHRASES:
             if (action.phrases.length > 0) {

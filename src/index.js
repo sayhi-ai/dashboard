@@ -15,7 +15,7 @@ require('./index.scss')
 // Copy the index.html file
 require('file?name=[name].[ext]!./index.html')
 
-let jwt = localStorage.getItem('sayhi-jwt')
+const jwt = localStorage.getItem('sayhi-jwt')
 if (jwt) {
     login(jwt)
 }

@@ -2,17 +2,17 @@ import AppDispatcher from '../../dispatchers/appDispatcher'
 import BaseStore from './../baseStore';
 import BotContstants from '../../constants/sayhi/botConstants';
 import assign from 'object-assign'
-var Immutable = require('immutable');
+import Immutable from 'immutable'
 
-var _bots = Immutable.List();
+let _bots = Immutable.List();
 
-var BotStore = assign({}, BaseStore, {
+const BotStore = assign({}, BaseStore, {
     getBots() {
         return _bots
     }
 });
 
-AppDispatcher.register(function(action) {
+AppDispatcher.register((action) => {
     switch(action.actionType) {
         case BotContstants.GET_BOTS:
             if (action.bots.length > 0) {
@@ -46,4 +46,4 @@ AppDispatcher.register(function(action) {
     }
 })
 
-export default SayHiStore
+export default BotStore
