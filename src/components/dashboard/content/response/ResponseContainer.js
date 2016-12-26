@@ -32,6 +32,7 @@ export default class ResponseView extends React.Component {
     }
     
     _setResponses() {
+        const responses = ResponseStore.getResponses().map(response => response.response);
         const responses = ResponseStore.getResponses()
 
         this.setState({
@@ -40,10 +41,11 @@ export default class ResponseView extends React.Component {
     }
 
     _updatePhrase() {
+        const phrase = StateStore.getCurrentPhrase();
         const phrase = StateStore.getCurrentPhrase()
 
         if (phrase.phrase !== "" && phrase.phrase !== this.state.phrase) {
-            fetchResponses(phrase.id)
+            fetchResponses(phrase.id);
             this.setState({
                 phrase: phrase.phrase
             })
@@ -57,7 +59,7 @@ export default class ResponseView extends React.Component {
     }
 
     _handleAddClick(e) {
-        let response = this.state.addResponseText
+        const response = this.state.addResponseText
 
         // Check for duplicates on client first before sending request to server
         let responses = ResponseStore.getResponses().filter(r => r.response === response)

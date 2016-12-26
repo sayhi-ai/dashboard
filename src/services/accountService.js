@@ -21,7 +21,7 @@ export const createAccount = function (firstName, lastName, email, password) {
                 if (json.created) {
                     accountActions.createAccount()
                 } else {
-                    accountActions.errorCreateAccount("Unable to create an account.")
+                    accountActions.errorCreateAccount(json.message)
                 }
             });
         } else {
