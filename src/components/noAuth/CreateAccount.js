@@ -21,35 +21,30 @@ export default class Login extends React.Component {
   _setFirstName(e) {
     this.setState({
       firstName: e.target.value,
-      open: false
     })
   }
 
   _setLastName(e) {
     this.setState({
       lastName: e.target.value,
-      open: false
     })
   }
 
   _setEmail(e) {
     this.setState({
       email: e.target.value,
-      open: false
     })
   }
 
   _setPassword1(e) {
     this.setState({
       password1: e.target.value,
-      open: false
     })
   }
 
   _setPassword2(e) {
     this.setState({
       password2: e.target.value,
-      open: false
     })
   }
 
@@ -163,8 +158,8 @@ export default class Login extends React.Component {
       })
     }
 
-    if (this.state.password1.length > 30 || this.state.password1.length < 6) {
-      const error = "Password has to be between 6 and 30 characters."
+    if (this.state.password1.length > 50 || this.state.password1.length < 6) {
+      const error = "Password has to be between 6 and 50 characters."
       this.setState({
         password1Error: error
       })
@@ -232,7 +227,7 @@ export default class Login extends React.Component {
                        value={this.state.user}
                        onChange={this._setEmail.bind(this)}
                        className="form-control"
-                       id="username"
+                       id="email"
                        errorText={this.state.emailError}
                        onKeyPress={this._handleKeyPress.bind(this)}
                        placeholder="Email"/>
@@ -257,7 +252,7 @@ export default class Login extends React.Component {
                        className="form-control"
                        id="password"
                        ref="password"
-                       errorText={this.state.passwor2Error}
+                       errorText={this.state.password2Error}
                        onKeyPress={this._handleKeyPress.bind(this)}
                        placeholder="Repeat Password"/>
           </div>

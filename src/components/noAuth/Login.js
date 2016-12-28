@@ -18,14 +18,12 @@ export default class Login extends React.Component {
   _setUsername(e) {
     this.setState({
       user: e.target.value,
-      open: false
     })
   }
 
   _setPassword(e) {
     this.setState({
       password: e.target.value,
-      open: false
     })
   }
 
@@ -60,11 +58,10 @@ export default class Login extends React.Component {
     e.preventDefault()
     browserHistory.push('/account/create');
   }
-
-  _handleSnackBarClose() {
-    this.setState({
-      open: false
-    })
+  
+  _forgotPasswordClick(e) {
+    e.preventDefault()
+    browserHistory.push('/account/password/reset');
   }
 
   _handleKeyPress(event) {
@@ -99,7 +96,7 @@ export default class Login extends React.Component {
                        placeholder="Password"/>
           </div>
           <div className="forgot-password-div"
-               onClick={() => console.log("sdf")}>
+               onClick={this._forgotPasswordClick.bind(this)}>
             <div className="forgot-password-text dim pointer">
               Forgot password?
             </div>

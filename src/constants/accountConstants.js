@@ -6,5 +6,5 @@ export default {
   CREATE_URL: BASE_URL + '/account/create',
 
   CREATE: 'CREATE',
-  ERROR: 'ERROR'
+  SET_EMAIL_FOR_RESET: 'SET_EMAIL_FOR_RESET',
 }

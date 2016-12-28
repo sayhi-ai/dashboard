@@ -20,7 +20,7 @@ export const createAccount = function (firstName, lastName, email, password) {
     if (serverResponse.status === 200) {
       serverResponse.json().then(json => {
         if (json.created) {
-          noAuthActions.notfify("Account created successfully. Please check your e-mail to activate your account.")
+          noAuthActions.success("Account created successfully. Please check your e-mail to activate your account.")
         } else {
           errorActions.handleNoAuthError(json.message)
         }

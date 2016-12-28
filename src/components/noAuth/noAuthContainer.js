@@ -5,7 +5,7 @@ import NoAuthStore from "../../stores/noAuthStore"
 import logoTitleImage from "../../resources/img/logowithtext.png"
 import Snackbar from "material-ui/Snackbar"
 
-export default class Login extends React.Component {
+export default class NoAuthContainer extends React.Component {
 
   constructor(props) {
     super(props);
@@ -18,12 +18,12 @@ export default class Login extends React.Component {
 
   componentDidMount() {
     ErrorStore.addChangeListener(this._handleError.bind(this))
-    NoAuthStore.addChangeListener(this._handleNotify.bind(this))
+    NoAuthStore.addChangeListener(this._handleMessage.bind(this))
   }
 
   componentWillUnmount() {
     ErrorStore.removeChangeListener(this._handleError.bind(this))
-    NoAuthStore.addChangeListener(this._handleNotify.bind(this))
+    NoAuthStore.addChangeListener(this._handleMessage.bind(this))
   }
 
   _handleError() {
@@ -37,12 +37,14 @@ export default class Login extends React.Component {
     }
   }
 
-  _handleNotify() {
+  _handleMessage() {
     const message = NoAuthStore.getMessage();
+    const color = NoAuthStore.getColor();
+
     if (message !== null) {
       this.setState({
         open: true,
-        snackBarColor: "#27ae60",
+        snackBarColor: color,
         snackBarText: message
       })
     }

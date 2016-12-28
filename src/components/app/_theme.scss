@@ -27,3 +27,15 @@ $body-text-color: #4A4A4A;
 html {
   font-family: Body-Font;
 }
+
+.pc {
+  color: $primary-color
+}
+
+.bc {
+  color: $background-color
+}
+
+.btc {
+  color: $body-text-color
+}
