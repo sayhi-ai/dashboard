@@ -1,6 +1,7 @@
 import fetch from "isomorphic-fetch";
 import AccountConstants from "../constants/accountConstants"
-import * as accountActions from '../actions/accountActions';
+import * as noAuthActions from '../actions/noAuthAction';
+import * as errorActions from '../actions/errorAction';
 
 export const createAccount = function (firstName, lastName, email, password) {
   return fetch(AccountConstants.CREATE_URL, {
@@ -19,14 +20,14 @@ export const createAccount = function (firstName, lastName, email, password) {
     if (serverResponse.status === 200) {
       serverResponse.json().then(json => {
         if (json.created) {
-          accountActions.createAccount()
+          noAuthActions.notfify("Account created successfully. Please check your e-mail to activate your account.")
         } else {
-          accountActions.errorCreateAccount(json.message)
+          errorActions.handleNoAuthError(json.message)
         }
       });
     } else {
       serverResponse.json().then(json => {
-        accountActions.errorCreateAccount(json.error)
+        errorActions.handleNoAuthError(json.error)
       });
     }
   });

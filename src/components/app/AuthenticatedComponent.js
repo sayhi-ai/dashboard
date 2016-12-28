@@ -5,8 +5,8 @@ import browserHistory from '../../history'
 export default (ComposedComponent) => {
   return class AuthenticatedComponent extends React.Component {
 
-    constructor() {
-      super()
+    constructor(props) {
+      super(props);
       this.state = this._getLoginState();
     }
 
@@ -40,7 +40,7 @@ export default (ComposedComponent) => {
             userLoggedIn={this.state.userLoggedIn}/>
         )
       } else {
-        browserHistory.push('/login') // redirect if not logged in
+        browserHistory.push('/login'); // redirect if not logged in
         return <div/>
       }
     }

@@ -3,27 +3,42 @@ import BaseStore from './baseStore';
 import ErrorConstants from '../constants/errorConstants.js';
 import assign from 'object-assign'
 
-var _error = null
+let _dashboardError = null;
+let _noAuthError = null;
 
-var StateStore = assign({}, BaseStore, {
-  getError() {
-    return _error
+const StateStore = assign({}, BaseStore, {
+  getDashboardError() {
+    return _dashboardError
+  },
+  getNoAuthError() {
+    return _noAuthError
   }
 });
 
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
-    case ErrorConstants.ERROR:
+    case ErrorConstants.DASHBOARD:
       if (action.error !== null || action.error !== "") {
-        _error = action.error
-        console.log(_error)
+        _dashboardError = action.error;
+        _noAuthError = null;
+
+        console.log(_dashboardError);
         StateStore.emitChange()
       }
-      break
+      break;
+    case ErrorConstants.NO_AUTH:
+      if (action.error !== null || action.error !== "") {
+        _noAuthError = action.error;
+        _dashboardError = null;
+
+        console.log(_noAuthError);
+        StateStore.emitChange()
+      }
+      break;
 
     default:
     // no op
   }
-})
+});
 
 export default StateStore

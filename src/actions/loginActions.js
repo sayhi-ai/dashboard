@@ -8,26 +8,19 @@ export const login = (jwt) => {
   AppDispatcher.dispatch({
     actionType: LoginConstants.LOGIN_USER,
     jwt: jwt
-  })
+  });
 
   if (savedJwt !== jwt) {
     localStorage.setItem('sayhi-jwt', jwt)
   }
 
   browserHistory.push('/dashboard')
-}
-
-export const errorLogin = (error) => {
-  AppDispatcher.dispatch({
-    actionType: LoginConstants.LOGIN_ERROR,
-    error: error
-  })
-}
+};
 
 export const logout = () => {
-  localStorage.removeItem('sayhi-jwt')
+  localStorage.removeItem('sayhi-jwt');
   AppDispatcher.dispatch({
     actionType: LoginConstants.LOGOUT_USER
-  })
-  browserHistory.push('/login')
-}
+  });
+  browserHistory.push('/noAuth')
+};

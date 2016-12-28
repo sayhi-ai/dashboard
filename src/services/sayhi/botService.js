@@ -1,7 +1,7 @@
 import fetch from "isomorphic-fetch";
 import BotConstants from '../../constants/sayhi/botConstants.js';
 import * as actions from '../../actions/sayhi/botAction';
-import {handleError} from '../../actions/errorAction';
+import {handleDashboardError} from '../../actions/errorAction';
 
 export const fetchBots = function () {
   let token = localStorage.getItem('sayhi-jwt')
@@ -20,7 +20,7 @@ export const fetchBots = function () {
       });
     } else {
       response.json().then(json => {
-        handleError(json.error)
+        handleDashboardError(json.error)
       });
     }
   });
@@ -51,12 +51,12 @@ export const addBot = function (name, type, description) {
             description: description
           })
         } else {
-          handleError("Bot with name already exists.")
+          handleDashboardError("Bot with name already exists.")
         }
       });
     } else {
       response.json().then(json => {
-        handleError(json.detail)
+        handleDashboardError(json.detail)
       });
     }
   });
@@ -80,12 +80,12 @@ export const removeBot = function (botId) {
         if (json.removed) {
           actions.removeBot(botId)
         } else {
-          handleError("Error removing bot.")
+          handleDashboardError("Error removing bot.")
         }
       });
     } else {
       serverResponse.json().then(json => {
-        handleError(json.error)
+        handleDashboardError(json.error)
       });
     }
   });

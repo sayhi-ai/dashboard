@@ -1,7 +1,7 @@
 import fetch from "isomorphic-fetch";
 import PhraseConstants from '../../constants/sayhi/phraseConstants.js';
 import * as actions from '../../actions/sayhi/phraseAction';
-import {handleError} from '../../actions/errorAction';
+import {handleDashboardError} from '../../actions/errorAction';
 
 export const fetchPhrases = function (botId) {
   let token = localStorage.getItem('sayhi-jwt')
@@ -22,7 +22,7 @@ export const fetchPhrases = function (botId) {
       });
     } else {
       response.json().then(json => {
-        handleError(json.error)
+        handleDashboardError(json.error)
       });
     }
   });
@@ -50,7 +50,7 @@ export const addPhrase = function (botId, phrase) {
       });
     } else {
       response.json().then(json => {
-        handleError(json.detail)
+        handleDashboardError(json.detail)
       });
     }
   });
@@ -74,12 +74,12 @@ export const removePhrase = function (phraseId) {
         if (json.removed) {
           actions.removePhrase(phraseId)
         } else {
-          handleError("Error removing phrase.")
+          handleDashboardError("Error removing phrase.")
         }
       });
     } else {
       serverResponse.json().then(json => {
-        handleError(json.error)
+        handleDashboardError(json.error)
       });
     }
   });

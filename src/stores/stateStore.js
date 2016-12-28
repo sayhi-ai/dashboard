@@ -8,7 +8,7 @@ var _botId = "ciwy8agg650tc0161tcbo75ol"
 var _error = null
 
 var StateStore = assign({}, BaseStore, {
-  getError() {
+  getDashboardError() {
     return _error
   },
 

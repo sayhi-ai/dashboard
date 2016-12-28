@@ -26,7 +26,7 @@ export default AuthenticatedComponent(class Dashboard extends React.Component {
   }
 
   _handleErrorMessage() {
-    let error = ErrorStore.getError()
+    let error = ErrorStore.getDashboardError()
     if (error !== null) {
       this._openErrorMessage(error)
     } else {

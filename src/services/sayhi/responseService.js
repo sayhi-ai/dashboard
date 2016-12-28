@@ -1,7 +1,7 @@
 import fetch from "isomorphic-fetch";
 import ResponseConstants from '../../constants/sayhi/responseConstants.js';
 import * as actions from '../../actions/sayhi/responseAction';
-import {handleError} from '../../actions/errorAction';
+import {handleDashboardError} from '../../actions/errorAction';
 
 export const fetchResponses = function (phraseId) {
   let token = localStorage.getItem('sayhi-jwt')
@@ -22,7 +22,7 @@ export const fetchResponses = function (phraseId) {
       });
     } else {
       response.json().then(json => {
-        handleError(json.error)
+        handleDashboardError(json.error)
       });
     }
   });
@@ -47,12 +47,12 @@ export const addResponse = function (phraseId, response) {
         if (json.added) {
           actions.addResponse({id: json.id, response: response})
         } else {
-          handleError("Response already exists.")
+          handleDashboardError("Response already exists.")
         }
       });
     } else {
       serverResponse.json().then(json => {
-        handleError(json.error)
+        handleDashboardError(json.error)
       });
     }
   });
@@ -77,13 +77,13 @@ export const removeResponse = function (phraseId, responseId) {
         if (json.removed) {
           actions.removeResponse(responseId)
         } else {
-          handleError("Error removing response.")
+          handleDashboardError("Error removing response.")
         }
       });
     } else {
       serverResponse.json().then(json => {
         actions.addResponse(null)
-        handleError(json.error)
+        handleDashboardError(json.error)
       });
     }
   });

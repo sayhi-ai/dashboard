@@ -1,3 +1,4 @@
 export default {
-  ERROR: 'ERROR'
+  DASHBOARD: 'DASHBOARD',
+  NO_AUTH: 'NO_AUTH'
 }

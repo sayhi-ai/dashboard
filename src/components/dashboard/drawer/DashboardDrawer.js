@@ -2,7 +2,7 @@ import React from 'react';
 import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField'
-import {changePhrase} from "../../../actions/stateAction"
+import {changePhrase} from "../../../actions/dashboardAction"
 import {addPhrase, removePhrase, fetchPhrases} from "../../../services/sayhi/phraseService"
 import PhraseStore from "../../../stores/sayhi/phraseStore"
 import StateStore from "../../../stores/stateStore"

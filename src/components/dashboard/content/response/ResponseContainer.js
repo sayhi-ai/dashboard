@@ -1,7 +1,7 @@
 import React from 'react'
 import Response from './Response'
 import {fetchResponses, addResponse, removeResponse} from '../../../../services/sayhi/responseService'
-import {handleError} from '../../../../actions/errorAction';
+import {handleDashboardError} from '../../../../actions/errorAction';
 import StateStore from "../../../../stores/stateStore"
 import ResponseStore from "../../../../stores/sayhi/responseStore"
 import ENV_VAR from '../../../../../tools/ENV_VARS'
@@ -62,15 +62,15 @@ export default class ResponseView extends React.Component {
     // Check for duplicates on client first before sending request to server
     let responses = ResponseStore.getResponses().filter(r => r.response === response)
     if (responses.size !== 0) {
-      return handleError("Response already exists.");
+      return handleDashboardError("Response already exists.");
     }
 
     if (response === "") {
-      return handleError("Responses cannot be empty.")
+      return handleDashboardError("Responses cannot be empty.")
     }
 
     if (response.length > ENV_VAR.CONSTANTS.MAX_RESPONSE_LENGTH) {
-      return handleError("Responses can be no longer than " +
+      return handleDashboardError("Responses can be no longer than " +
         ENV_VAR.CONSTANTS.MAX_RESPONSE_LENGTH + " characters.")
     }
 
