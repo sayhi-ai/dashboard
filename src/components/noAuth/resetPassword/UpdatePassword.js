@@ -108,11 +108,12 @@ export default class UpdatePassword extends React.Component {
   }
 
   _loginClick(e) {
-    e.preventDefault()
+    e.preventDefault();
     browserHistory.push('/login');
   }
 
   _resendEmail(e) {
+    e.preventDefault();
     accountService.sendPasswordResetCode(this.props.email);
   }
 

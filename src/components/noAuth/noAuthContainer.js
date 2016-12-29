@@ -69,7 +69,9 @@ export default class NoAuthContainer extends React.Component {
           <div className="login-inner">
             <Paper className="login-div" zDepth={5}
                    onKeyPress={this._handleKeyPress.bind(this)}>
-              <Link to="/login"><img className="login-logo" src={logoTitleImage}/></Link>
+              <div className="dib">
+                <Link to="/login"><img className="login-logo" src={logoTitleImage}/></Link>
+              </div>
               {this.props.children}
             </Paper>
           </div>

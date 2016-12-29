@@ -30,28 +30,51 @@ export default class Login extends React.Component {
   _login(e) {
     e.preventDefault();
 
-    let error = null
     if (this.state.user === '') {
-      error = "Email missing."
+      const error = "Email missing."
+      return this.setState({
+        userError: error
+      })
+    } else {
+      this.setState({
+        userError: ''
+      })
     }
 
     if (this.state.user.length > 100) {
-      error = "Email is too long."
+      const error = "Email too long."
+      return this.setState({
+        userError: error
+      })
+    } else {
+      this.setState({
+        userError: ''
+      })
     }
 
     if (this.state.password === '') {
-      error = "Password missing."
-    }
-
-    if (this.state.password.length > 100) {
-      error = "Password is too long."
-    }
-
-    if (error === null) {
-      login(this.state.user, this.state.password)
+      const error = "Password missing."
+      return this.setState({
+        passwordError: error
+      })
     } else {
-      errorActions.handleNoAuthError(error);
+      this.setState({
+        passwordError: ''
+      })
     }
+
+    if (this.state.password.length  > 50) {
+      const error = "Password too long."
+      return this.setState({
+        passwordError: error
+      })
+    } else {
+      this.setState({
+        passwordError: ''
+      })
+    }
+
+    login(this.state.user, this.state.password);
   }
 
   _createAccountClick(e) {
@@ -81,6 +104,7 @@ export default class Login extends React.Component {
                        onChange={this._setUsername.bind(this)}
                        className="form-control"
                        id="username"
+                       errorText={this.state.userError}
                        onKeyPress={this._handleKeyPress.bind(this)}
                        placeholder="Email"/>
           </div>
@@ -92,12 +116,13 @@ export default class Login extends React.Component {
                        className="form-control"
                        id="password"
                        ref="password"
+                       errorText={this.state.passwordError}
                        onKeyPress={this._handleKeyPress.bind(this)}
                        placeholder="Password"/>
           </div>
-          <div className="forgot-password-div"
-               onClick={this._forgotPasswordClick.bind(this)}>
-            <div className="forgot-password-text dim pointer">
+          <div className="db mt2 pc f6">
+            <div className="dib dim pointer"
+                 onClick={this._forgotPasswordClick.bind(this)}>
               Forgot password?
             </div>
           </div>

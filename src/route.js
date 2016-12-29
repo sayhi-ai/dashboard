@@ -22,8 +22,7 @@ export default (
           <Route name="reset" path="reset" component={ResetPassword}/>
         </Route>
       </Route>
-
     </Route>
-    <Route name="dashboard" path="dashboard" component={Dashboard}/>
+    <Route name="dashboard" path="/" component={Dashboard}/>
   </Route>
 )
