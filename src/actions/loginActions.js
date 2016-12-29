@@ -14,7 +14,7 @@ export const login = (jwt) => {
     localStorage.setItem('sayhi-jwt', jwt)
   }
 
-  browserHistory.push('/dashboard')
+  browserHistory.push('/bots')
 };
 
 export const logout = () => {

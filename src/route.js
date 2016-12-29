@@ -23,6 +23,6 @@ export default (
         </Route>
       </Route>
     </Route>
-    <Route name="dashboard" path="/" component={Dashboard}/>
+    <Route name="dashboard" path="/bots" component={Dashboard}/>
   </Route>
 )

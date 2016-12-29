@@ -1,20 +1,22 @@
 import React from 'react';
 import TextField from "material-ui/TextField"
+import CheckBox from "material-ui/CheckBox"
 import RaisedButton from "material-ui/RaisedButton"
 import browserHistory from '../../history'
-import * as noAuthActions from "../../actions/noAuthAction"
+import * as errorActions from "../../actions/errorAction"
 import {createAccount} from '../../services/accountService'
 
 export default class Login extends React.Component {
 
   constructor(props) {
     super(props)
+    this.checked = false;
     this.state = {
       firstName: '',
       lastName: '',
       email: '',
       password1: '',
-      password2: ''
+      password2: '',
     };
   }
 
@@ -184,13 +186,21 @@ export default class Login extends React.Component {
       })
     }
 
-    createAccount(this.state.firstName, this.state.lastName, this.state.email, this.state.password1);
+    if (!this.checked) {
+      errorActions.handleNoAuthError("You must agree to the terms and conditions to create an account.");
+    } else {
+      createAccount(this.state.firstName, this.state.lastName, this.state.email, this.state.password1);
+    }
   }
 
   _handleKeyPress(event) {
     if (event.key == 'Enter') {
       this._createAccount(event)
     }
+  }
+
+  _handleCheckBoxClick(event) {
+    this.checked = !this.checked;
   }
 
   render() {
@@ -256,13 +266,17 @@ export default class Login extends React.Component {
                        onKeyPress={this._handleKeyPress.bind(this)}
                        placeholder="Repeat Password"/>
           </div>
-          <div className="forgot-password-div"
-               onClick={() => console.log("sdf")}>
-            <div className="forgot-password-text dim pointer">
-              Forgot password?
+          <div className="db mt2 mb4">
+            <div className="dib">
+            <CheckBox
+              onCheck={this._handleCheckBoxClick.bind(this)}
+            />
+            </div>
+            <div className="dib f6 v-top pt1">I agree to the
+              <a className="pc dim pointer no-underline" href="https://sayhi.ai" target="_blank"> terms and conditions</a>.
             </div>
           </div>
-          <div className="button-div">
+          <div className="db mt3">
             <div className="login-button">
               <RaisedButton type="submit"
                             labelStyle={{color: "#19A5E4"}}
