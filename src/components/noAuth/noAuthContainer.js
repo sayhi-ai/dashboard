@@ -4,6 +4,7 @@ import ErrorStore from "../../stores/errorStore"
 import NoAuthStore from "../../stores/noAuthStore"
 import logoTitleImage from "../../resources/img/logowithtext.png"
 import Snackbar from "material-ui/Snackbar"
+import {Link} from "react-router"
 
 export default class NoAuthContainer extends React.Component {
 
@@ -51,9 +52,10 @@ export default class NoAuthContainer extends React.Component {
   }
 
   _handleSnackBarClose() {
+    this.props.onRequestClose; // Default closing behaviour (i.e. animation)
     this.setState({
-      open: false
-    })
+      open: false,
+    });
   }
 
   _handleKeyPress(event) {
@@ -63,10 +65,11 @@ export default class NoAuthContainer extends React.Component {
   render() {
     return (
       <div className="login-screen">
-        <div className="login-outter">
+        <div className="login-outer">
           <div className="login-inner">
-            <Paper className="login-div" zDepth={5} onKeyPress={this._handleKeyPress.bind(this)}>
-              <img className="login-logo" src={logoTitleImage}/>
+            <Paper className="login-div" zDepth={5}
+                   onKeyPress={this._handleKeyPress.bind(this)}>
+              <Link to="/login"><img className="login-logo" src={logoTitleImage}/></Link>
               {this.props.children}
             </Paper>
           </div>
@@ -76,7 +79,9 @@ export default class NoAuthContainer extends React.Component {
                     backgroundColor: this.state.snackBarColor, fontFamily: "Header-Font",
                     textAlign: "center"
                   }}
-                  autoHideDuration={8000} open={this.state.open}/>
+                  onRequestClose={this._handleSnackBarClose.bind(this)}
+                  autoHideDuration={8000}
+                  open={this.state.open}/>
       </div>
     );
   }

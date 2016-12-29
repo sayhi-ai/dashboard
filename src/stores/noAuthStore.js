@@ -17,10 +17,10 @@ const NoAuthStore = assign({}, BaseStore, {
 
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
-    case NoAuthConstants.NOTIFY:
+    case NoAuthConstants.MESSAGE:
       if (action.message !== null || action.message !== "") {
         _message = action.message
-        _message = action.color
+        _color = action.color
         NoAuthStore.emitChange()
       }
       break

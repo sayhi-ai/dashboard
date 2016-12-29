@@ -60,7 +60,7 @@ export default class ResponseView extends React.Component {
     const response = this.state.addResponseText
 
     // Check for duplicates on client first before sending request to server
-    let responses = ResponseStore.getResponses().filter(r => r.response === response)
+    let responses = ResponseStore.getResponses().filter(r => r.response.toLowerCase() === response.toLowerCase())
     if (responses.size !== 0) {
       return handleDashboardError("Response already exists.");
     }

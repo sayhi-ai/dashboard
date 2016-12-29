@@ -2,13 +2,15 @@ import React from 'react';
 import SendEmail from './SendEmail'
 import UpdatePassword from './UpdatePassword';
 import AccountStore from '../../../stores/accountStore'
+import {sendPasswordResetCode} from '../../../services/accountService'
 
 export default class ResetPassword extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      email: ''
+      email: '',
+      success: false
     };
   }
 
@@ -22,9 +24,16 @@ export default class ResetPassword extends React.Component {
 
   _handleViewSwitch() {
     const email = AccountStore.getResetEmail();
-    console.log(email)
 
-    if (email !== null && email !== '') {
+    if (email !== null && email !== '' && email !== this.state.email) {
+      sendPasswordResetCode(email)
+        .then(response => {
+          if (response) {
+            this.setState({
+              success: true
+            });
+          }
+        })
       this.setState({
         email: email
       });
@@ -32,17 +41,17 @@ export default class ResetPassword extends React.Component {
   }
 
   render() {
-    if (this.state.email === '') {
+    if (this.state.success) {
       return (
         <div>
-          <SendEmail/>
+          <UpdatePassword email={this.state.email}/>
         </div>
       )
     }
 
     return (
       <div>
-        <UpdatePassword email={this.state.email}/>
+        <SendEmail/>
       </div>
     )
   }

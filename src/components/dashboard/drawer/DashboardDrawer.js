@@ -75,7 +75,7 @@ export default class DashboardDrawer extends React.Component {
     let error = false
     let phraseErrorMessage = ""
 
-    let phrases = PhraseStore.getPhrases().filter(p => p.phrase === phrase)
+    let phrases = PhraseStore.getPhrases().filter(p => p.phrase.toLowerCase() === phrase.toLowerCase())
     if (phrases.size !== 0) {
       error = true
       phraseErrorMessage = "Phrase already exists."

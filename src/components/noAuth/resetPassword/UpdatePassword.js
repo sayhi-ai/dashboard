@@ -1,8 +1,7 @@
 import React from 'react';
-import {login} from '../../../services/authService'
 import TextField from "material-ui/TextField"
 import RaisedButton from "material-ui/RaisedButton"
-import * as errorActions from "../../../actions/errorAction"
+import * as accountService from "../../../services/accountService"
 import browserHistory from '../../../history'
 
 export default class UpdatePassword extends React.Component {
@@ -99,7 +98,7 @@ export default class UpdatePassword extends React.Component {
       })
     }
 
-    console.log("update password")
+    accountService.resetPassword(this.props.email, this.state.code, this.state.password1);
   }
 
   _handleKeyPress(event) {
@@ -111,6 +110,10 @@ export default class UpdatePassword extends React.Component {
   _loginClick(e) {
     e.preventDefault()
     browserHistory.push('/login');
+  }
+
+  _resendEmail(e) {
+    accountService.sendPasswordResetCode(this.props.email);
   }
 
   render() {
@@ -176,7 +179,7 @@ export default class UpdatePassword extends React.Component {
             </div>
           </div>
           <p className="pt2 f6">
-            If you did not receive the e-mail, click <span className="dim pointer pc">here</span> to send it again.
+            If you did not receive the e-mail, click <span className="dim pointer pc" onClick={this._resendEmail.bind(this)}>here</span> to send it again.
           </p>
         </form>
       </div>
