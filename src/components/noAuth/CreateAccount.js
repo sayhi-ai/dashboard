@@ -199,7 +199,8 @@ export default class Login extends React.Component {
     }
   }
 
-  _handleCheckBoxClick(event) {
+  _handleCheckBoxClick(e) {
+    e.preventDefault();
     this.checked = !this.checked;
   }
 
