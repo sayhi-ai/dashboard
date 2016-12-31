@@ -5,7 +5,6 @@ import {handleDashboardError} from '../../../../actions/errorAction';
 import StateStore from "../../../../stores/stateStore"
 import ResponseStore from "../../../../stores/sayhi/responseStore"
 import ENV_VARS from '../../../../../tools/ENV_VARS'
-import ColorTextInput from './ColorTextInput'
 import ResponseEditor from './ResponseEditor'
 
 export default class ResponseView extends React.Component {
@@ -69,7 +68,7 @@ export default class ResponseView extends React.Component {
         + ENV_VARS.CONSTANTS.MAX_RESPONSE_LENGTH + " characters.");
     }
 
-    addResponse(StateStore.getCurrentPhrase().id, response)
+    addResponse(StateStore.getCurrentPhrase().id, data.text, data.html, data.vars)
   }
 
   render() {
@@ -86,7 +85,7 @@ export default class ResponseView extends React.Component {
           <div className='ma3 pa3 br2 bg-white'>
             <div>
               {this.state.responses.map((response, index) =>
-                <Response key={index} response={response.response}
+                <Response key={index} response={response.text}
                           onDelete={() => removeResponse(StateStore.getCurrentPhrase().id, response.id)}/>
               )}
             </div>

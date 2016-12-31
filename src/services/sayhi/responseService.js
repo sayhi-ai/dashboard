@@ -28,7 +28,7 @@ export const fetchResponses = function (phraseId) {
   });
 }
 
-export const addResponse = function (phraseId, response) {
+export const addResponse = function (phraseId, text, html, vars) {
   let token = localStorage.getItem('sayhi-jwt')
   return fetch(ResponseConstants.ADD_RESPONSE_URL, {
     method: "POST",
@@ -39,13 +39,15 @@ export const addResponse = function (phraseId, response) {
     },
     body: JSON.stringify({
       "phraseId": phraseId,
-      "response": response
+      "text": text,
+      "html": html,
+      "vars": vars
     })
   }).then(serverResponse => {
     if (serverResponse.status === 200) {
       serverResponse.json().then(json => {
         if (json.added) {
-          actions.addResponse({id: json.id, response: response})
+          actions.addResponse({id: json.id, response: text})
         } else {
           handleDashboardError("Response already exists.")
         }

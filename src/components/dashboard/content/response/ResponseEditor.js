@@ -3,6 +3,7 @@ import * as Draft from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import createEmojiPlugin from 'draft-js-emoji-plugin';
 import logo from "../../../../resources/img/logo.png";
+import * as DraftConvert from 'draft-convert';
 import 'draft-js-emoji-plugin/lib/plugin.css';
 
 const VAR_REGEX = /({\w+})+/g;
@@ -14,15 +15,15 @@ export default class ResponseEditor extends React.Component {
     this._plugins = [createEmojiPlugin()];
     this._styleMap = {
       variable: {
-        color: 'rgba(74, 74, 74, 1)'
+        color: 'rgba(255, 145, 0, 1)'
       },
       text: {
-        color: 'rgba(255, 145, 0, 1)'
+        color: 'rgba(74, 74, 74, 1)'
       }
     };
     this._decorators = [{
       strategy: this._variableStrategy.bind(this),
-      component: this._variableSpan
+      component: this._variableSpan.bind(this)
     }];
 
     this._focus = () => this.refs.editor.focus();
@@ -48,7 +49,7 @@ export default class ResponseEditor extends React.Component {
     }
   }
 
-  _variableSpan = (props) => {
+  _variableSpan(props) {
     return <span style={this._styleMap.variable}>{props.children}</span>;
   };
 
@@ -86,13 +87,27 @@ export default class ResponseEditor extends React.Component {
 
   _handleSubmit() {
     const contentState = this.state.editorState.getCurrentContent();
-    //const var
+    const text = contentState.getPlainText();
+    const html = DraftConvert.convertToHTML(contentState);
+
+    // Get variables
+    let vars = [];
+    let match = VAR_REGEX.exec(text);
+    vars.push(match);
+    while(match !== null) {
+      match = VAR_REGEX.exec(text);
+      vars.push(match);
+    }
+    vars = vars
+      .filter(variable => variable  !== null)
+      .map(variable => variable[0])
+
+    vars = Array.from(new Set(vars));
 
     this.props.onSubmit({
-      text: editorState.getPlainText(),
-      html: "",
-      vars: "there",
-      type: ""
+      text: contentState.getPlainText(),
+      html: html,
+      vars: vars
     });
   }
 
