@@ -65,6 +65,9 @@
   },
   "dependencies": {
     "classnames": "^2.2.5",
+    "draft-js": "^0.9.1",
+    "draft-js-emoji-plugin": "^2.0.0-beta9",
+    "draft-js-plugins-editor": "^2.0.0-beta9",
     "es6-promise": "^3.2.1",
     "eventemitter3": "^1.2.0",
     "events": "^1.1.1",

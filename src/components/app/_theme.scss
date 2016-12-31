@@ -25,7 +25,11 @@ $body-text-color: #4A4A4A;
 }
 
 html {
-  font-family: Body-Font;
+  font-family: Body-Font, sans-serif;
+}
+
+.bf {
+  font-family: Body-Font, sans-serif;
 }
 
 .pc {

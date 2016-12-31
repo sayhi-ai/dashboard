@@ -4,7 +4,9 @@ import {fetchResponses, addResponse, removeResponse} from '../../../../services/
 import {handleDashboardError} from '../../../../actions/errorAction';
 import StateStore from "../../../../stores/stateStore"
 import ResponseStore from "../../../../stores/sayhi/responseStore"
-import ENV_VAR from '../../../../../tools/ENV_VARS'
+import ENV_VARS from '../../../../../tools/ENV_VARS'
+import ColorTextInput from './ColorTextInput'
+import ResponseEditor from './ResponseEditor'
 
 export default class ResponseView extends React.Component {
 
@@ -16,7 +18,6 @@ export default class ResponseView extends React.Component {
       snackBarColor: '',
       snackBarText: '',
       phrase: "",
-      addResponseText: '',
       responses: []
     }
   }
@@ -50,14 +51,8 @@ export default class ResponseView extends React.Component {
     }
   }
 
-  _setAddResponseText(e) {
-    this.setState({
-      addResponseText: e.target.value
-    })
-  }
-
-  _handleAddClick(e) {
-    const response = this.state.addResponseText
+  _handleAddClick(data) {
+    const response = data.text
 
     // Check for duplicates on client first before sending request to server
     let responses = ResponseStore.getResponses().filter(r => r.response.toLowerCase() === response.toLowerCase())
@@ -69,27 +64,12 @@ export default class ResponseView extends React.Component {
       return handleDashboardError("Responses cannot be empty.")
     }
 
-    if (response.length > ENV_VAR.CONSTANTS.MAX_RESPONSE_LENGTH) {
-      return handleDashboardError("Responses can be no longer than " +
-        ENV_VAR.CONSTANTS.MAX_RESPONSE_LENGTH + " characters.")
+    if (response.length > ENV_VARS.CONSTANTS.MAX_RESPONSE_LENGTH) {
+      return handleDashboardError("Responses can be no longer than "
+        + ENV_VARS.CONSTANTS.MAX_RESPONSE_LENGTH + " characters.");
     }
 
     addResponse(StateStore.getCurrentPhrase().id, response)
-    this.setState({
-      addResponseText: ''
-    })
-  }
-
-  _handleKeyPress(event) {
-    if (event.key == 'Enter') {
-      this._handleAddClick(event)
-    }
-  }
-
-  _handleSnackBarClose() {
-    this.setState({
-      open: false
-    })
   }
 
   render() {
@@ -110,28 +90,13 @@ export default class ResponseView extends React.Component {
                           onDelete={() => removeResponse(StateStore.getCurrentPhrase().id, response.id)}/>
               )}
             </div>
-            <div className='flex items-center mt2 h-100 w-100 justify-stretch'>
-              <input
-                className='br-pill ba b--black pv2 ph3 ma1 outline-0 f5 flex-auto'
-                style={{flex: '1'}}
-                type='text'
-                placeholder='Add new response'
-                onChange={this._setAddResponseText.bind(this)}
-                onKeyDown={this._handleKeyPress.bind(this)}
-                value={this.state.addResponseText}/>
-              <div className='flex ba br-100 justify-center items-center pointer dim ml2'
-                   style={{
-                     width: 36,
-                     height: 36
-                   }}
-                   onClick={this._handleAddClick.bind(this)}
-              >
-                +
-              </div>
-            </div>
+            <ResponseEditor
+              onSubmit={this._handleAddClick.bind(this)}/>
           </div>
         </div>
       </div>
     );
   }
 }
+
+
