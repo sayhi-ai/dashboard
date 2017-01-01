@@ -47,7 +47,7 @@ export const addResponse = function (phraseId, text, html, vars) {
     if (serverResponse.status === 200) {
       serverResponse.json().then(json => {
         if (json.added) {
-          actions.addResponse({id: json.id, response: text})
+          actions.addResponse({id: json.id, text: text})
         } else {
           handleDashboardError("Response already exists.")
         }

@@ -101,6 +101,8 @@ export default class ResponseEditor extends React.Component {
     vars = vars
       .filter(variable => variable  !== null)
       .map(variable => variable[0])
+      .map(variable => variable.substr(1))
+      .map(variable => variable.slice(0, -1))
 
     vars = Array.from(new Set(vars));
 
