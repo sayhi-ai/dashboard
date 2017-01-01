@@ -8,6 +8,7 @@ import * as DraftConvert from 'draft-convert';
 import 'draft-js-emoji-plugin/lib/plugin.css';
 
 const VAR_REGEX = /({\w+})+/g;
+const CHECK_ESCAPE_VAR_REGEX = /(\\\\)*({\w+})+/g;
 const ESCAPE_REGEX = /\\./g;
 const variableColor = 'rgba(255, 145, 0, 1)';
 const escapeColor = 'rgba(180, 180, 180, 1)';
@@ -47,22 +48,31 @@ export default class ResponseEditor extends React.Component {
   }
 
   _variableStrategy(contentBlock, callback) {
-    this._findWithRegex(VAR_REGEX, contentBlock, callback);
-  }
-
-  _escapeStrategy(contentBlock, callback) {
-    this._findWithRegex(ESCAPE_REGEX, contentBlock, callback);
-  }
-
-  _findWithRegex(regex, contentBlock, callback) {
     const text = contentBlock.getText();
     let matchArr, start;
-    while ((matchArr = regex.exec(text)) !== null) {
+    while ((matchArr = VAR_REGEX.exec(text)) !== null) {
       start = matchArr.index;
-      if (start === 0 || text[start - 1] !== escapeSymbol) {
+      if (!this._isEscaped(text, start - 1, 0)) {
         callback(start, start + matchArr[0].length);
       }
     }
+  }
+
+  _escapeStrategy(contentBlock, callback) {
+    const text = contentBlock.getText();
+    let matchArr, start;
+    while ((matchArr = ESCAPE_REGEX.exec(text)) !== null) {
+      start = matchArr.index;
+      callback(start, start + matchArr[0].length);
+    }
+  }
+
+  _isEscaped(text, index, count) {
+    if (index < 0 && text[index] !== '\\') {
+      return count % 2 !== 0;
+    }
+
+    return this._isEscaped(text, index - 1, count + 1);
   }
 
   _variableSpan(props) {
@@ -219,7 +229,7 @@ export default class ResponseEditor extends React.Component {
             onChange={this._onChange}
             decorators={this._decorators}
             plugins={this._plugins}
-            ref="editor"/>
+            ref='editor'/>
         </div>
         <EmojiSuggestions/>
         <div className='flex br-100 justify-center items-center mh2' style={{ height: 46 }}>
