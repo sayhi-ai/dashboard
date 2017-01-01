@@ -7,6 +7,11 @@ import * as DraftConvert from 'draft-convert';
 import 'draft-js-emoji-plugin/lib/plugin.css';
 
 const VAR_REGEX = /({\w+})+/g;
+const ESCAPE_REGEX = /\\./g;
+const variableColor = 'rgba(255, 145, 0, 1)';
+const escapeColor = 'rgba(180, 180, 180, 1)';
+const fontColor = 'rgba(74, 74, 74, 1)';
+const escapeSymbol = '\\';
 
 export default class ResponseEditor extends React.Component {
   constructor(props) {
@@ -15,15 +20,21 @@ export default class ResponseEditor extends React.Component {
     this._plugins = [createEmojiPlugin()];
     this._styleMap = {
       variable: {
-        color: 'rgba(255, 145, 0, 1)'
+        color: variableColor
+      },
+      escape: {
+        color: escapeColor
       },
       text: {
-        color: 'rgba(74, 74, 74, 1)'
+        color: fontColor
       }
     };
     this._decorators = [{
       strategy: this._variableStrategy.bind(this),
       component: this._variableSpan.bind(this)
+    },{
+      strategy: this._escapeStrategy.bind(this),
+      component: this._escapeSpan.bind(this)
     }];
 
     this._focus = () => this.refs.editor.focus();
@@ -38,12 +49,16 @@ export default class ResponseEditor extends React.Component {
     this._findWithRegex(VAR_REGEX, contentBlock, callback);
   }
 
+  _escapeStrategy(contentBlock, callback) {
+    this._findWithRegex(ESCAPE_REGEX, contentBlock, callback);
+  }
+
   _findWithRegex(regex, contentBlock, callback) {
     const text = contentBlock.getText();
     let matchArr, start;
     while ((matchArr = regex.exec(text)) !== null) {
       start = matchArr.index;
-      if (start === 0 || text[start - 1] !== '\\') {
+      if (start === 0 || text[start - 1] !== escapeSymbol) {
         callback(start, start + matchArr[0].length);
       }
     }
@@ -51,6 +66,10 @@ export default class ResponseEditor extends React.Component {
 
   _variableSpan(props) {
     return <span style={this._styleMap.variable}>{props.children}</span>;
+  };
+
+  _escapeSpan(props) {
+    return <span style={this._styleMap.escape}>{props.children}</span>;
   };
 
   _handleKeyCommand(command) {
@@ -87,7 +106,7 @@ export default class ResponseEditor extends React.Component {
 
   _handleSubmit() {
     const contentState = this.state.editorState.getCurrentContent();
-    const text = contentState.getPlainText();
+    let text = contentState.getPlainText();
     const html = DraftConvert.convertToHTML(contentState);
 
     // Get variables
@@ -106,11 +125,61 @@ export default class ResponseEditor extends React.Component {
 
     vars = Array.from(new Set(vars));
 
+    // Remove escape chars
+    // match = ESCAPE_REGEX.exec(text);
+    // let offset = 0;
+    // while(match !== null) {
+    //   const start = match.index - offset;
+    //   text = text.slice(0, 3) + text.slice(4);
+    //
+    //   match = ESCAPE_REGEX.exec(text);
+    //   offset++;
+    // }
+    //
+    // console.log(text)
+
     this.props.onSubmit({
-      text: contentState.getPlainText(),
+      text: text,
       html: html,
       vars: vars
     });
+
+    const editorState = this._replaceAllText(this.state.editorState, '');
+    this._onChange(editorState);
+  }
+
+  _replaceAllText(editorState, text) {
+    const contentState = editorState.getCurrentContent();
+    const selectionState = editorState.getSelection();
+
+    const isBackward = selectionState.getIsBackward();
+
+    const firstBlock = contentState.getFirstBlock();
+    const lastBlock = contentState.getLastBlock();
+
+    const leftmostBlock = !isBackward ? firstBlock : lastBlock;
+    const rightmostBlock = !isBackward ? lastBlock : firstBlock;
+
+    const rightmostBlockLength = rightmostBlock.getLength();
+
+    const anchorKey = leftmostBlock.getKey();
+    const anchorOffset = !isBackward ? 0 : rightmostBlockLength;
+
+    const focusKey = rightmostBlock.getKey();
+    const focusOffset = !isBackward ? rightmostBlockLength : 0;
+
+    const newSelectionState = selectionState.merge({
+      anchorKey,
+      anchorOffset,
+      focusKey,
+      focusOffset,
+      hasFocus: true,
+    });
+
+    return Draft.EditorState.push(
+      Draft.EditorState.moveFocusToEnd(editorState),
+      Draft.Modifier.replaceText(contentState, newSelectionState, text)
+    );
   }
 
   render() {
