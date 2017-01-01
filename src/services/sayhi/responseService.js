@@ -29,7 +29,7 @@ export const fetchResponses = function (phraseId) {
 }
 
 export const addResponse = function (phraseId, text, html, vars) {
-  let token = localStorage.getItem('sayhi-jwt')
+  let token = localStorage.getItem('sayhi-jwt');
   return fetch(ResponseConstants.ADD_RESPONSE_URL, {
     method: "POST",
     headers: {
