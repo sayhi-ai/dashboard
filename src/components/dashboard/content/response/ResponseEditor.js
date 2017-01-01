@@ -135,7 +135,7 @@ export default class ResponseEditor extends React.Component {
       match = ESCAPE_REGEX.exec(text);
     }
 
-    this.props.onEnter({
+    this.props.onSubmit({
       text: text,
       html: html,
       vars: vars
@@ -179,6 +179,21 @@ export default class ResponseEditor extends React.Component {
     );
   }
 
+  _addVariable = () => {
+    const {editorState} = this.state
+
+    const newContentState = Draft.Modifier.insertText(editorState.getCurrentContent(), editorState.getSelection(), "{variable_name}")
+    const newEditorState = Draft.EditorState.push(editorState, newContentState, 'insert-characters')
+    const newSelectionState = newEditorState.getSelection()
+
+    const newSelectedEditorState = Draft.EditorState.acceptSelection(newEditorState, newSelectionState.merge({
+      anchorOffset: newSelectionState.getAnchorOffset() - 14,
+      focusOffset: newSelectionState.getAnchorOffset() - 1,
+    }))
+
+    this._onChange(Draft.EditorState.forceSelection(newSelectedEditorState, newSelectedEditorState.getSelection()))
+  }
+
   render() {
     const { EmojiSuggestions }  = this._plugins[0];
     // If the user changes block type before entering any text, we can
@@ -208,7 +223,7 @@ export default class ResponseEditor extends React.Component {
         </div>
         <EmojiSuggestions/>
         <div className='flex br-100 justify-center items-center mh2' style={{ height: 46 }}>
-          <div className='flex justify-center items-center pointer dim' style={{width: 32, height: 32, color: '#888'}}>
+          <div className='flex justify-center items-center pointer dim' style={{width: 32, height: 32, color: '#888'}} onClick={this._addVariable}>
             {"{x}"}
           </div>
           <Icon
