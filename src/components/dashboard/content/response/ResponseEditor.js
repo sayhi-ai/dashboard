@@ -126,19 +126,15 @@ export default class ResponseEditor extends React.Component {
     vars = Array.from(new Set(vars));
 
     // Remove escape chars
-    // match = ESCAPE_REGEX.exec(text);
-    // let offset = 0;
-    // while(match !== null) {
-    //   const start = match.index - offset;
-    //   text = text.slice(0, 3) + text.slice(4);
-    //
-    //   match = ESCAPE_REGEX.exec(text);
-    //   offset++;
-    // }
-    //
-    // console.log(text)
+    match = ESCAPE_REGEX.exec(text);
+    while(match !== null) {
+      const start = match.index;
+      text = text.slice(0, start) + text.slice(start + 1);
 
-    this.props.onSubmit({
+      match = ESCAPE_REGEX.exec(text);
+    }
+
+    this.props.onEnter({
       text: text,
       html: html,
       vars: vars
