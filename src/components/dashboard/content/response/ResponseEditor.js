@@ -3,6 +3,7 @@ import * as Draft from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import createEmojiPlugin from 'draft-js-emoji-plugin';
 import logo from "../../../../resources/img/logo.png";
+import Icon from '../../../app/Icon'
 import * as DraftConvert from 'draft-convert';
 import 'draft-js-emoji-plugin/lib/plugin.css';
 
@@ -141,13 +142,15 @@ export default class ResponseEditor extends React.Component {
             ref="editor"/>
         </div>
         <EmojiSuggestions/>
-        <div className='flex br-100 justify-center items-center pointer dim ml2 mr2'
-             style={{
-               width: 46,
-               height: 46
-             }}
-             onClick={this._handleSubmit.bind(this)}>
-          <img className="response-logo" src={logo}/>
+        <div className='flex br-100 justify-center items-center mh2' style={{ height: 46 }}>
+          <div className='flex justify-center items-center pointer dim' style={{width: 32, height: 32, color: '#888'}}>
+            {"{x}"}
+          </div>
+          <Icon
+            style={{width: 32, height: 32, fill: '#19A5E4'}}
+            className='dim pointer'
+            svg={require('../../../../resources/img/plus.svg')}
+            onClick={this._handleSubmit.bind(this)} />
         </div>
       </div>
     )
