@@ -8,7 +8,6 @@ import * as DraftConvert from 'draft-convert';
 import 'draft-js-emoji-plugin/lib/plugin.css';
 
 const VAR_REGEX = /({\w+})+/g;
-const CHECK_ESCAPE_VAR_REGEX = /(\\\\)*({\w+})+/g;
 const ESCAPE_REGEX = /\\./g;
 const variableColor = 'rgba(255, 145, 0, 1)';
 const escapeColor = 'rgba(180, 180, 180, 1)';
@@ -68,7 +67,7 @@ export default class ResponseEditor extends React.Component {
   }
 
   _isEscaped(text, index, count) {
-    if (index < 0 && text[index] !== '\\') {
+    if (index < 0 || text[index] !== escapeSymbol) {
       return count % 2 !== 0;
     }
 
