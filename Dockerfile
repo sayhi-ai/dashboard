@@ -8,6 +8,8 @@ RUN npm install
 
 COPY . /usr/src/app
 
+RUN . /private-install.sh
+
 EXPOSE 4000
 
 CMD ["npm", "start"]
