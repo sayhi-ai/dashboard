@@ -8,6 +8,8 @@ COPY private-install.sh /usr/src/app/
 RUN chmod +x /usr/src/app/private-install.sh
 
 RUN npm run preinstall
+COPY . /usr/src/app
+
 RUN npm install
 COPY . /usr/src/app
 
