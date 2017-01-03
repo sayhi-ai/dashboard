@@ -3,19 +3,12 @@ FROM node
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
+COPY .npmrc /usr/src/app/
 COPY package.json /usr/src/app/
-COPY private-install.sh /usr/src/app/
-RUN chmod +x /usr/src/app/private-install.sh
-
-RUN npm run preinstall
-ADD . /usr/src/app
-
 RUN npm install
-ADD . /usr/src/app
+RUN rm -f .npmrc
 
-#ADD private-install.sh /usr/src/app/private-install.sh
-#RUN chmod +x /usr/src/app/private-install.sh
-#RUN /usr/src/app/private-install.sh
+COPY . /usr/src/app
 
 EXPOSE 4000
 
