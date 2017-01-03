@@ -128,8 +128,6 @@
     "webpack-dev-server": "^1.14.1"
   },
   "scripts": {
-    "preinstall": ". ./private-install.sh",
-    "preupdate": ". ./private-install.sh",
     "clean": "rm build",
     "build": "webpack --progress --config tools/webpack.config.prod.js",
     "build:dev": "webpack --progress --config tools/webpack.config.dev.js",
