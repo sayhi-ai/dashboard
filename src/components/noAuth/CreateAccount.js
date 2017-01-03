@@ -1,6 +1,5 @@
 import React from 'react';
 import TextField from "material-ui/TextField"
-import CheckBox from "material-ui/CheckBox"
 import RaisedButton from "material-ui/RaisedButton"
 import browserHistory from '../../history'
 import * as errorActions from "../../actions/errorAction"
@@ -269,9 +268,7 @@ export default class Login extends React.Component {
           </div>
           <div className="db mt2 mb4">
             <div className="dib">
-            <CheckBox
-              onCheck={this._handleCheckBoxClick.bind(this)}
-            />
+
             </div>
             <div className="dib f6 v-top pt1">I agree to the
               <a className="pc dim pointer no-underline" href="https://sayhi.ai" target="_blank"> terms and conditions</a>.
