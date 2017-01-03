@@ -199,7 +199,6 @@ export default class Login extends React.Component {
   }
 
   _handleCheckBoxClick(e) {
-    e.preventDefault();
     this.checked = !this.checked;
   }
 
@@ -267,8 +266,10 @@ export default class Login extends React.Component {
                        placeholder="Repeat Password"/>
           </div>
           <div className="db mt2 mb4">
-            <div className="dib">
-
+            <div className="dib pr2 pb1">
+            <input type="checkbox"
+              onClick={this._handleCheckBoxClick.bind(this)}
+            />
             </div>
             <div className="dib f6 v-top pt1">I agree to the
               <a className="pc dim pointer no-underline" href="https://sayhi.ai" target="_blank"> terms and conditions</a>.
