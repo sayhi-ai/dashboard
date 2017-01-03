@@ -10,7 +10,4 @@ COPY . /usr/src/app
 
 EXPOSE 4000
 
-ADD private-install.sh ./private-install.sh
-RUN chmod +x ./private-install.sh
-CMD ["./private-install.sh"]
-CMD ["npm", "start"]
+CMD ["npm", "docker"]

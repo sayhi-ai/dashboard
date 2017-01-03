@@ -137,6 +137,7 @@
     "server:prod": "node tools/start.js build",
     "lint": "eslint .",
     "dev": "npm-run-all --parallel build:dev:watch server:dev",
+    "docker": "npm-run-all preinstall start",
     "start": "npm-run-all build server:prod"
   }
 }
