@@ -1,86 +1,42 @@
-import fetch from "isomorphic-fetch";
-import PhraseConstants from '../../constants/sayhi/phraseConstants.js';
+import middleware from 'dashboard-middleware'
 import * as actions from '../../actions/sayhi/phraseAction';
 import {handleDashboardError} from '../../actions/errorAction';
 
 export const fetchPhrases = function (botId) {
-  let token = localStorage.getItem('sayhi-jwt')
-  return fetch(PhraseConstants.GET_PHRASES_URL, {
-    method: "POST",
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + token
-    },
-    body: JSON.stringify({
-      "botId": botId,
+  const token = localStorage.getItem('sayhi-jwt')
+  return middleware.getPhraseHandler().getPhrases(token, botId)
+    .then(json => actions.setPhrases(json.phrases))
+    .catch(error => {
+      handleDashboardError("Unable to fetch phrases.")
     })
-  }).then(response => {
-    if (response.status === 200) {
-      response.json().then(json => {
-        actions.setPhrases(json.phrases)
-      });
-    } else {
-      response.json().then(json => {
-        handleDashboardError(json.error)
-      });
-    }
-  });
 }
 
 export const addPhrase = function (botId, phrase) {
-  let token = localStorage.getItem('sayhi-jwt')
-  return fetch(PhraseConstants.ADD_PHRASES_URL, {
-    method: "POST",
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + token
-    },
-    body: JSON.stringify({
-      "botId": botId,
-      "phrase": phrase
+  const token = localStorage.getItem('sayhi-jwt')
+  return middleware.getPhraseHandler().addPhrase(token, botId, phrase)
+    .then(json => {
+      if (json.added) {
+        actions.addPhrase({id: json.id, phrase: phrase})
+      } else {
+        handleDashboardError("Phrase already exists.")
+      }
     })
-  }).then(response => {
-    if (response.status === 200) {
-      response.json().then(json => {
-        if (json.added) {
-          actions.addPhrase({id: json.id, phrase: phrase})
-        }
-      });
-    } else {
-      response.json().then(json => {
-        handleDashboardError(json.detail)
-      });
-    }
-  });
+    .catch(error => {
+      handleDashboardError("Unable to add phrase.")
+    })
 }
 
 export const removePhrase = function (phraseId) {
-  let token = localStorage.getItem('sayhi-jwt')
-  return fetch(PhraseConstants.REMOVE_PHRASES_URL, {
-    method: "POST",
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + token
-    },
-    body: JSON.stringify({
-      "phraseId": phraseId
+  const token = localStorage.getItem('sayhi-jwt')
+  return middleware.getPhraseHandler().removePhrase(token, phraseId)
+    .then(json => {
+      if (json.removed) {
+        actions.removePhrase(phraseId)
+      } else {
+        handleDashboardError("Error removing phrase.")
+      }
     })
-  }).then(serverResponse => {
-    if (serverResponse.status === 200) {
-      serverResponse.json().then(json => {
-        if (json.removed) {
-          actions.removePhrase(phraseId)
-        } else {
-          handleDashboardError("Error removing phrase.")
-        }
-      });
-    } else {
-      serverResponse.json().then(json => {
-        handleDashboardError(json.error)
-      });
-    }
-  });
+    .catch(error => {
+      handleDashboardError("Unable to remove phrase.")
+    })
 }

@@ -1,92 +1,42 @@
-import fetch from "isomorphic-fetch";
-import ResponseConstants from '../../constants/sayhi/responseConstants.js';
+import middleware from 'dashboard-middleware'
 import * as actions from '../../actions/sayhi/responseAction';
 import {handleDashboardError} from '../../actions/errorAction';
 
 export const fetchResponses = function (phraseId) {
-  let token = localStorage.getItem('sayhi-jwt')
-  return fetch(ResponseConstants.GET_RESPONSES_URL, {
-    method: "POST",
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + token
-    },
-    body: JSON.stringify({
-      "phraseId": phraseId
+  const token = localStorage.getItem('sayhi-jwt')
+  return middleware.getResponseHandler().getResponses(token, phraseId, 'text')
+    .then(json => actions.setResponses(json.responses))
+    .catch(error => {
+      handleDashboardError("Unable to fetch responses.")
     })
-  }).then(response => {
-    if (response.status === 200) {
-      response.json().then(json => {
-        actions.setResponses(json.responses)
-      });
-    } else {
-      response.json().then(json => {
-        handleDashboardError(json.error)
-      });
-    }
-  });
 }
 
 export const addResponse = function (phraseId, text, html, vars) {
-  let token = localStorage.getItem('sayhi-jwt');
-  return fetch(ResponseConstants.ADD_RESPONSE_URL, {
-    method: "POST",
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + token
-    },
-    body: JSON.stringify({
-      "phraseId": phraseId,
-      "text": text,
-      "html": html,
-      "vars": vars
-    })
-  }).then(serverResponse => {
-    if (serverResponse.status === 200) {
-      serverResponse.json().then(json => {
+  const token = localStorage.getItem('sayhi-jwt');
+  return middleware.getResponseHandler().addResponse(token, phraseId, text, html, vars)
+    .then(json => {
         if (json.added) {
           actions.addResponse({id: json.id, text: text})
         } else {
           handleDashboardError("Response already exists.")
         }
-      });
-    } else {
-      serverResponse.json().then(json => {
-        handleDashboardError(json.error)
-      });
-    }
-  });
+      })
+    .catch(error => {
+      handleDashboardError("Unable to add response.")
+    })
 }
 
 export const removeResponse = function (phraseId, responseId) {
-  let token = localStorage.getItem('sayhi-jwt')
-  return fetch(ResponseConstants.REMOVE_RESPONSE_URL, {
-    method: "POST",
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + token
-    },
-    body: JSON.stringify({
-      "phraseId": phraseId,
-      "responseId": responseId
-    })
-  }).then(serverResponse => {
-    if (serverResponse.status === 200) {
-      serverResponse.json().then(json => {
+  const token = localStorage.getItem('sayhi-jwt')
+  return middleware.getResponseHandler().removeResponse(token, phraseId, responseId)
+    .then(json => {
         if (json.removed) {
           actions.removeResponse(responseId)
         } else {
           handleDashboardError("Error removing response.")
         }
-      });
-    } else {
-      serverResponse.json().then(json => {
-        actions.addResponse(null)
-        handleDashboardError(json.error)
-      });
-    }
-  });
+      })
+    .catch(error => {
+      handleDashboardError("Unable to remove response.")
+    })
 }

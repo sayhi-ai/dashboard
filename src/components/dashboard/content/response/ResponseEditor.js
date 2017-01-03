@@ -46,7 +46,7 @@ export default class ResponseEditor extends React.Component {
     };
   }
 
-  _variableStrategy(contentBlock, callback) {
+  _variableStrategy (contentBlock, callback) {
     const text = contentBlock.getText();
     let matchArr, start;
     while ((matchArr = VAR_REGEX.exec(text)) !== null) {
