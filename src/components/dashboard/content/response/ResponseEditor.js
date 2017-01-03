@@ -9,9 +9,6 @@ import 'draft-js-emoji-plugin/lib/plugin.css';
 
 const VAR_REGEX = /({\w+})+/g;
 const ESCAPE_REGEX = /\\./g;
-const variableColor = 'rgba(255, 145, 0, 1)';
-const escapeColor = 'rgba(180, 180, 180, 1)';
-const fontColor = 'rgba(74, 74, 74, 1)';
 const escapeSymbol = '\\';
 
 export default class ResponseEditor extends React.Component {
@@ -21,22 +18,23 @@ export default class ResponseEditor extends React.Component {
     this._plugins = [createEmojiPlugin()];
     this._styleMap = {
       variable: {
-        color: variableColor
+        color: '#FFA726'
       },
       escape: {
-        color: escapeColor
+        color: 'rgba(180, 180, 180, 1)'
       },
       text: {
-        color: fontColor
+        color: 'rgba(74, 74, 74, 1)'
       }
     };
     this._decorators = [{
       strategy: this._variableStrategy.bind(this),
       component: this._variableSpan.bind(this)
-    },{
-      strategy: this._escapeStrategy.bind(this),
-      component: this._escapeSpan.bind(this)
-    }];
+    }]
+    // },{
+    //   strategy: this._escapeStrategy.bind(this),
+    //   component: this._escapeSpan.bind(this)
+    // }];
 
     this._focus = () => this.refs.editor.focus();
     this._onChange = (editorState) => this.setState({editorState});
@@ -51,36 +49,37 @@ export default class ResponseEditor extends React.Component {
     let matchArr, start;
     while ((matchArr = VAR_REGEX.exec(text)) !== null) {
       start = matchArr.index;
-      if (!this._isEscaped(text, start - 1, 0)) {
-        callback(start, start + matchArr[0].length);
-      }
-    }
-  }
-
-  _escapeStrategy(contentBlock, callback) {
-    const text = contentBlock.getText();
-    let matchArr, start;
-    while ((matchArr = ESCAPE_REGEX.exec(text)) !== null) {
-      start = matchArr.index;
       callback(start, start + matchArr[0].length);
+      // if (!this._isEscaped(text, start - 1, 0)) {
+      //   callback(start, start + matchArr[0].length);
+      // }
     }
   }
 
-  _isEscaped(text, index, count) {
-    if (index < 0 || text[index] !== escapeSymbol) {
-      return count % 2 !== 0;
-    }
+  // _escapeStrategy(contentBlock, callback) {
+  //   const text = contentBlock.getText();
+  //   let matchArr, start;
+  //   while ((matchArr = ESCAPE_REGEX.exec(text)) !== null) {
+  //     start = matchArr.index;
+  //     callback(start, start + matchArr[0].length);
+  //   }
+  // }
 
-    return this._isEscaped(text, index - 1, count + 1);
-  }
+  // _isEscaped(text, index, count) {
+  //   if (index < 0 || text[index] !== escapeSymbol) {
+  //     return count % 2 !== 0;
+  //   }
+  //
+  //   return this._isEscaped(text, index - 1, count + 1);
+  // }
 
   _variableSpan(props) {
     return <span style={this._styleMap.variable}>{props.children}</span>;
   };
 
-  _escapeSpan(props) {
-    return <span style={this._styleMap.escape}>{props.children}</span>;
-  };
+  // _escapeSpan(props) {
+  //   return <span style={this._styleMap.escape}>{props.children}</span>;
+  // };
 
   _handleKeyCommand(command) {
     let handled;
@@ -135,14 +134,16 @@ export default class ResponseEditor extends React.Component {
 
     vars = Array.from(new Set(vars));
 
-    // Remove escape chars
-    match = ESCAPE_REGEX.exec(text);
-    while(match !== null) {
-      const start = match.index;
-      text = text.slice(0, start) + text.slice(start + 1);
+    console.log("sdf")
 
-      match = ESCAPE_REGEX.exec(text);
-    }
+    // Remove escape chars
+    // match = ESCAPE_REGEX.exec(text);
+    // while(match !== null) {
+    //   const start = match.index;
+    //   text = text.slice(0, start) + text.slice(start + 1);
+    //
+    //   match = ESCAPE_REGEX.exec(text);
+    // }text
 
     this.props.onSubmit({
       text: text,
@@ -233,7 +234,7 @@ export default class ResponseEditor extends React.Component {
         <EmojiSuggestions/>
         <div className='flex br-100 justify-center items-center mh2' style={{ height: 46 }}>
           <div className='flex justify-center items-center pointer dim' style={{width: 32, height: 32, color: '#888'}} onClick={this._addVariable}>
-            {"{x}"}
+            {"{var}"}
           </div>
           <Icon
             style={{width: 32, height: 32, fill: '#19A5E4'}}
