@@ -5,6 +5,7 @@ WORKDIR /usr/src/app
 
 COPY package.json /usr/src/app/
 COPY private-install.sh /usr/src/app/
+RUN chmod +x /usr/src/app/private-install.sh
 
 RUN npm run preinstall
 RUN npm install
