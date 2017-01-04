@@ -1,16 +1,6 @@
 import React from 'react';
-import Dialog from 'material-ui/Dialog';
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField'
 import Icon from '../../app/Icon'
-import Avatar from 'material-ui/Avatar'
-import ListItem from 'material-ui/List/ListItem';
-import {changePhrase} from "../../../actions/dashboardAction"
-import {addPhrase, removePhrase, fetchPhrases} from "../../../services/sayhi/phraseService"
-import PhraseStore from "../../../stores/sayhi/phraseStore"
-import StateStore from "../../../stores/stateStore"
-import ENV_VARS from '../../../../tools/ENV_VARS'
-import Immutable from 'immutable'
+import browserHistory from '../../../history'
 
 export default class DashboardDrawer extends React.Component {
 
@@ -37,7 +27,7 @@ export default class DashboardDrawer extends React.Component {
                 style={{width: 60, height: 60, fill: '#19A5E4'}}
                 className='dim pointer pa3 ml2'
                 svg={require('../../../resources/img/bot.svg')}
-              />
+                onClick={() => browserHistory.push('/bots')} />
               <div className="dib tc white hf f4" style={{marginRight: 'auto'}}>Bot</div>
             </div>
           </div>

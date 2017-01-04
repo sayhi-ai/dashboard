@@ -15,11 +15,6 @@ require('./index.scss')
 // Copy the index.html file
 require('file?name=[name].[ext]!./index.html')
 
-const jwt = localStorage.getItem('sayhi-jwt')
-if (jwt) {
-  login(jwt)
-}
-
 ReactDOM.render((
   <Router
     forceFetch

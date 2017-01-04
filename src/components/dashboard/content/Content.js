@@ -14,7 +14,7 @@ export default class Content extends React.Component {
       <div className="content-div">
         <div className="hf f1 pa4 btc">Responses</div>
         <Divider/>
-        <ResponseContainer/>
+        {this.props.children}
       </div>
     );
   }

@@ -51,20 +51,21 @@ export default AuthenticatedComponent(class Dashboard extends React.Component {
   }
 
   render() {
+    const props = Object.assign({}, this.props)
     return (
       <div className="flex flex-column min-vh-100">
         <div className='flex w-100 flex-auto'>
           <DashboardDrawer/>
           <div className='flex-auto'>
-            <Content/>
+            <Content {...props}/>
           </div>
         </div>
         <Snackbar message={this.state.snackBarText}
-                  bodyStyle={{
-                    backgroundColor: this.state.snackBarColor, fontFamily: "Header-Font",
-                    textAlign: "center"
-                  }}
-                  open={this.state.open}/>
+          bodyStyle={{
+            backgroundColor: this.state.snackBarColor, fontFamily: "Header-Font",
+            textAlign: "center"
+          }}
+          open={this.state.open}/>
       </div>
     );
   }

@@ -31,7 +31,8 @@ export default (ComposedComponent) => {
     }
 
     render() {
-      if (this.state.userLoggedIn) {
+      const jwt = localStorage.getItem('sayhi-jwt')
+      if (jwt) {
         return (
           <ComposedComponent
             {...this.props}

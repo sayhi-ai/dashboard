@@ -1,5 +1,6 @@
 import React from 'react';
-import {login} from '../../services/authService'
+import * as authService from '../../services/authService'
+import * as loginActions from '../../actions/loginActions'
 import TextField from "material-ui/TextField"
 import RaisedButton from "material-ui/RaisedButton"
 import * as errorActions from "../../actions/errorAction"
@@ -74,7 +75,7 @@ export default class Login extends React.Component {
       })
     }
 
-    login(this.state.user, this.state.password);
+    authService.login(this.state.user, this.state.password);
   }
 
   _createAccountClick(e) {
@@ -94,6 +95,11 @@ export default class Login extends React.Component {
   }
 
   render() {
+    const jwt = localStorage.getItem('sayhi-jwt')
+    if (jwt) {
+      loginActions.login(jwt)
+    }
+
     return (
       <div className="login-form-div">
         <form className="login-form">
