@@ -13,7 +13,6 @@ export const fetchResponses = function (phraseId) {
 
 export const addResponse = function (phraseId, text, html, vars) {
   const token = localStorage.getItem('sayhi-jwt');
-  console.log("here")
   return middleware.getResponseHandler().addResponse(token, phraseId, text, html, vars)
     .then(json => {
         if (json.added) {

@@ -1,7 +1,8 @@
 import React from 'react'
 import Immutable from 'immutable'
 
-const escapeSymbol = '\\';
+const ESCAPE_REGEX = /\\./g
+const escapeSymbol = '\\'
 
 export default class Response extends React.Component {
   constructor() {
@@ -10,38 +11,50 @@ export default class Response extends React.Component {
     this._styleMap = {
       variable: {
         color: '#FFCC80'
-      },
-      escape: {
-        color: 'rgba(180, 180, 180, 1)'
-      },
-      text: {
-        color: 'rgba(74, 74, 74, 1)'
       }
     }
   }
 
   _styleResponse(text, spans) {
-    let matchArr, start;
-    const regex = /({\w+})+/g
-    if ((matchArr = regex.exec(text)) !== null) {
-      start = matchArr.index;
-      if (!this._isEscaped(text, start - 1, 0)) {
-        console.log("d")
-        const prefix = text.substr(0, start)
-        const variable = text.substr(start, matchArr[0].length);
-        const remainder = text.substr(start + matchArr[0].length);
+    let matchArr, start
+    const varRegex = /({\w+})+/g
 
-        const prefixSpan = <span>{prefix}</span>
-        const variableSpan = <span style={this._styleMap.variable}>{variable}</span>
-        spans = spans.push(prefixSpan, variableSpan)
-        return this._styleResponse(remainder, spans)
+    if ((matchArr = varRegex.exec(text)) !== null) {
+      start = matchArr.index;
+      let prefix = this._removeEscapeCharacters(text.substr(0, start))
+      const variable = this._removeEscapeCharacters(text.substr(start, matchArr[0].length))
+      const remainder = text.substr(start + matchArr[0].length);
+
+      let prefixSpan = <span>{prefix}</span>
+      let variableSpan
+      if (this._isEscaped(text, start - 1, 0)) {
+        prefix = prefix.substr(0, prefix.length -1)
+        prefixSpan = <span>{prefix}</span>
+        variableSpan = <span>{variable}</span>
+      } else {
+        variableSpan = <span style={this._styleMap.variable}>{variable}</span>
       }
+      spans = spans.push(prefixSpan, variableSpan)
+      return this._styleResponse(remainder, spans)
     } else {
+      text = this._removeEscapeCharacters(text)
       const suffixSpan = <span>{text}</span>
       spans = spans.push(suffixSpan)
     }
 
     return spans
+  }
+
+  _removeEscapeCharacters(text) {
+    let matchArr = ESCAPE_REGEX.exec(text);
+    while(matchArr !== null) {
+      const start = matchArr.index;
+      text = text.slice(0, start) + text.slice(start + 1);
+
+      matchArr = ESCAPE_REGEX.exec(text);
+    }
+
+    return text
   }
 
   _isEscaped(text, index, count) {

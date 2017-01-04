@@ -30,11 +30,10 @@ export default class ResponseEditor extends React.Component {
     this._decorators = [{
       strategy: this._variableStrategy.bind(this),
       component: this._variableSpan.bind(this)
-    }]
-    // },{
-    //   strategy: this._escapeStrategy.bind(this),
-    //   component: this._escapeSpan.bind(this)
-    // }];
+    },{
+      strategy: this._escapeStrategy.bind(this),
+      component: this._escapeSpan.bind(this)
+    }];
 
     this._focus = () => this.refs.editor.focus();
     this._onChange = (editorState) => this.setState({editorState});
@@ -49,37 +48,36 @@ export default class ResponseEditor extends React.Component {
     let matchArr, start;
     while ((matchArr = VAR_REGEX.exec(text)) !== null) {
       start = matchArr.index;
-      callback(start, start + matchArr[0].length);
-      // if (!this._isEscaped(text, start - 1, 0)) {
-      //   callback(start, start + matchArr[0].length);
-      // }
+      if (!this._isEscaped(text, start - 1, 0)) {
+        callback(start, start + matchArr[0].length);
+      }
     }
   }
 
-  // _escapeStrategy(contentBlock, callback) {
-  //   const text = contentBlock.getText();
-  //   let matchArr, start;
-  //   while ((matchArr = ESCAPE_REGEX.exec(text)) !== null) {
-  //     start = matchArr.index;
-  //     callback(start, start + matchArr[0].length);
-  //   }
-  // }
+  _escapeStrategy(contentBlock, callback) {
+    const text = contentBlock.getText();
+    let matchArr, start;
+    while ((matchArr = ESCAPE_REGEX.exec(text)) !== null) {
+      start = matchArr.index;
+      callback(start, start + matchArr[0].length);
+    }
+  }
 
-  // _isEscaped(text, index, count) {
-  //   if (index < 0 || text[index] !== escapeSymbol) {
-  //     return count % 2 !== 0;
-  //   }
-  //
-  //   return this._isEscaped(text, index - 1, count + 1);
-  // }
+  _isEscaped(text, index, count) {
+    if (index < 0 || text[index] !== escapeSymbol) {
+      return count % 2 !== 0;
+    }
+
+    return this._isEscaped(text, index - 1, count + 1);
+  }
 
   _variableSpan(props) {
     return <span style={this._styleMap.variable}>{props.children}</span>;
   };
 
-  // _escapeSpan(props) {
-  //   return <span style={this._styleMap.escape}>{props.children}</span>;
-  // };
+  _escapeSpan(props) {
+    return <span style={this._styleMap.escape}>{props.children}</span>;
+  };
 
   _handleKeyCommand(command) {
     let handled;
@@ -120,11 +118,17 @@ export default class ResponseEditor extends React.Component {
 
     // Get variables
     let vars = [];
-    let match = VAR_REGEX.exec(text);
-    vars.push(match);
-    while(match !== null) {
-      match = VAR_REGEX.exec(text);
+    let match = VAR_REGEX.exec(text)
+    let start = match.index
+    if (!this._isEscaped(text, start - 1, 0)) {
       vars.push(match);
+    }
+    while (match !== null) {
+      start = match.index;
+      if (!this._isEscaped(text, start - 1, 0)) {
+        vars.push(match);
+      }
+      match = VAR_REGEX.exec(text);
     }
     vars = vars
       .filter(variable => variable  !== null)
@@ -133,17 +137,6 @@ export default class ResponseEditor extends React.Component {
       .map(variable => variable.slice(0, -1))
 
     vars = Array.from(new Set(vars));
-
-    console.log("sdf")
-
-    // Remove escape chars
-    // match = ESCAPE_REGEX.exec(text);
-    // while(match !== null) {
-    //   const start = match.index;
-    //   text = text.slice(0, start) + text.slice(start + 1);
-    //
-    //   match = ESCAPE_REGEX.exec(text);
-    // }text
 
     this.props.onSubmit({
       text: text,
