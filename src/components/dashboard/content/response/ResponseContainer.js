@@ -74,10 +74,10 @@ export default class ResponseView extends React.Component {
   render() {
     return (
       <div className='flex justify-center'>
-        <div className='w-100' style={{maxWidth: 750}}>
+        <div className='w-80 pa4'>
           <div className='ma3 pa3 br2' style={{backgroundColor: '#555'}}>
             <div className='w-100 tc courier f3'>
-              <span className='white'>ai.say(</span>
+              <span className='white'>bot.say(</span>
               <span style={{color: 'rgb(100, 215, 228)'}}>{'"' + this.state.phrase + '"'}</span>
               <span className='white'>{");"}</span>
             </div>

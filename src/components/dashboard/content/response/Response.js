@@ -8,6 +8,7 @@ export default class Response extends React.Component {
   constructor() {
     super()
 
+    this._spanKey = 0
     this._styleMap = {
       variable: {
         color: '#FFCC80'
@@ -25,24 +26,29 @@ export default class Response extends React.Component {
       const variable = this._removeEscapeCharacters(text.substr(start, matchArr[0].length))
       const remainder = text.substr(start + matchArr[0].length);
 
-      let prefixSpan = <span>{prefix}</span>
+      let prefixSpan = <span key={this._generateKey()}>{prefix}</span>
       let variableSpan
       if (this._isEscaped(text, start - 1, 0)) {
         prefix = prefix.substr(0, prefix.length -1)
-        prefixSpan = <span>{prefix}</span>
-        variableSpan = <span>{variable}</span>
+        prefixSpan = <span key={this._generateKey()}>{prefix}</span>
+        variableSpan = <span key={this._generateKey()}>{variable}</span>
       } else {
-        variableSpan = <span style={this._styleMap.variable}>{variable}</span>
+        variableSpan = <span key={this._generateKey()} style={this._styleMap.variable}>{variable}</span>
       }
       spans = spans.push(prefixSpan, variableSpan)
       return this._styleResponse(remainder, spans)
     } else {
       text = this._removeEscapeCharacters(text)
-      const suffixSpan = <span>{text}</span>
+      const suffixSpan = <span key={this._generateKey()}>{text}</span>
       spans = spans.push(suffixSpan)
     }
 
     return spans
+  }
+
+  _generateKey() {
+    this._spanKey++
+    return "response" + this._spanKey
   }
 
   _removeEscapeCharacters(text) {

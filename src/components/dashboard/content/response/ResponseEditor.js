@@ -119,12 +119,8 @@ export default class ResponseEditor extends React.Component {
     // Get variables
     let vars = [];
     let match = VAR_REGEX.exec(text)
-    let start = match.index
-    if (!this._isEscaped(text, start - 1, 0)) {
-      vars.push(match);
-    }
     while (match !== null) {
-      start = match.index;
+      const start = match.index;
       if (!this._isEscaped(text, start - 1, 0)) {
         vars.push(match);
       }

@@ -53,7 +53,6 @@ export default AuthenticatedComponent(class Dashboard extends React.Component {
   render() {
     return (
       <div className="flex flex-column min-vh-100">
-        <HeaderBar/>
         <div className='flex w-100 flex-auto'>
           <DashboardDrawer/>
           <div className='flex-auto'>
