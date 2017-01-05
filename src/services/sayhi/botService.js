@@ -5,21 +5,22 @@ import {handleDashboardError} from '../../actions/errorAction'
 export const fetchBots = function () {
   const token = localStorage.getItem('sayhi-jwt')
   return middleware.getBotHandler().getBots(token)
-    .then(bots => actions.setBots(json.bots))
+    .then(json => actions.setBots(json.bots))
     .catch(error => {
       handleDashboardError("Unable to fetch bots.")
     })
 }
 
-export const addBot = function (name, type, description) {
+export const addBot = function (name, description, tags) {
   const token = localStorage.getItem('sayhi-jwt')
-  return middleware.getBotHandler().addBot(token, name, type, description)
+  console.log("dsfsf")
+  return middleware.getBotHandler().addBot(token, name, description, tags)
     .then(json => {
       if (json.added) {
         actions.addBot({
           id: json.id,
           name: name,
-          type: type,
+          tags: tags,
           description: description
         })
       } else {

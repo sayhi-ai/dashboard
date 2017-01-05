@@ -4,7 +4,7 @@ import StateStore from "../../../../stores/stateStore"
 import ENV_VARS from '../../../../../tools/ENV_VARS'
 import Paper from 'material-ui/Paper';
 
-export default class ResponseView extends React.Component {
+export default class Bot extends React.Component {
 
   constructor(props) {
     super(props);
@@ -56,7 +56,7 @@ export default class ResponseView extends React.Component {
               src={require('../../../../resources/img/bot-icon.jpg')}
             />
           </div>
-          <div className="btf hf f5 pt2">Title</div>
+          <div className="btf hf f5 pt2">{this.props.name}</div>
         </Paper>
       </div>
     );

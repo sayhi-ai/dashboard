@@ -7,7 +7,7 @@ import ResponseStore from "../../../../stores/sayhi/responseStore"
 import ENV_VARS from '../../../../../tools/ENV_VARS'
 import ResponseEditor from './ResponseEditor'
 
-export default class ResponseView extends React.Component {
+export default class ResponseContainer extends React.Component {
 
   constructor(props) {
     super(props);
