@@ -72,6 +72,14 @@ export default class ResponseView extends React.Component {
   }
 
   render() {
+    //const url = this.props.params;
+    //console.log(url)
+    // const phrase = this.state.phrases.find(phrase => phrase.phrase === url);
+    // console.log("here")
+    // if (phrase !== undefined) {
+    //   setTimeout(changePhrase(phrase))
+    // }
+
     return (
       <div className='flex justify-center'>
         <div className='w-80 pa4'>

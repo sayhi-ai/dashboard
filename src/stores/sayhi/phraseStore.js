@@ -1,12 +1,12 @@
 import AppDispatcher from '../../dispatchers/appDispatcher'
-import BaseStore from './../baseStore';
-import PhraseConstants from '../../constants/sayhi/phraseConstants';
+import BaseStore from './../baseStore'
+import PhraseConstants from '../../constants/sayhi/phraseConstants'
 import assign from 'object-assign'
-var Immutable = require('immutable');
+import Immutable from 'immutable'
 
-var _phrases = Immutable.List();
+let _phrases = Immutable.List();
 
-var PhraseStore = assign({}, BaseStore, {
+const PhraseStore = assign({}, BaseStore, {
   getPhrases() {
     return _phrases
   }
@@ -14,7 +14,7 @@ var PhraseStore = assign({}, BaseStore, {
 
 AppDispatcher.register((action) => {
   switch (action.actionType) {
-    case PhraseConstants.GET_PHRASES:
+    case PhraseConstants.SET_PHRASES:
       if (action.phrases.length > 0) {
         _phrases = Immutable.List(action.phrases)
         PhraseStore.emitChange()

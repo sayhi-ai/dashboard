@@ -5,7 +5,13 @@ import {handleDashboardError} from '../../actions/errorAction';
 export const fetchPhrases = function (botId) {
   const token = localStorage.getItem('sayhi-jwt')
   return middleware.getPhraseHandler().getPhrases(token, botId)
-    .then(json => actions.setPhrases(json.phrases))
+    .then(json => {
+      return json.phrases.map(phrase => {
+        phrase.url = `/bots/botname/phrase/${phrase.phrase}`
+        return phrase
+      })
+    })
+    .then(json => actions.setPhrases(json))
     .catch(error => {
       handleDashboardError("Unable to fetch phrases.")
     })
@@ -16,7 +22,7 @@ export const addPhrase = function (botId, phrase) {
   return middleware.getPhraseHandler().addPhrase(token, botId, phrase)
     .then(json => {
       if (json.added) {
-        actions.addPhrase({id: json.id, phrase: phrase})
+        actions.addPhrase({id: json.id, phrase: phrase, url: `/bots/botname/phrase/${phrase}`})
       } else {
         handleDashboardError("Phrase already exists.")
       }

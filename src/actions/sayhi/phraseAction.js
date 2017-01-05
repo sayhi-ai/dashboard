@@ -3,7 +3,7 @@ import PhraseConstants from '../../constants/sayhi/phraseConstants.js';
 
 export const setPhrases = (phrases) => {
   AppDispatcher.dispatch({
-    actionType: PhraseConstants.GET_PHRASES,
+    actionType: PhraseConstants.SET_PHRASES,
     phrases: phrases
   })
 };

@@ -7,7 +7,7 @@ export default {
   ADD_PHRASES_URL: BASE_URL + '/phrase/add',
   REMOVE_PHRASES_URL: BASE_URL + '/phrase/remove',
 
-  GET_PHRASES: "GET_PHRASES",
+  SET_PHRASES: "SET_PHRASES",
   ADD_PHRASE: "ADD_PHRASE",
   REMOVE_PHRASE: "REMOVE_PHRASE"
 }

@@ -8,6 +8,7 @@ import PhraseStore from "../../../stores/sayhi/phraseStore"
 import StateStore from "../../../stores/stateStore"
 import ENV_VARS from '../../../../tools/ENV_VARS'
 import Immutable from 'immutable'
+import browserHistory from '../../../history'
 
 export default class DashboardDrawer extends React.Component {
 
@@ -40,19 +41,28 @@ export default class DashboardDrawer extends React.Component {
     }
 
     // TODO: fix this hack
+    let index = 0
+    const phrases = PhraseStore.getPhrases()
     if (PhraseStore.getPhrases().size > 0 && this.firstLoad) {
       this.firstLoad = false
-      setTimeout(() => changePhrase(PhraseStore.getPhrases().get(0)), 0);
+      if (this.props.params.phrase !== undefined) {
+        const phrase = phrases.find(phrase => phrase.phrase === this.props.params.phrase)
+        index = phrases.indexOf(phrase)
+      }
+      setTimeout(() => changePhrase(phrases.get(index)), 0);
     }
 
     this.setState({
-      phrases: PhraseStore.getPhrases(),
+      phrases: phrases,
+      phraseValue: index
     })
   }
 
   _handlePhraseSelectFieldChange = (event, index) => {
-    changePhrase(this.state.phrases.get(index))
+    const phrase = this.state.phrases.get(index)
+    changePhrase(phrase)
     this.setState({phraseValue: index});
+    browserHistory.push(phrase.url)
   }
 
   _handleDialogOpen() {
@@ -83,8 +93,7 @@ export default class DashboardDrawer extends React.Component {
 
     if (phrase === "" || phrase.length > 30) {
       error = true
-      phraseErrorMessage = "A phrase is between 0 and " +
-        ENV_VARS.CONSTANTS.MAX_PHRASE_TOKEN_LENGTH + " characters long."
+      phraseErrorMessage = "A phrase is between 0 and " + ENV_VARS.CONSTANTS.MAX_PHRASE_TOKEN_LENGTH + " characters long."
     }
 
     if (error) {
