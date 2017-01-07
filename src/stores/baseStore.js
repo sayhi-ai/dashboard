@@ -1,9 +1,9 @@
 import assign from 'object-assign';
-var EventEmitter = require('events').EventEmitter;
+const EventEmitter = require('events').EventEmitter;
 
-var CHANGE_EVENT = 'change'
+const CHANGE_EVENT = 'change'
 
-var BaseStore = assign({}, EventEmitter.prototype, {
+const BaseStore = assign({}, EventEmitter.prototype, {
   dispatchToken: function () {
     return this._dispatchToken
   },

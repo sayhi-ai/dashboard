@@ -11,7 +11,7 @@ import { Scrollbars } from 'react-custom-scrollbars';
 export default class ResponseContainer extends React.Component {
 
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       open: false,
@@ -23,27 +23,26 @@ export default class ResponseContainer extends React.Component {
   }
 
   componentDidMount() {
-    StateStore.addChangeListener(this._updatePhrase.bind(this));
-    ResponseStore.addChangeListener(this._setResponses.bind(this))
+    StateStore.addChangeListener(this._updatePhrase)
+    ResponseStore.addChangeListener(this._setResponses)
   }
 
   componentWillUnmount() {
-    StateStore.removeChangeListener(this._updatePhrase.bind(this));
-    ResponseStore.removeChangeListener(this._setResponses.bind(this))
+    StateStore.removeChangeListener(this._updatePhrase)
+    ResponseStore.removeChangeListener(this._setResponses)
   }
 
-  _setResponses() {
-    const responses = ResponseStore.getResponses();
+  _setResponses = () => {
+    const responses = ResponseStore.getResponses()
     this.setState({
       responses: responses
     })
   }
 
-  _updatePhrase() {
-    const phrase = StateStore.getCurrentPhrase();
+  _updatePhrase = () => {
+    const phrase = StateStore.getCurrentPhrase()
 
     if (phrase.phrase !== "" && phrase.phrase !== this.state.phrase) {
-      console.log("got here")
       fetchResponses(phrase.id);
       this.setState({
         phrase: phrase.phrase
@@ -73,25 +72,17 @@ export default class ResponseContainer extends React.Component {
   }
 
   render() {
-    //const url = this.props.params;
-    //console.log(url)
-    // const phrase = this.state.phrases.find(phrase => phrase.phrase === url);
-    // console.log("here")
-    // if (phrase !== undefined) {
-    //   setTimeout(changePhrase(phrase))
-    // }
-
     return (
       <div className='flex'>
         <div className='w-70 pa4'>
-          <div className='ma3 pa3 br2' style={{backgroundColor: '#555'}}>
+          <div className='ma3 pa3 br2 mb0' style={{backgroundColor: '#555'}}>
             <div className='w-100 tc courier f3'>
               <span className='white'>bot.say(</span>
               <span style={{color: 'rgb(100, 215, 228)'}}>{'"' + this.state.phrase + '"'}</span>
               <span className='white'>{");"}</span>
             </div>
           </div>
-          <div className='ma3 pa3 br2' style={{background: "#FAFAFA"}}>
+          <div className='ma3 pa3 br2 mt0 pt0' style={{background: "#FAFAFA"}}>
             <Scrollbars style={{height: '50vh'}}>
               {this.state.responses.map((response, index) =>
                 <Response key={index} response={response.text}

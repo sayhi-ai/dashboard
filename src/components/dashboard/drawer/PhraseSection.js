@@ -28,14 +28,14 @@ export default class DashboardDrawer extends React.Component {
   }
 
   componentDidMount() {
-    PhraseStore.addChangeListener(this._loadPhraseList.bind(this))
+    PhraseStore.addChangeListener(this._loadPhraseList)
   }
 
   componentWillUnmount() {
-    PhraseStore.removeChangeListener(this._loadPhraseList.bind(this))
+    PhraseStore.removeChangeListener(this._loadPhraseList)
   }
 
-  _loadPhraseList() {
+  _loadPhraseList = () => {
     if (PhraseStore.getPhrases().size === 0) {
       return;
     }

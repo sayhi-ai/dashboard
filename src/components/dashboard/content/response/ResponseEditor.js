@@ -206,7 +206,7 @@ export default class ResponseEditor extends React.Component {
     }
 
     return (
-      <div className='flex pa2 items-center mt2 h-100 w-100 br3 justify-stretch' style={{background: '#f0f0f0'}}>
+      <div className='flex pa2 pa0 items-center mt0 h-100 w-100 br3 justify-stretch' style={{background: '#f0f0f0'}}>
         <div className='bf btc w-10 pv2 ph3 ma1 f5 flex-auto' onClick={this._focus}>
           <Editor
             editorState={this.state.editorState}

@@ -21,20 +21,20 @@ export default class BotContainer extends React.Component {
   }
 
   componentDidMount() {
-    BotStore.addChangeListener(this._updateBotsList.bind(this));
-    StateStore.addChangeListener(this._updateCurrentBot.bind(this));
+    BotStore.addChangeListener(this._updateBotsList)
+    StateStore.addChangeListener(this._updateCurrentBot)
   }
 
   componentWillUnmount() {
-    BotStore.addChangeListener(this._updateBotsList.bind(this));
-    StateStore.addChangeListener(this._updateCurrentBot.bind(this));
+    BotStore.removeChangeListener(this._updateBotsList)
+    StateStore.removeChangeListener(this._updateCurrentBot)
   }
 
-  _updateCurrentBot() {
+  _updateCurrentBot = () => {
 
   }
 
-  _updateBotsList() {
+  _updateBotsList = () => {
     this.setState({
       botData: BotStore.getBots()
     })
