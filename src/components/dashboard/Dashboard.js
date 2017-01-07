@@ -3,7 +3,6 @@ import AuthenticatedComponent from '../app/AuthenticatedComponent';
 import Account from "./account/Account"
 import HeaderBar from "./headerBar/HeaderBar"
 import DashboardDrawer from "./drawer/DashboardDrawer"
-import Content from "./content/Content"
 import Snackbar from "material-ui/Snackbar"
 import ErrorStore from "../../stores/errorStore"
 
@@ -57,7 +56,7 @@ export default AuthenticatedComponent(class Dashboard extends React.Component {
         <div className='flex w-100 flex-auto'>
           <DashboardDrawer {...props}/>
           <div className='flex-auto' style={{background: "#FAFAFA"}}>
-            <Content {...props}/>
+            {this.props.children}
           </div>
         </div>
         <Snackbar message={this.state.snackBarText}

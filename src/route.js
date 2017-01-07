@@ -5,7 +5,8 @@ import {Route, IndexRedirect} from "react-router"
 import App from "./components/app/App"
 import NoAuthContainer from "./components/noAuth/noAuthContainer"
 import Dashboard from "./components/dashboard/Dashboard"
-import BotContainer from "./components/dashboard/content/bots/BotContainer"
+import BotContainer from "./components/dashboard/content/bots/BotsContainer"
+import BotSettingsContainer from "./components/dashboard/content/bots/BotSettingsContainer"
 import ResponseContainer from "./components/dashboard/content/response/ResponseContainer"
 import Login from "./components/noAuth/Login"
 import CreateAccount from "./components/noAuth/CreateAccount"
@@ -28,7 +29,8 @@ export default (
 
     <Route name="dashboard" component={Dashboard}>
       <Route name="bots" path="bots" component={BotContainer}/>
-      <Route name="responses" path="bots/:bot/phrase/:phrase" component={ResponseContainer}/>
+      <Route name="bots" path="bot/:bot" component={BotSettingsContainer}/>
+      <Route name="responses" path="bot/:bot/phrase/:phrase" component={ResponseContainer}/>
     </Route>
   </Route>
 )

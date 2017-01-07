@@ -1,16 +1,16 @@
 import AppDispatcher from '../dispatchers/appDispatcher';
-import StateConstants from '../constants/stateConstants.js';
+import DashboardConstants from '../constants/dashboardConstants.js';
 
 export const changeBot = (bot) => {
   AppDispatcher.dispatch({
-    actionType: StateConstants.UPDATE_PHRASE,
+    actionType: DashboardConstants.UPDATE_BOT,
     bot: bot
   })
-};
+}
 
 export const changePhrase = (phrase) => {
   AppDispatcher.dispatch({
-    actionType: StateConstants.UPDATE_PHRASE,
+    actionType: DashboardConstants.UPDATE_PHRASE,
     phrase: phrase
   })
-};
+}

@@ -1,13 +1,15 @@
 import middleware from 'dashboard-middleware'
 import * as actions from '../../actions/sayhi/phraseAction';
 import {handleDashboardError} from '../../actions/errorAction';
+import DashboardStore from '../../stores/dashboardStore'
 
 export const fetchPhrases = function (botId) {
   const token = localStorage.getItem('sayhi-jwt')
   return middleware.getPhraseHandler().getPhrases(token, botId)
     .then(json => {
       return json.phrases.map(phrase => {
-        phrase.url = `/bots/botname/phrase/${phrase.phrase}`
+        const bot = DashboardStore.getCurrentBot()
+        phrase.url = `/bot/${bot.name}/phrase/${phrase.phrase}`
         return phrase
       })
     })
@@ -22,7 +24,8 @@ export const addPhrase = function (botId, phrase) {
   return middleware.getPhraseHandler().addPhrase(token, botId, phrase)
     .then(json => {
       if (json.added) {
-        actions.addPhrase({id: json.id, phrase: phrase, url: `/bots/botname/phrase/${phrase}`})
+        const bot = DashboardStore.getCurrentBot()
+        actions.addPhrase({id: json.id, phrase: phrase, url: `/bots/${bot.name}/phrase/${phrase}`})
       } else {
         handleDashboardError("Phrase already exists.")
       }

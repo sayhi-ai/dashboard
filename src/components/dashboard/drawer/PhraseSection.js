@@ -3,53 +3,114 @@ import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField'
 import {changePhrase} from "../../../actions/dashboardAction"
-import {addPhrase, removePhrase, fetchPhrases} from "../../../services/sayhi/phraseService"
+import * as PhraseServices from "../../../services/sayhi/phraseService"
 import PhraseStore from "../../../stores/sayhi/phraseStore"
 import StateStore from "../../../stores/dashboardStore"
 import ENV_VARS from '../../../../tools/ENV_VARS'
 import Immutable from 'immutable'
 import browserHistory from '../../../history'
+import Spinner from 'react-spinkit'
+import DashboardStore from "../../../stores/dashboardStore"
+import BotStore from "../../../stores/sayhi/botStore"
+import * as BotServices from "../../../services/sayhi/botService"
+import * as DashboardActions from '../../../actions/dashboardAction'
 
 export default class DashboardDrawer extends React.Component {
 
   constructor(props) {
     super(props)
 
-    fetchPhrases(StateStore.getCurrentBotId())
-    this.firstLoad = true
+    this.currentBot = null
+    this._loadPhrasesInit()
 
     this.state = {
       dialogOpen: false,
       addPhrase: '',
       addPhraseErrorCode: '',
       phraseValue: 0,
-      phrases: new Immutable.List(),
+      phrases: Immutable.List(),
     }
   }
 
   componentDidMount() {
     PhraseStore.addChangeListener(this._loadPhraseList)
+    DashboardStore.addChangeListener(this._handleBotChange)
   }
 
   componentWillUnmount() {
     PhraseStore.removeChangeListener(this._loadPhraseList)
+    DashboardStore.removeChangeListener(this._handleBotChange)
+  }
+
+  _handleBotChange = () => {
+    const newBot = DashboardStore.getCurrentBot()
+    if (this.currentBot !== null && newBot !== null && this.currentBot.name !== newBot.name) {
+      PhraseServices.fetchPhrases(newBot.id)
+      this.setState({
+        phrases: Immutable.List()
+      })
+    }
+  }
+
+  _loadPhrasesInit = () => {
+    const botName = this.props.params.bot
+    const bots = BotStore.getBots()
+    this.currentBot = DashboardStore.getCurrentBot()
+    if (bots.size === 0) {
+      BotServices.fetchBots()
+        .then(response => BotStore.getBots().find(bot => bot.name === botName))
+        .then(bot => {
+          if (bot !== null) {
+            DashboardActions.changeBot(bot)
+            return bot
+          }
+          return null
+        })
+        .then(bot => {
+          if (bot !== null) {
+            return PhraseServices.fetchPhrases(bot.id)
+          }
+          return null
+        })
+        .then(phrases => {
+          if (phrases !== null) {
+            phrases = PhraseStore.getPhrases()
+            const index = phrases.indexOf(this.props.params.phrase)
+            this.setState({
+              phrases: phrases,
+              phraseValue: index
+            })
+            return true
+          }
+          return false
+        })
+
+     return Immutable.List()
+    } else if (this.currentBot !== null) {
+      PhraseServices.fetchPhrases(this.currentBot.id)
+        .then(phrases => {
+          if (phrases !== null) {
+            this.setState({
+              phrases: PhraseStore.getPhrases(),
+              phraseValue: 0
+            })
+            return true
+          }
+          return false
+        })
+
+      return Immutable.List()
+    }
+
+    return PhraseStore.getPhrases()
   }
 
   _loadPhraseList = () => {
-    if (PhraseStore.getPhrases().size === 0) {
-      return;
-    }
-
-    // TODO: fix this hack
     let index = 0
     const phrases = PhraseStore.getPhrases()
-    if (PhraseStore.getPhrases().size > 0 && this.firstLoad) {
-      this.firstLoad = false
-      if (this.props.params.phrase !== undefined) {
-        const phrase = phrases.find(phrase => phrase.phrase === this.props.params.phrase)
-        index = phrases.indexOf(phrase)
-      }
-      setTimeout(() => changePhrase(phrases.get(index)), 0);
+    if (this.props.params.phrase !== undefined) {
+      const phrase = phrases.find(phrase => phrase.phrase === this.props.params.phrase)
+      index = phrases.indexOf(phrase)
     }
 
     this.setState({
@@ -101,7 +162,7 @@ export default class DashboardDrawer extends React.Component {
         addPhraseErrorCode: phraseErrorMessage,
       })
     } else {
-      addPhrase(StateStore.getCurrentBotId(), phrase)
+      PhraseServices.addPhrase(StateStore.getCurrentBotId(), phrase)
       this.setState({
         addPhraseErrorCode: '',
         dialogOpen: false,
@@ -117,6 +178,34 @@ export default class DashboardDrawer extends React.Component {
   }
 
   render() {
+    let phraseDivs = this.state.phrases.map((phrase, index) =>
+      <div
+        className='pointer pv2 ph3 f5 flex justify-between items-center hide-child white'
+        style={{background: this.state.phraseValue !== index ? '#19A5E4' : '#0288D1'}}
+        key={index}
+        onClick={(e) => this._handlePhraseSelectFieldChange(e, index)}
+      >
+        <div>
+          "{phrase.phrase}"
+        </div>
+        {this.state.phrases.size > 1 &&
+        <div className='ttu mr2 red child' style={{fontSize: '.7em'}} onClick={() => PhraseServices.removePhrase(phrase.id)}>
+          delete
+        </div>
+        }
+      </div>
+    )
+
+    if (this.state.phrases.size === 0) {
+      phraseDivs = (
+        <div className="white f5 bf dib flex justify-center" style={{
+          alignItems: "center"
+        }}>
+          <Spinner spinnerName='wave' />
+        </div>
+      )
+    }
+
     const actions = [
       <RaisedButton
         label="Add"
@@ -145,23 +234,7 @@ export default class DashboardDrawer extends React.Component {
                 </div>
               </div>
             </div>
-            {this.state.phrases.map((phrase, index) =>
-              <div
-                className='pointer pv2 ph3 f5 flex justify-between items-center hide-child white'
-                style={{background: this.state.phraseValue !== index ? '#19A5E4' : '#0288D1'}}
-                key={index}
-                onClick={(e) => this._handlePhraseSelectFieldChange(e, index)}
-              >
-                <div>
-                  "{phrase.phrase}"
-                </div>
-                {this.state.phrases.size > 1 &&
-                <div className='ttu mr2 red child' style={{fontSize: '.7em'}} onClick={() => removePhrase(phrase.id)}>
-                  delete
-                </div>
-                }
-              </div>
-            )}
+            {phraseDivs}
           </div>
         </div>
         <Dialog

@@ -5,7 +5,13 @@ import {handleDashboardError} from '../../actions/errorAction'
 export const fetchBots = function () {
   const token = localStorage.getItem('sayhi-jwt')
   return middleware.getBotHandler().getBots(token)
-    .then(json => actions.setBots(json.bots))
+    .then(json => {
+      return json.bots.map(bot => {
+        bot.url = `/bot/${bot.name}`
+        return bot
+      })
+    })
+    .then(bots => actions.setBots(bots))
     .catch(error => {
       handleDashboardError("Unable to fetch bots.")
     })

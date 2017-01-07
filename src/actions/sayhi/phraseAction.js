@@ -21,3 +21,9 @@ export const removePhrase = (phraseId) =>{
     id: phraseId
   })
 };
+
+export const clearPhrases = () => {
+  AppDispatcher.dispatch({
+    actionType: PhraseConstants.CLEAR_PHRASES
+  })
+}

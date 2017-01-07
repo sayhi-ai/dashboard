@@ -28,7 +28,7 @@ export default class DashboardDrawer extends React.Component {
                 className='dim pointer pa3 ml2'
                 svg={require('../../../resources/img/bot.svg')}
                 onClick={() => browserHistory.push('/bots')} />
-              <div className="dib tc white hf f4" style={{marginRight: 'auto'}}>Bot</div>
+              <div className="dib tc white hf f4" style={{marginRight: 'auto'}}>{this.props.bot.name}</div>
             </div>
           </div>
         </div>

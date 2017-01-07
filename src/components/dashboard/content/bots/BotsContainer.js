@@ -1,12 +1,13 @@
 import React from 'react'
 import Bot from './Bot'
 import AddButton from './AddButton'
-import StateStore from "../../../../stores/dashboardStore"
+import DashboardStore from "../../../../stores/dashboardStore"
 import BotStore from "../../../../stores/sayhi/botStore"
 import * as BotServices from "../../../../services/sayhi/botService"
 import ENV_VARS from '../../../../../tools/ENV_VARS'
 import Spinner from 'react-spinkit'
 import Immutable from 'immutable'
+import Divider from 'material-ui/Divider';
 
 export default class BotContainer extends React.Component {
 
@@ -22,12 +23,12 @@ export default class BotContainer extends React.Component {
 
   componentDidMount() {
     BotStore.addChangeListener(this._updateBotsList)
-    StateStore.addChangeListener(this._updateCurrentBot)
+    DashboardStore.addChangeListener(this._updateCurrentBot)
   }
 
   componentWillUnmount() {
     BotStore.removeChangeListener(this._updateBotsList)
-    StateStore.removeChangeListener(this._updateCurrentBot)
+    DashboardStore.removeChangeListener(this._updateCurrentBot)
   }
 
   _updateCurrentBot = () => {
@@ -41,15 +42,28 @@ export default class BotContainer extends React.Component {
   }
 
   render() {
+    if (this.state.botData.size === 0) {
+      return (
+        <div className="white f5 bf dib flex justify-center" style={{
+          height: "100vh",
+          alignItems: "center"
+        }}>
+          <Spinner spinnerName='double-bounce' />
+        </div>
+      )
+    }
+
     let key = -1
     const bots = this.state.botData.map(bot => {
       key++
       return <Bot key={key} bot={bot}/>
     })
     return (
-      <div className='flex pa5 justify-left'>
-        {bots}
-        <AddButton/>
+      <div>
+        <div className='flex pa5 justify-left'>
+          {bots}
+          <AddButton/>
+        </div>
       </div>
     );
   }

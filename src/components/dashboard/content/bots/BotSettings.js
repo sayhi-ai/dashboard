@@ -1,10 +1,11 @@
 import React from 'react'
 import Icon from '../../../app/Icon'
-import StateStore from "../../../../stores/dashboardStore"
+import DashboardStore from "../../../../stores/dashboardStore"
 import * as BotServices from "../../../../services/sayhi/botService"
 import RaisedButton from "material-ui/RaisedButton"
 import TextField from 'material-ui/TextField';
 import Chip from 'material-ui/Chip';
+import Immutable from 'immutable'
 
 export default class BotSettings extends React.Component {
 
@@ -12,13 +13,13 @@ export default class BotSettings extends React.Component {
     super(props)
 
     this.state = {
-      name: this.props.name,
+      name: this.props.bot.name,
       nameError: "",
-      description: this.props.description,
+      description: this.props.bot.description,
       descriptionError: "",
       tag: "",
       tagError: "",
-      chipData: this.props.chipData
+      chipData: Immutable.List(this.props.bot.tags)
     }
 
     this.styles = {

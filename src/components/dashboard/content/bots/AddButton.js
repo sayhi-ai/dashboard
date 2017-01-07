@@ -4,7 +4,6 @@ import BotSettings from './BotSettings'
 import StateStore from "../../../../stores/dashboardStore"
 import Paper from 'material-ui/Paper';
 import Dialog from 'material-ui/Dialog';
-import Immutable from 'immutable'
 
 export default class AddButton extends React.Component {
   constructor(props) {
@@ -78,9 +77,11 @@ export default class AddButton extends React.Component {
           open={this.state.open}
         >
           <BotSettings
-            name=""
-            description=""
-            chipData={Immutable.List()}
+            bot={{
+              name: "",
+              description: "",
+              tags: []
+            }}
             onCancel={this._handleClose}
             onSubmit={this._handleClose}/>
         </Dialog>

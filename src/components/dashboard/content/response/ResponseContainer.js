@@ -7,6 +7,7 @@ import ResponseStore from "../../../../stores/sayhi/responseStore"
 import ENV_VARS from '../../../../../tools/ENV_VARS'
 import ResponseEditor from './ResponseEditor'
 import { Scrollbars } from 'react-custom-scrollbars';
+import Divider from 'material-ui/Divider';
 
 export default class ResponseContainer extends React.Component {
 
@@ -73,24 +74,28 @@ export default class ResponseContainer extends React.Component {
 
   render() {
     return (
-      <div className='flex'>
-        <div className='w-70 pa4'>
-          <div className='ma3 pa3 br2 mb0' style={{backgroundColor: '#555'}}>
-            <div className='w-100 tc courier f3'>
-              <span className='white'>bot.say(</span>
-              <span style={{color: 'rgb(100, 215, 228)'}}>{'"' + this.state.phrase + '"'}</span>
-              <span className='white'>{");"}</span>
+      <div>
+        <div className="hf f1 pa4 btc" style={{background: "white"}}>Responses</div>
+        <Divider/>
+        <div className='flex'>
+          <div className='w-70 pa4'>
+            <div className='ma3 pa3 br2 mb0' style={{backgroundColor: '#555'}}>
+              <div className='w-100 tc courier f3'>
+                <span className='white'>bot.say(</span>
+                <span style={{color: 'rgb(100, 215, 228)'}}>{'"' + this.state.phrase + '"'}</span>
+                <span className='white'>{");"}</span>
+              </div>
             </div>
-          </div>
-          <div className='ma3 pa3 br2 mt0 pt0' style={{background: "#FAFAFA"}}>
-            <Scrollbars style={{height: '50vh'}}>
-              {this.state.responses.map((response, index) =>
-                <Response key={index} response={response.text}
-                          onDelete={() => removeResponse(StateStore.getCurrentPhrase().id, response.id)}/>
-              )}
-            </Scrollbars>
-            <ResponseEditor
-              onSubmit={this._handleAddClick.bind(this)}/>
+            <div className='ma3 pa3 br2 mt0 pt0' style={{background: "#FAFAFA"}}>
+              <Scrollbars style={{height: '50vh'}}>
+                {this.state.responses.map((response, index) =>
+                  <Response key={index} response={response.text}
+                            onDelete={() => removeResponse(StateStore.getCurrentPhrase().id, response.id)}/>
+                )}
+              </Scrollbars>
+              <ResponseEditor
+                onSubmit={this._handleAddClick.bind(this)}/>
+            </div>
           </div>
         </div>
       </div>

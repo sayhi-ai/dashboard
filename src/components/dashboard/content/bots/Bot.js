@@ -1,9 +1,6 @@
 import React from 'react'
 import Icon from '../../../app/Icon'
-import * as DashboardActions from '../../../../actions/dashboardAction'
-import DashboardStore from "../../../../stores/dashboardStore"
 import browserHistory from '../../../../history'
-import ENV_VARS from '../../../../../tools/ENV_VARS'
 import Paper from 'material-ui/Paper';
 
 export default class Bot extends React.Component {
@@ -35,8 +32,7 @@ export default class Bot extends React.Component {
   }
 
   _chooseBot = (e) => {
-    DashboardActions.changeBot(this.props.bot)
-    browserHistory.push()
+    browserHistory.push(this.props.bot.url)
   }
 
   render() {

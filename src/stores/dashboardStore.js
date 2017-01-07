@@ -1,41 +1,38 @@
 import AppDispatcher from '../dispatchers/appDispatcher'
 import BaseStore from './baseStore';
-import StateConstants from '../constants/stateConstants.js';
+import DashboardConstants from '../constants/dashboardConstants.js';
 import assign from 'object-assign'
 
-let _phrase = {}
-let _botId = "cixf3et6c5io4010759dn050r"
-let _error = null
+let _phrase = null
+let _bot = null
 
-const StateStore = assign({}, BaseStore, {
+const DashboardStore = assign({}, BaseStore, {
   getCurrentPhrase() {
     return _phrase
   },
 
-  getCurrentBotId() {
-    return _botId
+  getCurrentBot() {
+    return _bot
   }
 });
 
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
-    case StateConstants.UPDATE_PHRASE:
-      if (action.phrase !== "") {
+    case DashboardConstants.UPDATE_PHRASE:
+      if (action.phrase !== null) {
         _phrase = action.phrase
-        StateStore.emitChange()
+        DashboardStore.emitChange()
       }
       break
-    case StateConstants.ERROR:
-      if (action.phrase !== "") {
-        _error = action.error
-        console.log(_error)
-        StateStore.emitChange()
+    case DashboardConstants.UPDATE_BOT:
+      if (action.bot !== null) {
+        _bot = action.bot
+        DashboardStore.emitChange()
       }
       break
-
     default:
     // no op
   }
 })
 
-export default StateStore
+export default DashboardStore
