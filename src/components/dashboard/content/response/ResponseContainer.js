@@ -2,10 +2,11 @@ import React from 'react'
 import Response from './Response'
 import {fetchResponses, addResponse, removeResponse} from '../../../../services/sayhi/responseService'
 import {handleDashboardError} from '../../../../actions/errorAction';
-import StateStore from "../../../../stores/stateStore"
+import StateStore from "../../../../stores/dashboardStore"
 import ResponseStore from "../../../../stores/sayhi/responseStore"
 import ENV_VARS from '../../../../../tools/ENV_VARS'
 import ResponseEditor from './ResponseEditor'
+import { Scrollbars } from 'react-custom-scrollbars';
 
 export default class ResponseContainer extends React.Component {
 
@@ -33,7 +34,6 @@ export default class ResponseContainer extends React.Component {
 
   _setResponses() {
     const responses = ResponseStore.getResponses();
-
     this.setState({
       responses: responses
     })
@@ -43,6 +43,7 @@ export default class ResponseContainer extends React.Component {
     const phrase = StateStore.getCurrentPhrase();
 
     if (phrase.phrase !== "" && phrase.phrase !== this.state.phrase) {
+      console.log("got here")
       fetchResponses(phrase.id);
       this.setState({
         phrase: phrase.phrase
@@ -81,8 +82,8 @@ export default class ResponseContainer extends React.Component {
     // }
 
     return (
-      <div className='flex justify-center'>
-        <div className='w-80 pa4'>
+      <div className='flex'>
+        <div className='w-70 pa4'>
           <div className='ma3 pa3 br2' style={{backgroundColor: '#555'}}>
             <div className='w-100 tc courier f3'>
               <span className='white'>bot.say(</span>
@@ -90,13 +91,13 @@ export default class ResponseContainer extends React.Component {
               <span className='white'>{");"}</span>
             </div>
           </div>
-          <div className='ma3 pa3 br2 bg-white'>
-            <div>
+          <div className='ma3 pa3 br2' style={{background: "#FAFAFA"}}>
+            <Scrollbars style={{height: '50vh'}}>
               {this.state.responses.map((response, index) =>
                 <Response key={index} response={response.text}
                           onDelete={() => removeResponse(StateStore.getCurrentPhrase().id, response.id)}/>
               )}
-            </div>
+            </Scrollbars>
             <ResponseEditor
               onSubmit={this._handleAddClick.bind(this)}/>
           </div>

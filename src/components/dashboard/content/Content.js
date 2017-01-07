@@ -12,7 +12,7 @@ export default class Content extends React.Component {
   render() {
     return (
       <div className="content-div">
-        <div className="hf f1 pa4 btc">Responses</div>
+        <div className="hf f1 pa4 btc" style={{background: "white"}}>Responses</div>
         <Divider/>
         {this.props.children}
       </div>

@@ -1,6 +1,8 @@
 import React from 'react'
 import Icon from '../../../app/Icon'
-import StateStore from "../../../../stores/stateStore"
+import * as DashboardActions from '../../../../actions/dashboardAction'
+import DashboardStore from "../../../../stores/dashboardStore"
+import browserHistory from '../../../../history'
 import ENV_VARS from '../../../../../tools/ENV_VARS'
 import Paper from 'material-ui/Paper';
 
@@ -10,7 +12,7 @@ export default class Bot extends React.Component {
     super(props);
 
     this.state = {
-      boxShadow: 1
+      boxShadow: 2
     }
   }
 
@@ -22,14 +24,19 @@ export default class Bot extends React.Component {
 
   _hoverBot = () => {
     this.setState({
-      boxShadow: 5
+      boxShadow: 4
     })
   }
 
   _unhoverBot = () => {
     this.setState({
-      boxShadow: 1
+      boxShadow: 2
     })
+  }
+
+  _chooseBot = (e) => {
+    DashboardActions.changeBot(this.props.bot)
+    browserHistory.push()
   }
 
   render() {
@@ -48,7 +55,8 @@ export default class Bot extends React.Component {
                zDepth={this.state.boxShadow}
                onMouseEnter={this._hoverBot}
                onMouseLeave={this._unhoverBot}
-               circle={true}>
+               onClick={this._chooseBot}
+               circle={false}>
           <div className="pt2 mt2">
             <img
               className="db center"
@@ -56,7 +64,7 @@ export default class Bot extends React.Component {
               src={require('../../../../resources/img/bot-icon.jpg')}
             />
           </div>
-          <div className="btf hf f5 pt2">{this.props.name}</div>
+          <div className="btf hf f5 pt2">{this.props.bot.name}</div>
         </Paper>
       </div>
     );

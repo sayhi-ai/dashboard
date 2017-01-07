@@ -5,7 +5,7 @@ import TextField from 'material-ui/TextField'
 import {changePhrase} from "../../../actions/dashboardAction"
 import {addPhrase, removePhrase, fetchPhrases} from "../../../services/sayhi/phraseService"
 import PhraseStore from "../../../stores/sayhi/phraseStore"
-import StateStore from "../../../stores/stateStore"
+import StateStore from "../../../stores/dashboardStore"
 import ENV_VARS from '../../../../tools/ENV_VARS'
 import Immutable from 'immutable'
 import browserHistory from '../../../history'
@@ -129,7 +129,7 @@ export default class DashboardDrawer extends React.Component {
       <div>
         <div className='' style={{width: 270}}>
           <div style={{textAlign: "left"}}>
-            <div className='ttu mt4 mb2 f6 flex justify-between items-center ph3'>
+            <div className='ttu mt4 mb2 f6 flex justify-between white items-center ph3'>
               <div>
                 Phrases
               </div>
@@ -138,20 +138,17 @@ export default class DashboardDrawer extends React.Component {
                 onClick={this._handleDialogOpen.bind(this)}
               >
                 <div
-                  style={{width: 16, height: 16, paddingBottom: 2}}
-                  className='br-100 ba flex items-center justify-center'
+                  style={{width: 20, height: 20, paddingBottom: 2}}
+                  className='br-100 ba flex items-center justify-center f4'
                 >
                   +
-                </div>
-                <div className='ml1'>
-                  Add
                 </div>
               </div>
             </div>
             {this.state.phrases.map((phrase, index) =>
               <div
-                className='pointer pv2 ph3 f5 flex justify-between items-center hide-child'
-                style={{background: this.state.phraseValue !== index ? '#fafafa' : '#e0e0e0'}}
+                className='pointer pv2 ph3 f5 flex justify-between items-center hide-child white'
+                style={{background: this.state.phraseValue !== index ? '#19A5E4' : '#0288D1'}}
                 key={index}
                 onClick={(e) => this._handlePhraseSelectFieldChange(e, index)}
               >

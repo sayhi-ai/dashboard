@@ -1,6 +1,6 @@
 import React from 'react'
 import Icon from '../../../app/Icon'
-import StateStore from "../../../../stores/stateStore"
+import StateStore from "../../../../stores/dashboardStore"
 import * as BotServices from "../../../../services/sayhi/botService"
 import RaisedButton from "material-ui/RaisedButton"
 import TextField from 'material-ui/TextField';

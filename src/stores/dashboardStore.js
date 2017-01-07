@@ -3,15 +3,11 @@ import BaseStore from './baseStore';
 import StateConstants from '../constants/stateConstants.js';
 import assign from 'object-assign'
 
-var _phrase = {}
-var _botId = "cixf3et6c5io4010759dn050r"
-var _error = null
+let _phrase = {}
+let _botId = "cixf3et6c5io4010759dn050r"
+let _error = null
 
-var StateStore = assign({}, BaseStore, {
-  getDashboardError() {
-    return _error
-  },
-
+const StateStore = assign({}, BaseStore, {
   getCurrentPhrase() {
     return _phrase
   },
