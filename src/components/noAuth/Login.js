@@ -105,7 +105,7 @@ export default class Login extends React.Component {
         <form className="login-form">
           <div className="">
             <TextField type="text"
-                       underlineStyle={{color: "red"}}
+                       underlineStyle={{color: "#19A5E4"}}
                        value={this.state.user}
                        onChange={this._setUsername.bind(this)}
                        className="form-control"
@@ -116,7 +116,7 @@ export default class Login extends React.Component {
           </div>
           <div className="">
             <TextField type="password"
-                       underlineStyle={{color: "red"}}
+                       underlineStyle={{color: "#19A5E4"}}
                        value={this.state.password}
                        onChange={this._setPassword.bind(this)}
                        className="form-control"
@@ -148,6 +148,7 @@ export default class Login extends React.Component {
                             label="Create Account"/>
             </div>
           </div>
+          sfdfsdf
           <div style={{position: "absolute", left: "-5000px"}} aria-hidden="true">
             <input type="text" name="b_91105fa973023812cf53dce73_5ddf44500c" tabIndex="-1"
                    id="validate" ref="validated"/>
