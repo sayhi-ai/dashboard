@@ -148,7 +148,6 @@ export default class Login extends React.Component {
                             label="Create Account"/>
             </div>
           </div>
-          sfdfsdf
           <div style={{position: "absolute", left: "-5000px"}} aria-hidden="true">
             <input type="text" name="b_91105fa973023812cf53dce73_5ddf44500c" tabIndex="-1"
                    id="validate" ref="validated"/>
