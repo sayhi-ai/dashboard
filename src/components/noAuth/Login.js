@@ -105,7 +105,7 @@ export default class Login extends React.Component {
         <form className="login-form">
           <div className="">
             <TextField type="text"
-                       underlineStyle={{color: "#19A5E4"}}
+                       underlineStyle={{color: "red"}}
                        value={this.state.user}
                        onChange={this._setUsername.bind(this)}
                        className="form-control"
@@ -116,7 +116,7 @@ export default class Login extends React.Component {
           </div>
           <div className="">
             <TextField type="password"
-                       underlineStyle={{color: "#19A5E4"}}
+                       underlineStyle={{color: "red"}}
                        value={this.state.password}
                        onChange={this._setPassword.bind(this)}
                        className="form-control"
