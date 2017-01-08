@@ -9,7 +9,7 @@ const CONSTANTS = {
 
 if (process.env.NODE_ENV === "production") {
   ENV_VARS = {
-    SERVER_URL: "https://api.sayhi.ai",
+    SERVER_URL: "https://server:8080",
     CONSTANTS: CONSTANTS
   };
 } else {
