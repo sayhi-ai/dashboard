@@ -2,11 +2,11 @@ import AppDispatcher from '../../dispatchers/appDispatcher'
 import BaseStore from './../baseStore';
 import ResponseConstants from '../../constants/sayhi/responseConstants';
 import assign from 'object-assign'
-var Immutable = require('immutable');
+import Immutable from 'immutable'
 
-var _responses = Immutable.List();
+let _responses = Immutable.List();
 
-var ResponseStore = assign({}, BaseStore, {
+const ResponseStore = assign({}, BaseStore, {
   getResponses() {
     return _responses
   }

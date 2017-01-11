@@ -17,8 +17,6 @@ export default class ResponseContainer extends React.Component {
   constructor(props) {
     super(props)
 
-    this.preliminaryPhrase = ""
-
     this.state = {
       open: false,
       snackBarColor: '',
@@ -26,43 +24,18 @@ export default class ResponseContainer extends React.Component {
       phrase: "",
       responses: []
     }
-
-    this.onResponeRouteEnter()
-  }
-
-  onResponeRouteEnter() {
-    browserHistory.listen(location =>  {
-      if (/^bot\/.+\/phrase\/.+$/.test(location.pathname)) {
-        this._loadResponses()
-      }
-    })
   }
 
   componentDidMount() {
     DashboardStore.addChangeListener(this._updatePhrase)
     ResponseStore.addChangeListener(this._setResponses)
+
+    this._updatePhrase()
   }
 
   componentWillUnmount() {
     DashboardStore.removeChangeListener(this._updatePhrase)
     ResponseStore.removeChangeListener(this._setResponses)
-  }
-
-  _loadResponses() {
-    const phrases = PhraseStore.getPhrases()
-
-    if (phrases.length > 0) {
-      console.log("dsf")
-
-      const phraseName = this.props.params.phrase
-      this.preliminaryPhrase = phraseName
-
-      const phrase = phrases.find(phrase => phrase.phrase === phraseName)
-      ResponseServices.fetchResponses(phrase.id)
-        .then(result => {
-          this._setResponses()
-        })
-    }
   }
 
   _setResponses = () => {
@@ -74,7 +47,6 @@ export default class ResponseContainer extends React.Component {
 
   _updatePhrase = () => {
     const phrase = DashboardStore.getCurrentPhrase()
-    console.log(phrase)
     if (phrase !== null && phrase.phrase !== "" && phrase.phrase !== this.state.phrase) {
       ResponseServices.fetchResponses(phrase.id)
       this.setState({
@@ -105,12 +77,6 @@ export default class ResponseContainer extends React.Component {
   }
 
   render() {
-
-    let phrase = this.state.phrase
-    if (phrase === "") {
-      phrase = this.preliminaryPhrase
-    }
-
     return (
       <div>
         <div className="hf f1 pa4 btc" style={{background: "white"}}>Responses</div>
@@ -120,7 +86,7 @@ export default class ResponseContainer extends React.Component {
             <div className='ma3 pa3 br2 mb0' style={{backgroundColor: '#555'}}>
               <div className='w-100 tc courier f3'>
                 <span className='white'>bot.say(</span>
-                <span style={{color: 'rgb(100, 215, 228)'}}>{'"' + phrase + '"'}</span>
+                <span style={{color: 'rgb(100, 215, 228)'}}>{'"' + this.state.phrase + '"'}</span>
                 <span className='white'>{");"}</span>
               </div>
             </div>
