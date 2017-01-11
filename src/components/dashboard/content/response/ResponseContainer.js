@@ -1,6 +1,5 @@
 import React from 'react'
 import Response from './Response'
-import {fetchResponses, addResponse, removeResponse} from '../../../../services/sayhi/responseService'
 import {handleDashboardError} from '../../../../actions/errorAction';
 import DashboardStore from "../../../../stores/dashboardStore"
 import ResponseStore from "../../../../stores/sayhi/responseStore"
@@ -8,11 +7,17 @@ import ENV_VARS from '../../../../../tools/ENV_VARS'
 import ResponseEditor from './ResponseEditor'
 import { Scrollbars } from 'react-custom-scrollbars';
 import Divider from 'material-ui/Divider';
+import browserHistory from '../../../../history'
+import PhraseStore from "../../../../stores/sayhi/phraseStore"
+import * as DashboardActions from '../../../../actions/dashboardAction'
+import * as ResponseServices from "../../../../services/sayhi/responseService"
 
 export default class ResponseContainer extends React.Component {
 
   constructor(props) {
     super(props)
+
+    this.preliminaryPhrase = ""
 
     this.state = {
       open: false,
@@ -21,6 +26,16 @@ export default class ResponseContainer extends React.Component {
       phrase: "",
       responses: []
     }
+
+    this.onResponeRouteEnter()
+  }
+
+  onResponeRouteEnter() {
+    browserHistory.listen(location =>  {
+      if (/^bot\/.+\/phrase\/.+$/.test(location.pathname)) {
+        this._loadResponses()
+      }
+    })
   }
 
   componentDidMount() {
@@ -33,6 +48,23 @@ export default class ResponseContainer extends React.Component {
     ResponseStore.removeChangeListener(this._setResponses)
   }
 
+  _loadResponses() {
+    const phrases = PhraseStore.getPhrases()
+
+    if (phrases.length > 0) {
+      console.log("dsf")
+
+      const phraseName = this.props.params.phrase
+      this.preliminaryPhrase = phraseName
+
+      const phrase = phrases.find(phrase => phrase.phrase === phraseName)
+      ResponseServices.fetchResponses(phrase.id)
+        .then(result => {
+          this._setResponses()
+        })
+    }
+  }
+
   _setResponses = () => {
     const responses = ResponseStore.getResponses()
     this.setState({
@@ -42,9 +74,9 @@ export default class ResponseContainer extends React.Component {
 
   _updatePhrase = () => {
     const phrase = DashboardStore.getCurrentPhrase()
-
-    if (phrase.phrase !== "" && phrase.phrase !== this.state.phrase) {
-      fetchResponses(phrase.id);
+    console.log(phrase)
+    if (phrase !== null && phrase.phrase !== "" && phrase.phrase !== this.state.phrase) {
+      ResponseServices.fetchResponses(phrase.id)
       this.setState({
         phrase: phrase.phrase
       })
@@ -69,10 +101,16 @@ export default class ResponseContainer extends React.Component {
         + ENV_VARS.CONSTANTS.MAX_RESPONSE_LENGTH + " characters.");
     }
 
-    addResponse(DashboardStore.getCurrentPhrase().id, data.text, data.html, data.vars)
+    ResponseServices.addResponse(DashboardStore.getCurrentPhrase().id, data.text, data.html, data.vars)
   }
 
   render() {
+
+    let phrase = this.state.phrase
+    if (phrase === "") {
+      phrase = this.preliminaryPhrase
+    }
+
     return (
       <div>
         <div className="hf f1 pa4 btc" style={{background: "white"}}>Responses</div>
@@ -82,7 +120,7 @@ export default class ResponseContainer extends React.Component {
             <div className='ma3 pa3 br2 mb0' style={{backgroundColor: '#555'}}>
               <div className='w-100 tc courier f3'>
                 <span className='white'>bot.say(</span>
-                <span style={{color: 'rgb(100, 215, 228)'}}>{'"' + this.state.phrase + '"'}</span>
+                <span style={{color: 'rgb(100, 215, 228)'}}>{'"' + phrase + '"'}</span>
                 <span className='white'>{");"}</span>
               </div>
             </div>
@@ -90,7 +128,7 @@ export default class ResponseContainer extends React.Component {
               <Scrollbars style={{height: '50vh'}}>
                 {this.state.responses.map((response, index) =>
                   <Response key={index} response={response.text}
-                            onDelete={() => removeResponse(DashboardStore.getCurrentPhrase().id, response.id)}/>
+                            onDelete={() => ResponseServices.removeResponse(DashboardStore.getCurrentPhrase().id, response.id)}/>
                 )}
               </Scrollbars>
               <ResponseEditor

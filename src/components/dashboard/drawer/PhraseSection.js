@@ -2,8 +2,6 @@ import React from 'react';
 import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField'
-import {changePhrase} from "../../../actions/dashboardAction"
-import * as PhraseServices from "../../../services/sayhi/phraseService"
 import PhraseStore from "../../../stores/sayhi/phraseStore"
 import StateStore from "../../../stores/dashboardStore"
 import ENV_VARS from '../../../../tools/ENV_VARS'
@@ -13,6 +11,7 @@ import Spinner from 'react-spinkit'
 import DashboardStore from "../../../stores/dashboardStore"
 import BotStore from "../../../stores/sayhi/botStore"
 import * as BotServices from "../../../services/sayhi/botService"
+import * as PhraseServices from "../../../services/sayhi/phraseService"
 import * as DashboardActions from '../../../actions/dashboardAction'
 
 export default class DashboardDrawer extends React.Component {
@@ -21,15 +20,26 @@ export default class DashboardDrawer extends React.Component {
     super(props)
 
     this.currentBot = null
-    //this._loadPhrasesInit()
 
     this.state = {
       dialogOpen: false,
       addPhrase: '',
       addPhraseErrorCode: '',
-      phraseValue: 0,
+      phraseValue: -1,
       phrases: this.props.phrases,
     }
+
+    this.onResponeRouteLeave()
+  }
+
+  onResponeRouteLeave() {
+    browserHistory.listen(location =>  {
+      if (!/^bot\/.+\/phrase\/.+$/.test(location.pathname) && this.state.phraseValue !== -1) {
+        this.setState({
+          phraseValue: -1
+        })
+      }
+    })
   }
 
   componentDidMount() {
@@ -40,61 +50,8 @@ export default class DashboardDrawer extends React.Component {
     PhraseStore.removeChangeListener(this._loadPhraseList)
   }
 
-  _loadPhrasesInit = () => {
-    const botName = this.props.params.bot
-    const bots = BotStore.getBots()
-    this.currentBot = DashboardStore.getCurrentBot()
-    if (bots.size === 0) {
-      BotServices.fetchBots()
-        .then(response => BotStore.getBots().find(bot => bot.name === botName))
-        .then(bot => {
-          if (bot !== null) {
-            DashboardActions.changeBot(bot)
-            return bot
-          }
-          return null
-        })
-        .then(bot => {
-          if (bot !== null) {
-            return PhraseServices.fetchPhrases(bot.id)
-          }
-          return null
-        })
-        .then(phrases => {
-          if (phrases !== null) {
-            phrases = PhraseStore.getPhrases()
-            const index = phrases.indexOf(this.props.params.phrase)
-            this.setState({
-              phrases: phrases,
-              phraseValue: index
-            })
-            return true
-          }
-          return false
-        })
-
-     return Immutable.List()
-    } else if (this.currentBot !== null) {
-      PhraseServices.fetchPhrases(this.currentBot.id)
-        .then(phrases => {
-          if (phrases !== null) {
-            this.setState({
-              phrases: PhraseStore.getPhrases(),
-              phraseValue: 0
-            })
-            return true
-          }
-          return false
-        })
-
-      return Immutable.List()
-    }
-
-    return PhraseStore.getPhrases()
-  }
-
   _loadPhraseList = () => {
-    let index = 0
+    let index = -1
     const phrases = PhraseStore.getPhrases()
     if (this.props.params.phrase !== undefined) {
       const phrase = phrases.find(phrase => phrase.phrase === this.props.params.phrase)
@@ -109,9 +66,9 @@ export default class DashboardDrawer extends React.Component {
 
   _handlePhraseSelectFieldChange = (event, index) => {
     const phrase = this.state.phrases.get(index)
-    changePhrase(phrase)
-    this.setState({phraseValue: index});
     browserHistory.push(phrase.url)
+    this.setState({phraseValue: index})
+    DashboardActions.changePhrase(phrase)
   }
 
   _handleDialogOpen() {
