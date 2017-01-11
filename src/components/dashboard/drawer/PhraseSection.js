@@ -21,35 +21,23 @@ export default class DashboardDrawer extends React.Component {
     super(props)
 
     this.currentBot = null
-    this._loadPhrasesInit()
+    //this._loadPhrasesInit()
 
     this.state = {
       dialogOpen: false,
       addPhrase: '',
       addPhraseErrorCode: '',
       phraseValue: 0,
-      phrases: Immutable.List(),
+      phrases: this.props.phrases,
     }
   }
 
   componentDidMount() {
     PhraseStore.addChangeListener(this._loadPhraseList)
-    DashboardStore.addChangeListener(this._handleBotChange)
   }
 
   componentWillUnmount() {
     PhraseStore.removeChangeListener(this._loadPhraseList)
-    DashboardStore.removeChangeListener(this._handleBotChange)
-  }
-
-  _handleBotChange = () => {
-    const newBot = DashboardStore.getCurrentBot()
-    if (this.currentBot !== null && newBot !== null && this.currentBot.name !== newBot.name) {
-      PhraseServices.fetchPhrases(newBot.id)
-      this.setState({
-        phrases: Immutable.List()
-      })
-    }
   }
 
   _loadPhrasesInit = () => {

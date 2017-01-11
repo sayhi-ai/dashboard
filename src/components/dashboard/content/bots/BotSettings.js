@@ -1,6 +1,5 @@
 import React from 'react'
 import Icon from '../../../app/Icon'
-import DashboardStore from "../../../../stores/dashboardStore"
 import * as BotServices from "../../../../services/sayhi/botService"
 import RaisedButton from "material-ui/RaisedButton"
 import TextField from 'material-ui/TextField';
@@ -19,7 +18,7 @@ export default class BotSettings extends React.Component {
       descriptionError: "",
       tag: "",
       tagError: "",
-      chipData: Immutable.List(this.props.bot.tags)
+      chipData: this._mapTagsToChips(this.props.bot.tags)
     }
 
     this.styles = {
@@ -33,10 +32,14 @@ export default class BotSettings extends React.Component {
     }
   }
 
-  componentDidMount() {
-  }
-
-  componentWillUnmount() {
+  _mapTagsToChips(tags) {
+    let index = -1
+    return Immutable.List(tags
+      .filter(tag => tag !== '{}')
+      .map(tag => {
+      index++
+      return {key: index, label: tag}
+    }))
   }
 
   _setName = (e) => {

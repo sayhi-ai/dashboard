@@ -2,6 +2,8 @@ import React from 'react';
 import BotSection from './BotSection'
 import PhraseSection from './PhraseSection'
 import DashboardStore from "../../../stores/dashboardStore"
+import Immutable from 'immutable'
+import * as PhraseServices from "../../../services/sayhi/phraseService"
 
 export default class DashboardDrawer extends React.Component {
   constructor(props) {
@@ -24,9 +26,10 @@ export default class DashboardDrawer extends React.Component {
     const bot = DashboardStore.getCurrentBot()
 
     if (bot !== null) {
-      this.setState({
+      PhraseServices.fetchPhrases(bot.id)
+      setTimeout(() => this.setState({
         currentBot: bot
-      })
+      }),  0)
     }
   }
 
@@ -47,7 +50,7 @@ export default class DashboardDrawer extends React.Component {
     return (
       <div style={{background: '#19A5E4'}}>
         <BotSection {...props} bot={this.state.currentBot}/>
-        <PhraseSection {...props}/>
+        <PhraseSection {...props} phrases={Immutable.List()}/>
       </div>
     )
   }

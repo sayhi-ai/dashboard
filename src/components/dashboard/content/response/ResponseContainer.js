@@ -2,7 +2,7 @@ import React from 'react'
 import Response from './Response'
 import {fetchResponses, addResponse, removeResponse} from '../../../../services/sayhi/responseService'
 import {handleDashboardError} from '../../../../actions/errorAction';
-import StateStore from "../../../../stores/dashboardStore"
+import DashboardStore from "../../../../stores/dashboardStore"
 import ResponseStore from "../../../../stores/sayhi/responseStore"
 import ENV_VARS from '../../../../../tools/ENV_VARS'
 import ResponseEditor from './ResponseEditor'
@@ -24,12 +24,12 @@ export default class ResponseContainer extends React.Component {
   }
 
   componentDidMount() {
-    StateStore.addChangeListener(this._updatePhrase)
+    DashboardStore.addChangeListener(this._updatePhrase)
     ResponseStore.addChangeListener(this._setResponses)
   }
 
   componentWillUnmount() {
-    StateStore.removeChangeListener(this._updatePhrase)
+    DashboardStore.removeChangeListener(this._updatePhrase)
     ResponseStore.removeChangeListener(this._setResponses)
   }
 
@@ -41,7 +41,7 @@ export default class ResponseContainer extends React.Component {
   }
 
   _updatePhrase = () => {
-    const phrase = StateStore.getCurrentPhrase()
+    const phrase = DashboardStore.getCurrentPhrase()
 
     if (phrase.phrase !== "" && phrase.phrase !== this.state.phrase) {
       fetchResponses(phrase.id);
@@ -69,7 +69,7 @@ export default class ResponseContainer extends React.Component {
         + ENV_VARS.CONSTANTS.MAX_RESPONSE_LENGTH + " characters.");
     }
 
-    addResponse(StateStore.getCurrentPhrase().id, data.text, data.html, data.vars)
+    addResponse(DashboardStore.getCurrentPhrase().id, data.text, data.html, data.vars)
   }
 
   render() {
@@ -90,7 +90,7 @@ export default class ResponseContainer extends React.Component {
               <Scrollbars style={{height: '50vh'}}>
                 {this.state.responses.map((response, index) =>
                   <Response key={index} response={response.text}
-                            onDelete={() => removeResponse(StateStore.getCurrentPhrase().id, response.id)}/>
+                            onDelete={() => removeResponse(DashboardStore.getCurrentPhrase().id, response.id)}/>
                 )}
               </Scrollbars>
               <ResponseEditor

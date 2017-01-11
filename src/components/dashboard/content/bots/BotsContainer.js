@@ -1,13 +1,10 @@
 import React from 'react'
 import Bot from './Bot'
 import AddButton from './AddButton'
-import DashboardStore from "../../../../stores/dashboardStore"
 import BotStore from "../../../../stores/sayhi/botStore"
 import * as BotServices from "../../../../services/sayhi/botService"
-import ENV_VARS from '../../../../../tools/ENV_VARS'
 import Spinner from 'react-spinkit'
 import Immutable from 'immutable'
-import Divider from 'material-ui/Divider';
 
 export default class BotContainer extends React.Component {
 
@@ -23,16 +20,10 @@ export default class BotContainer extends React.Component {
 
   componentDidMount() {
     BotStore.addChangeListener(this._updateBotsList)
-    DashboardStore.addChangeListener(this._updateCurrentBot)
   }
 
   componentWillUnmount() {
     BotStore.removeChangeListener(this._updateBotsList)
-    DashboardStore.removeChangeListener(this._updateCurrentBot)
-  }
-
-  _updateCurrentBot = () => {
-
   }
 
   _updateBotsList = () => {
