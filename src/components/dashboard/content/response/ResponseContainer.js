@@ -7,9 +7,6 @@ import ENV_VARS from '../../../../../tools/ENV_VARS'
 import ResponseEditor from './ResponseEditor'
 import { Scrollbars } from 'react-custom-scrollbars';
 import Divider from 'material-ui/Divider';
-import browserHistory from '../../../../history'
-import PhraseStore from "../../../../stores/sayhi/phraseStore"
-import * as DashboardActions from '../../../../actions/dashboardAction'
 import * as ResponseServices from "../../../../services/sayhi/responseService"
 
 export default class ResponseContainer extends React.Component {
@@ -29,7 +26,6 @@ export default class ResponseContainer extends React.Component {
   componentDidMount() {
     DashboardStore.addChangeListener(this._updatePhrase)
     ResponseStore.addChangeListener(this._setResponses)
-
     this._updatePhrase()
   }
 

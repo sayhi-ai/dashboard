@@ -58,11 +58,13 @@ export default class DashboardDrawer extends React.Component {
         .then(bot => PhraseServices.fetchPhrases(bot.id))
         .then(nothing => PhraseStore.getPhrases().find(phrase => phrase.phrase === phraseName))
         .then(phrase => {
-          DashboardActions.changePhrase(phrase)
-          return phrase
+          if (phrase !== undefined) {
+            DashboardActions.changePhrase(phrase)
+            return phrase
+          }
+          throw new Error("No phrase found (yet?)")
         })
         .then(phrase => ResponseServices.fetchResponses(phrase.id))
-        .then(result => this.firstLoad = false)
         .catch(error => console.log(error))
     }
   }
@@ -78,6 +80,8 @@ export default class DashboardDrawer extends React.Component {
         currentBot: bot
       }),  0)
     }
+
+    this.firstLoad = false
   }
 
   render() {
