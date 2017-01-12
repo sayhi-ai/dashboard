@@ -6,24 +6,25 @@ export const setPhrases = (phrases) => {
     actionType: PhraseConstants.SET_PHRASES,
     phrases: phrases
   })
-};
+}
 
 export const addPhrase = (phrase) => {
   AppDispatcher.dispatch({
     actionType: PhraseConstants.ADD_PHRASE,
     phrase: phrase
   })
-};
+}
 
-export const removePhrase = (phraseId) =>{
+export const updatePhrase = (phrase) => {
+  AppDispatcher.dispatch({
+    actionType: PhraseConstants.UPDATE_PHRASE,
+    phrase: phrase
+  })
+}
+
+export const removePhrase = (phraseId) => {
   AppDispatcher.dispatch({
     actionType: PhraseConstants.REMOVE_PHRASE,
     id: phraseId
-  })
-};
-
-export const clearPhrases = () => {
-  AppDispatcher.dispatch({
-    actionType: PhraseConstants.CLEAR_PHRASES
   })
 }

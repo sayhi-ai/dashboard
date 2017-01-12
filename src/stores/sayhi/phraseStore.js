@@ -26,14 +26,19 @@ AppDispatcher.register((action) => {
         PhraseStore.emitChange()
       }
       break
+    case PhraseConstants.UPDATE_PHRASE:
+      if (action.phrase !== null) {
+        const index = _phrases.findIndex(phrase => phrase.id === action.id)
+
+        if (index !== null) {
+          _phrases = _phrases.set(index, action.phrase)
+          PhraseStore.emitChange()
+        }
+      }
+      break
     case PhraseConstants.REMOVE_PHRASE:
       if (action.id !== null) {
-        let index = null
-        for (let i = 0; i < _phrases.size; i++) {
-          if (_phrases.get(i).id === action.id) {
-            index = i
-          }
-        }
+        const index = _phrases.findIndex(phrase => phrase.id === action.id)
 
         if (index !== null) {
           _phrases = _phrases.delete(index)

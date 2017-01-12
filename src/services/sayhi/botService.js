@@ -19,7 +19,6 @@ export const fetchBots = function () {
 
 export const addBot = function (name, description, tags) {
   const token = localStorage.getItem('sayhi-jwt')
-  console.log("dsfsf")
   return middleware.getBotHandler().addBot(token, name, description, tags)
     .then(json => {
       if (json.added) {
@@ -35,6 +34,25 @@ export const addBot = function (name, description, tags) {
     })
     .catch(error => {
       handleDashboardError("Unable to add bot.")
+    })
+}
+
+export const updateBot = function(botId, name, description, tags) {
+  const token = localStorage.getItem('sayhi-jwt')
+  return middleware.getBotHandler().updateBot(botId, name, description, tags)
+    .then(json => {
+      if (json.added) {
+        actions.updateBot({
+          id: botId,
+          name: name,
+          tags: tags,
+          description: description
+        })
+      }
+      return handleDashboardError("Unable to update phrase.")
+    })
+    .catch(error => {
+      handleDashboardError("Unable to update phrase.")
     })
 }
 

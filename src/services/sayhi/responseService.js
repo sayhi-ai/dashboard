@@ -26,6 +26,20 @@ export const addResponse = function (phraseId, text, html, vars) {
     })
 }
 
+export const updateResponse = function(responseId, text, html, vars) {
+  const token = localStorage.getItem('sayhi-jwt');
+  return middleware.getResponseHandler().updateResponse(token, responseId, text, html, vars)
+    .then(json => {
+      if (json.added) {
+        return actions.updateResponse({id: json.id, text: text})
+      }
+      return handleDashboardError("Unable to update phrase.")
+    })
+    .catch(error => {
+      handleDashboardError("Unable to update response.")
+    })
+}
+
 export const removeResponse = function (phraseId, responseId) {
   const token = localStorage.getItem('sayhi-jwt')
   return middleware.getResponseHandler().removeResponse(token, phraseId, responseId)

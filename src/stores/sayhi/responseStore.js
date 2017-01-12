@@ -26,14 +26,19 @@ AppDispatcher.register(function (action) {
         ResponseStore.emitChange()
       }
       break
+    case ResponseConstants.UPDATE_RESPONSE:
+      if (action.response !== null) {
+        const index = _responses.findIndex(response => response.id === action.id)
+
+        if (index !== null) {
+          _responses = _responses.set(index, action.response)
+          ResponseStore.emitChange()
+        }
+      }
+      break
     case ResponseConstants.REMOVE_RESPONSE:
       if (action.id !== null) {
-        let index = null
-        for (let i = 0; i < _responses.size; i++) {
-          if (_responses.get(i).id === action.id) {
-            index = i
-          }
-        }
+        const index = _responses.findIndex(response => response.id === action.id)
 
         if (index !== null) {
           _responses = _responses.delete(index)

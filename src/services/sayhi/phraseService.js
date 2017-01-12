@@ -35,6 +35,20 @@ export const addPhrase = function (botId, phrase) {
     })
 }
 
+export const updatePhrase = function(phraseId, phrase) {
+  const token = localStorage.getItem('sayhi-jwt')
+  return middleware.getPhraseHandler().updatePhrase(token, phraseId, phrase)
+    .then(json => {
+      if (json.added) {
+        return actions.updatePhrase({id: phraseId, phrase: phrase, url: `/bot/${bot.name}/phrase/${phrase}`})
+      }
+      return handleDashboardError("Unable to update phrase.")
+    })
+    .catch(error => {
+      handleDashboardError("Unable to update phrase.")
+    })
+}
+
 export const removePhrase = function (phraseId) {
   const token = localStorage.getItem('sayhi-jwt')
   return middleware.getPhraseHandler().removePhrase(token, phraseId)

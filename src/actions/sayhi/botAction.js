@@ -6,18 +6,25 @@ export const setBots = (bots) => {
     actionType: BotConstants.GET_BOTS,
     bots: bots
   })
-};
+}
 
 export const addBot = (bot) => {
   AppDispatcher.dispatch({
     actionType: BotConstants.ADD_BOT,
     bot: bot
   })
-};
+}
+
+export const updateBot = (bot) => {
+  AppDispatcher.dispatch({
+    actionType: BotConstants.UPDATE_BOT,
+    bot: bot
+  })
+}
 
 export const removeBot = (botId) => {
   AppDispatcher.dispatch({
     actionType: BotConstants.REMOVE_BOT,
     id: botId
   })
-};
+}

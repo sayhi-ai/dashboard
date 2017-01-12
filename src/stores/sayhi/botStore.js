@@ -26,14 +26,19 @@ AppDispatcher.register((action) => {
         BotStore.emitChange()
       }
       break
+    case BotContstants.UPDATE_BOT:
+      if (action.bot !== null) {
+        const index = _bots.findIndex(bot => bot.id === action.bot.id)
+
+        if (index !== null) {
+          _bots = _bots.set(index, action.bot)
+          BotStore.emitChange()
+        }
+      }
+      break
     case BotContstants.REMOVE_BOT:
       if (action.id !== null) {
-        let index = null
-        for (let i = 0; i < _bots.size; i++) {
-          if (_bots.get(i).id === action.id) {
-            index = i
-          }
-        }
+        const index = _bots.findIndex(bot => bot.id === action.id)
 
         if (index !== null) {
           _bots = _bots.delete(index)
