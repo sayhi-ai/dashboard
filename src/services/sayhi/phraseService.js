@@ -25,7 +25,7 @@ export const addPhrase = function (botId, phrase) {
     .then(json => {
       if (json.added) {
         const bot = DashboardStore.getCurrentBot()
-        return actions.addPhrase({id: json.id, phrase: phrase, url: `/bots/${bot.name}/phrase/${phrase}`})
+        return actions.addPhrase({id: json.id, phrase: phrase, url: `/bot/${bot.name}/phrase/${phrase}`})
       }
 
       return handleDashboardError("Phrase already exists.")

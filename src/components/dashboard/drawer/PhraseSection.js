@@ -3,7 +3,6 @@ import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField'
 import PhraseStore from "../../../stores/sayhi/phraseStore"
-import StateStore from "../../../stores/dashboardStore"
 import ENV_VARS from '../../../../tools/ENV_VARS'
 import Immutable from 'immutable'
 import browserHistory from '../../../history'
@@ -107,7 +106,7 @@ export default class DashboardDrawer extends React.Component {
         addPhraseErrorCode: phraseErrorMessage,
       })
     } else {
-      PhraseServices.addPhrase(StateStore.getCurrentBotId(), phrase)
+      PhraseServices.addPhrase(DashboardStore.getCurrentBot().id, phrase)
       this.setState({
         addPhraseErrorCode: '',
         dialogOpen: false,
