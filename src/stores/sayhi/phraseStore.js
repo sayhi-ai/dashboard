@@ -46,10 +46,6 @@ AppDispatcher.register((action) => {
         }
       }
       break
-    case PhraseConstants.CLEAR_PHRASES:
-      _phrases = Immutable.List()
-      PhraseStore.emitChange()
-      break
     default:
     // no op
   }
