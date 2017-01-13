@@ -28,7 +28,7 @@ AppDispatcher.register(function (action) {
       break
     case ResponseConstants.UPDATE_RESPONSE:
       if (action.response !== null) {
-        const index = _responses.findIndex(response => response.id === action.id)
+        const index = _responses.findIndex(response => response.id === action.response.id)
 
         if (index !== null) {
           _responses = _responses.set(index, action.response)

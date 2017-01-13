@@ -10,7 +10,7 @@ const PhraseStore = assign({}, BaseStore, {
   getPhrases() {
     return _phrases
   }
-});
+})
 
 AppDispatcher.register((action) => {
   switch (action.actionType) {
@@ -28,7 +28,7 @@ AppDispatcher.register((action) => {
       break
     case PhraseConstants.UPDATE_PHRASE:
       if (action.phrase !== null) {
-        const index = _phrases.findIndex(phrase => phrase.id === action.id)
+        const index = _phrases.findIndex(phrase => phrase.id === action.phrase.id)
 
         if (index !== null) {
           _phrases = _phrases.set(index, action.phrase)
@@ -38,7 +38,7 @@ AppDispatcher.register((action) => {
       break
     case PhraseConstants.REMOVE_PHRASE:
       if (action.id !== null) {
-        const index = _phrases.findIndex(phrase => phrase.id === action.id)
+        const index = _phrases.findIndex(phrase => phrase.id === action.phrase.id)
 
         if (index !== null) {
           _phrases = _phrases.delete(index)
