@@ -125,11 +125,16 @@ export default class DashboardDrawer extends React.Component {
     let phraseDivs = this.state.phrases.map((phrase, index) =>
       <div
         className='pointer pv2 ph3 f5 flex justify-between items-center hide-child white'
-        style={{background: this.state.phraseValue !== index ? '#19A5E4' : '#0288D1'}}
+        style={{
+          background: this.state.phraseValue !== index ? 'transparent' : '#1F2F3C',
+          borderLeft: this.state.phraseValue !== index ? '5px solid transparent' : '5px solid #19A5E4',
+          borderRadius: this.state.phraseValue !== index ? 'none' : '2px',
+          color: this.state.phraseValue !== index ? '#9199A0' : 'white'
+        }}
         key={index}
         onClick={(e) => this._handlePhraseSelectFieldChange(e, index)}
       >
-        <div>
+        <div className="pa2">
           "{phrase.phrase}"
         </div>
         {this.state.phrases.size > 1 &&
@@ -160,9 +165,9 @@ export default class DashboardDrawer extends React.Component {
 
     return (
       <div>
-        <div className='' style={{width: 270}}>
+        <div className='pt3 pb3' style={{width: 270, background: "#0F202E"}}>
           <div style={{textAlign: "left"}}>
-            <div className='ttu mt4 mb2 f6 flex justify-between white items-center ph3'>
+            <div className='ttu mb2 f6 pa2 flex justify-between tracked items-center ph3' style={{color: "#9199A0"}}>
               <div>
                 Phrases
               </div>

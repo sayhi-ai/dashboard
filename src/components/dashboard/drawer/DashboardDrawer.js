@@ -88,7 +88,7 @@ export default class DashboardDrawer extends React.Component {
     if (this.state.currentBot === null) {
       return (
         <div className="white f5 bf dib flex justify-center" style={{
-          background: '#19A5E4',
+          background: '#172A3A',
           width: 270,
           alignItems: "center"
         }}>
@@ -99,7 +99,7 @@ export default class DashboardDrawer extends React.Component {
 
     const props = Object.assign({}, this.props)
     return (
-      <div style={{background: '#19A5E4'}}>
+      <div style={{background: '#172A3A'}}>
         <BotSection {...props} bot={this.state.currentBot}/>
         <PhraseSection {...props} phrases={Immutable.List()}/>
       </div>
