@@ -90,7 +90,8 @@ export default class DashboardDrawer extends React.Component {
         <div className="white f5 bf dib flex justify-center" style={{
           background: '#172A3A',
           width: 270,
-          alignItems: "center"
+          alignItems: "center",
+          color: "#9199A0"
         }}>
           Choose a bot.
         </div>
