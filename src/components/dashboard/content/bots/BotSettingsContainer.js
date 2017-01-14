@@ -72,7 +72,7 @@ export default class BotSettingsContainer extends React.Component {
 
     return (
       <div>
-        <div className="hf f1 pa4 btc" style={{background: "white"}}>Bot:{this.state.bot.name}</div>
+        <div className="hf f1 pa4 btc" style={{background: "white"}}>Bot::{this.state.bot.name}</div>
         <Divider/>
         <div className='flex pa5 justify-left'>
           <BotSettings bot={this.state.bot}/>
